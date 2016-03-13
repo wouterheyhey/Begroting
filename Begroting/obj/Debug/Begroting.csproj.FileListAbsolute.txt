@@ -1,0 +1,2 @@
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\Begroting\bin\Debug\Begroting.exe.config
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\Begroting\bin\Debug\UI_CA.exe.config

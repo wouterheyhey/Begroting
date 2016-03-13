@@ -1,0 +1,5 @@
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\BL.Domain\obj\Debug\BL.Domain.csprojResolveAssemblyReference.cache
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\BL.Domain\bin\Debug\BL.Domain.dll
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\BL.Domain\bin\Debug\BL.Domain.pdb
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\BL.Domain\obj\Debug\BL.Domain.dll
+C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\Begroting\BL.Domain\obj\Debug\BL.Domain.pdb
