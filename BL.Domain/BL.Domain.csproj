@@ -42,10 +42,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Categorie.cs" />
-    <Compile Include="BegrotingsLijn.cs" />
+    <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
-    <Compile Include="BegrotingsItem.cs" />
+    <Compile Include="FinancieelOverzicht.cs" />
+    <Compile Include="Gemeente.cs" />
+    <Compile Include="GemeenteCategorie.cs" />
+    <Compile Include="InspraakItem.cs" />
     <Compile Include="CategoryType.cs" />
+    <Compile Include="JaarRekening.cs" />
+    <Compile Include="JaarBegroting.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

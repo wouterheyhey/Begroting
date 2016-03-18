@@ -41,9 +41,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CategoryManager.cs" />
+    <Compile Include="FinancieleManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BL.Domain\BL.Domain.csproj">
+      <Project>{f74e1c27-d554-4716-bcc0-fed8d1041cf1}</Project>
+      <Name>BL.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{6e6c241b-b317-4dfc-9b09-403d14a3a91e}</Project>
       <Name>DAL</Name>

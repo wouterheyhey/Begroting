@@ -18,10 +18,21 @@ namespace DAL
         protected override void Seed(BegrotingDBContext ctx)
         {
             string importPath = @"..\..\..\DAL\lib\";
-            string categoryFile = "Config_Categorien.xls";
+            string categoryFileCat = "Config_Categorien.xls";
+            string categoryFileGem = "Config_Gemeenten.xls";
 
             base.Seed(ctx);
-            foreach (Categorie s in ExcelImporter.ImportCategories(importPath + categoryFile).Values)
+
+            foreach (Gemeente s in ExcelImporter.ImportGemeenten(importPath + categoryFileGem))
+            {
+                Console.WriteLine(s.ToString());
+                ctx.Gemeenten.Add(s);
+            }
+            ctx.SaveChanges();
+            Console.ReadLine();
+
+
+            foreach (Categorie s in ExcelImporter.ImportCategories(importPath + categoryFileCat).Values)
             {
                 Console.WriteLine(s.ToString());
                 ctx.Categorien.Add(s);

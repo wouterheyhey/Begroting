@@ -13,10 +13,10 @@ namespace BL.Domain
         [Key]
         public string categorieCode { get; set; }
         public string categorieNaam { get; set; }
-        public char categorieType { get; set; }
+        public string categorieType { get; set; }   // char do not get mapped in EF !!! -> keep string
         public Categorie categorieParent { get; set; }
 
-        public Categorie(string categorieCode, string categorieNaam, char categorieType, Categorie categorieParent = null)
+        public Categorie(string categorieCode, string categorieNaam, string categorieType, Categorie categorieParent = null)
         {
             this.categorieCode = categorieCode;
             this.categorieNaam = categorieNaam;

@@ -15,6 +15,7 @@ namespace UI_CA
         static void Main(string[] args)
         {
             CategoryManager mgr = new CategoryManager();
+            mgr.LoadFinancieleLijnen(2020);
             Console.ReadLine();
         }
     }
