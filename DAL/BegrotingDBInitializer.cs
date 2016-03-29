@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure.Annotations;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
     {
 
 

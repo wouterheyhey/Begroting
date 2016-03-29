@@ -24,6 +24,10 @@ namespace BL
             repo.ImportFinancieleLijnen(year);
         }
 
+        public IEnumerable<Categorie> GetCategorien()
+        {
+            return repo.ReadCategories();
+        }
 
 
 

@@ -1,0 +1,17 @@
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\BL.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\BL.pdb
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\BL.Domain.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\DAL.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\EntityFramework.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\LinqToExcel.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\EntityFramework.SqlServer.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\Remotion.Data.Linq.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\log4net.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\BL.Domain.pdb
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\DAL.pdb
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\EntityFramework.xml
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\LinqToExcel.xml
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\bin\x64\Debug\EntityFramework.SqlServer.xml
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\obj\x64\Debug\BL.csprojResolveAssemblyReference.cache
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\obj\x64\Debug\BL.dll
+C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL\obj\x64\Debug\BL.pdb

@@ -32,6 +32,11 @@ namespace DAL
             return ctx.Categorien.Find(categorieCode);
         }
 
+        public IEnumerable<Categorie> ReadCategories()
+        {
+            return ctx.Categorien;
+        }
+
         public GemeenteCategorie CreateGemeenteCategorie(GemeenteCategorie cat)
         {
             ctx.GemeenteCategorien.Add(cat);
@@ -96,7 +101,6 @@ namespace DAL
         {
             return ctx.Gemeenten.Where<Gemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
-
 
     }
 }
