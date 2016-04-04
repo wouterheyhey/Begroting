@@ -95,11 +95,15 @@ namespace DAL
             GemeenteCategorie cat;
             Actie actie;
             Gemeente gem;
+            BestuurType bt;
+            FinancieelOverzicht fo;
+
             foreach (var r in rows)  //needs parameterless constructor
             {
                 cat = catRepo.ReadGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], r["Groep"].Cast<string>()); // lijn hangen aan laagste hierarchieniveau
                 actie = catRepo.ReadActie(r["Actie code"].Cast<string>(), r["Groep"].Cast<string>());
                 gem = catRepo.ReadGemeente(r["Groep"].Cast<string>());
+                fo = catRepo.ReadFinancieelOverzicht(year, gem);
 
                 if (actie == null)
                 {
@@ -111,7 +115,28 @@ namespace DAL
                     cat = catRepo.CreateGemeenteCategorie(new GemeenteCategorie(catRepo.ReadCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0]), gem));
                 }
 
-                lines.Add(new FinancieleLijn(r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), cat, actie));  //creating new category objects with data
+
+                if (fo == null)
+                {
+                    // logic to decide if begroting or rekening. beter ergens in een functie zetten
+                    bool check = year <= DateTime.Now.Year ;
+                    switch (check)
+                        {
+                        case true:
+                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
+                            break;
+                        case false:
+                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
+                            break;
+                    }
+                         
+
+                    
+                }
+
+                bt = FinancieleLijn.MapBestuurType(r["Naam bestuur"].Cast<string>());
+
+                lines.Add(new FinancieleLijn(r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), cat, actie, bt, fo));  //creating new category objects with data
             }
 
             return lines;

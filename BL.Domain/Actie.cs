@@ -14,13 +14,17 @@ namespace BL.Domain
         public string actieKort { get; set; }
         public string actieLang { get; set; }
 
-        public Actie() { }  // EF needs this
+        public Actie()
+        {
+            this.inspraakNiveau = InspraakNiveau.Auto;
+        }  // EF needs this
 
         public Actie(string actieCode, string actieKort, string actieLang)
         {
             this.actieCode = actieCode;
             this.actieKort = actieKort;
             this.actieLang = actieLang;
+            this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
         public Actie(string actieCode, string actieKort, string actieLang, Gemeente gemeente)
@@ -29,6 +33,7 @@ namespace BL.Domain
             this.actieKort = actieKort;
             this.actieLang = actieLang;
             this.gemeente = gemeente;
+            this.inspraakNiveau = InspraakNiveau.Auto;
         }
     }
 

@@ -102,5 +102,43 @@ namespace DAL
             return ctx.Gemeenten.Where<Gemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
+        public List<Categorie> ReadChildrenCategories(Categorie cat)
+        {
+            // Subcategorien beginnen altijd met dezelfde categoriecode
+            return ctx.Categorien.Where<Categorie>(x => x.categorieCode.StartsWith(cat.categorieCode) && x.categorieCode != cat.categorieCode).ToList<Categorie>();
+        }
+
+
+        public void UpdateAllCategoriesChildren()
+        {
+            foreach (Categorie cat in ReadCategories().ToList())
+            {
+                cat.categrorieChildren = ReadChildrenCategories(cat);
+                // Voor debuggen
+                 Console.WriteLine(cat.categrorieChildren.Count() + " added to " + cat.categorieCode);
+            }
+            ctx.SaveChanges();
+
+        }
+
+        public FinancieelOverzicht ReadFinancieelOverzicht(int jaar, Gemeente gemeente)
+        {
+            return ctx.FinancieleOverzichten.Where<FinancieelOverzicht>(x => x.boekJaar == jaar).Where<FinancieelOverzicht>(x => x.gemeente.naam == gemeente.naam).SingleOrDefault();
+        }
+
+        public JaarBegroting CreateJaarBegroting(JaarBegroting jaarBegroting)
+        {
+            ctx.FinancieleOverzichten.Add(jaarBegroting);
+            ctx.SaveChanges();
+            return jaarBegroting;
+        }
+
+        public JaarRekening CreateJaarBegroting(JaarRekening jaarRekening)
+        {
+            ctx.FinancieleOverzichten.Add(jaarRekening);
+            ctx.SaveChanges();
+            return jaarRekening;
+        }
+
     }
 }

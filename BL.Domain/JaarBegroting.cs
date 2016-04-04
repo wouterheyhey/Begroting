@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace BL.Domain
 {
-    class JaarBegroting : FinancieelOverzicht
+    public class JaarBegroting : FinancieelOverzicht
     {
+        public JaarBegroting(int boekJaar, Gemeente gemeente) : base(boekJaar, gemeente) { }
+        public JaarBegroting() : base() { }
     }
 }

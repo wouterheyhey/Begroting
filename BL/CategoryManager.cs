@@ -29,6 +29,11 @@ namespace BL
             return repo.ReadCategories();
         }
 
+        public void SetChildrenCategorien()
+        {
+            repo.UpdateAllCategoriesChildren();
+        }
+
 
 
     }

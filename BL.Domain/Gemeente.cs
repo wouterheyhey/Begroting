@@ -11,7 +11,7 @@ namespace BL.Domain
     public class Gemeente
     {
         [Key]
-        public int ID { get; set; }
+        public int GemeenteID { get; set; }
         public string naam { get; set; }
         public int postCode { get; set; }
         public string provincie { get; set; }
@@ -21,6 +21,9 @@ namespace BL.Domain
         public float isMan { get; set; }
         public float isVrouw { get; set; }
         public float isKind { get; set; }
+        public HashSet<Politicus> bestuur { get; set; }
+        public float aanslagVoet { get; set; }
+        public Gemeente parent { get; set; }
         //public GemeenteType type;
 
         public Gemeente(string naam)

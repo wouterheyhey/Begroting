@@ -59,17 +59,37 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Account.cs" />
+    <Compile Include="AccountType.cs" />
+    <Compile Include="AntwoordEmail.cs" />
+    <Compile Include="BegrotingsVoorstel.cs" />
+    <Compile Include="BegrotingsVoorstelReactie.cs" />
+    <Compile Include="BestuurType.cs" />
+    <Compile Include="BudgetVerschuiving.cs" />
     <Compile Include="Categorie.cs" />
+    <Compile Include="CategorieInput.cs" />
+    <Compile Include="DateRange.cs" />
+    <Compile Include="Desactivatie.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
     <Compile Include="FinancieelOverzicht.cs" />
     <Compile Include="Gemeente.cs" />
     <Compile Include="GemeenteCategorie.cs" />
+    <Compile Include="IngelogdeGebruiker.cs" />
     <Compile Include="InspraakItem.cs" />
     <Compile Include="CategoryType.cs" />
+    <Compile Include="InspraakNiveau.cs" />
     <Compile Include="JaarRekening.cs" />
     <Compile Include="JaarBegroting.cs" />
+    <Compile Include="Politicus.cs" />
+    <Compile Include="PoliticusType.cs" />
+    <Compile Include="Project.cs" />
+    <Compile Include="ProjectAfbeelding.cs" />
+    <Compile Include="ProjectScenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RolType.cs" />
+    <Compile Include="Stem.cs" />
+    <Compile Include="VerificatieStatus.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

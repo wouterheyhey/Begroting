@@ -15,15 +15,18 @@ namespace BL.Domain
         public GemeenteCategorie(Categorie cat)
         {
             this.cat = cat;
+            this.inspraakNiveau = InspraakNiveau.Auto;
         }
         public GemeenteCategorie(Categorie cat, Gemeente gemeente)
         {
             this.cat = cat;
             this.gemeente = gemeente;
+            this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
         public GemeenteCategorie()  // Required by EF
         {
+            this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
     }

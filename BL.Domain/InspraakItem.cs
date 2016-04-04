@@ -11,9 +11,11 @@ namespace BL.Domain
     {
         [Key]
         public int ID { get; set; }
-        public string inspraakMogelijk { get; set; }
         public float totaal { get; set; }
-        public object logo { get; set; } 
+        public float relatiefAandeel { get; set; }
+        public byte[] logo { get; set; }  // byte[] as type for the image for EF
         public Gemeente gemeente { get; set; }
+        public InspraakNiveau inspraakNiveau { get; set; }
+
     }
 }

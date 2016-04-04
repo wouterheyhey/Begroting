@@ -15,6 +15,7 @@ namespace BL.Domain
         public string categorieNaam { get; set; }
         public string categorieType { get; set; }   // char do not get mapped in EF !!! -> keep string
         public Categorie categorieParent { get; set; }
+        public List<Categorie> categrorieChildren { get; set; }
 
         public Categorie(string categorieCode, string categorieNaam, string categorieType, Categorie categorieParent = null)
         {
@@ -29,6 +30,7 @@ namespace BL.Domain
         {
 
         }
+
 
         public override string ToString()
         {
