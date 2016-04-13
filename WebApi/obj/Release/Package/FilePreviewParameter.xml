@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<parameters>
+  <parameter name="IIS Web Application Name" description="" value="begroting" tags="IisApp">
+    <parameterEntry kind="ProviderPath" scope="IisApp" match="^C:\\Users\\kevin\\Source\\Repos\\Begroting\\WebApi\\obj\\Release\\Package\\PackageTmp$" />
+    <parameterEntry kind="ProviderPath" scope="setAcl" match="^C:\\Users\\kevin\\Source\\Repos\\Begroting\\WebApi\\obj\\Release\\Package\\PackageTmp$" />
+  </parameter>
+  <parameter name="BegrotingDB_EF-Web.config Connection String" description="" value="Data Source=tcp:begroting.database.windows.net,1433;Initial Catalog=begroting;User Id=begroting@begroting.database.windows.net;Password=Blended01" tags="">
+    <parameterEntry kind="XmlFile" scope="C:\\Users\\kevin\\Source\\Repos\\Begroting\\WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BegrotingDB_EF']/@connectionString" />
+  </parameter>
+</parameters>

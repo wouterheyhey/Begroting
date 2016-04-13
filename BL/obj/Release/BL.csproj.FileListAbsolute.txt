@@ -1,0 +1,17 @@
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\BL.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\BL.pdb
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\BL.Domain.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\DAL.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\EntityFramework.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\LinqToExcel.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\EntityFramework.SqlServer.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\Remotion.Data.Linq.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\log4net.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\BL.Domain.pdb
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\DAL.pdb
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\EntityFramework.xml
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\LinqToExcel.xml
+C:\Users\kevin\Source\Repos\Begroting\BL\bin\Release\EntityFramework.SqlServer.xml
+C:\Users\kevin\Source\Repos\Begroting\BL\obj\Release\BL.csprojResolveAssemblyReference.cache
+C:\Users\kevin\Source\Repos\Begroting\BL\obj\Release\BL.dll
+C:\Users\kevin\Source\Repos\Begroting\BL\obj\Release\BL.pdb
