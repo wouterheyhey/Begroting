@@ -58,3 +58,6 @@ C:\Users\kevin\Source\Repos\Begroting\Begroting\bin\Debug\EntityFramework.xml
 C:\Users\kevin\Source\Repos\Begroting\Begroting\bin\Debug\EntityFramework.SqlServer.xml
 C:\Users\kevin\Source\Repos\Begroting\Begroting\bin\Debug\LinqToExcel.xml
 C:\Users\kevin\Source\Repos\Begroting\Begroting\obj\Debug\UI_CA.csprojResolveAssemblyReference.cache
+C:\Begroting\Begroting\bin\Debug\UI_CA.exe.config
+C:\Begroting\Begroting\obj\Debug\UI_CA.exe
+C:\Begroting\Begroting\obj\Debug\UI_CA.pdb
