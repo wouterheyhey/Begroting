@@ -102,6 +102,11 @@ namespace DAL
             return ctx.Gemeenten.Where<Gemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
+        public IEnumerable<Gemeente>  ReadGemeentes()
+        {
+            return ctx.Gemeenten;
+        }
+
         public List<Categorie> ReadChildrenCategories(Categorie cat)
         {
             // Subcategorien beginnen altijd met dezelfde categoriecode

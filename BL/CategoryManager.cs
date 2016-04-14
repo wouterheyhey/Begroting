@@ -29,6 +29,11 @@ namespace BL
             return repo.ReadCategories();
         }
 
+        public IEnumerable<Gemeente> GetCGemeenten()
+        {
+            return repo.ReadGemeentes();
+        }
+
         public void SetChildrenCategorien()
         {
             repo.UpdateAllCategoriesChildren();

@@ -13,3 +13,8 @@ C:\Users\kevin\Source\Repos\Begroting\BL.Domain\bin\Debug\BL.Domain.pdb
 C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Debug\BL.Domain.csprojResolveAssemblyReference.cache
 C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Debug\BL.Domain.dll
 C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Debug\BL.Domain.pdb
+C:\Begroting\BL.Domain\bin\Debug\BL.Domain.dll
+C:\Begroting\BL.Domain\bin\Debug\BL.Domain.pdb
+C:\Begroting\BL.Domain\obj\Debug\BL.Domain.csprojResolveAssemblyReference.cache
+C:\Begroting\BL.Domain\obj\Debug\BL.Domain.dll
+C:\Begroting\BL.Domain\obj\Debug\BL.Domain.pdb
