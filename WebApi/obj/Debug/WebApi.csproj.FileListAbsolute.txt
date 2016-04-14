@@ -163,3 +163,6 @@ C:\Begroting\WebApi\bin\EntityFramework.SqlServer.xml
 C:\Begroting\WebApi\obj\Debug\WebApi.csprojResolveAssemblyReference.cache
 C:\Begroting\WebApi\obj\Debug\WebApi.dll
 C:\Begroting\WebApi\obj\Debug\WebApi.pdb
+C:\Begroting\WebApi\bin\System.Web.Cors.dll
+C:\Begroting\WebApi\bin\System.Web.Http.Cors.dll
+C:\Begroting\WebApi\bin\System.Web.Http.Cors.xml
