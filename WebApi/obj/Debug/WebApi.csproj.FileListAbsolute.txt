@@ -166,3 +166,6 @@ C:\Begroting\WebApi\obj\Debug\WebApi.pdb
 C:\Begroting\WebApi\bin\System.Web.Cors.dll
 C:\Begroting\WebApi\bin\System.Web.Http.Cors.dll
 C:\Begroting\WebApi\bin\System.Web.Http.Cors.xml
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.xml
