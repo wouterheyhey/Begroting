@@ -53,3 +53,6 @@ C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\EntityFramework.SqlServer.xml
 C:\Users\kevin\Source\Repos\Begroting\WebApi\obj\Release\WebApi.csprojResolveAssemblyReference.cache
 C:\Users\kevin\Source\Repos\Begroting\WebApi\obj\Release\WebApi.dll
 C:\Users\kevin\Source\Repos\Begroting\WebApi\obj\Release\WebApi.pdb
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.xml
