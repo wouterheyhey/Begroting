@@ -166,6 +166,12 @@ C:\Begroting\WebApi\obj\Debug\WebApi.pdb
 C:\Begroting\WebApi\bin\System.Web.Cors.dll
 C:\Begroting\WebApi\bin\System.Web.Http.Cors.dll
 C:\Begroting\WebApi\bin\System.Web.Http.Cors.xml
+<<<<<<< HEAD
 C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\GitHub_Begroting\Begroting\WebApi\bin\System.Web.Cors.dll
 C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\GitHub_Begroting\Begroting\WebApi\bin\System.Web.Http.Cors.dll
 C:\Users\wheyndrickx\Documents\KdG\Integratieproject\Project\GitHub_Begroting\Begroting\WebApi\bin\System.Web.Http.Cors.xml
+=======
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.dll
+C:\Users\kevin\Source\Repos\Begroting\WebApi\bin\System.Web.Http.Cors.xml
+>>>>>>> ba302dd70fbfe9a4f9a9269147fbd3670e05fb44
