@@ -10,27 +10,143 @@ namespace DAL
 {
     public class ExcelImporter
     {
-        public static IEnumerable<Gemeente> ImportGemeenten(string path)
+        public static IDictionary<string,Cluster> ImportClusters(string path)
         {
-            List<Gemeente> gemeenten = new List<Gemeente>();
+            Dictionary<string,Cluster> clusters = new Dictionary<string, Cluster>();
 
             // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(List<Gemeente>);
+            if (!File.Exists(path)) return default(IDictionary<string,Cluster>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             var rows = from c in book.Worksheet("Sheet1")
                        select c
                 ;
 
-            string gemeenteNaam;
+            string clusterNaam;
             foreach (var r in rows)  //needs parameterless constructor
             {
-                gemeenteNaam = r["GemeenteNaam"].Cast<string>();
-                if (gemeenteNaam != null )  gemeenten.Add(new Gemeente(gemeenteNaam));
+                clusterNaam = r["ClusterNaam"].Cast<string>();
+                if (clusterNaam != null) clusters.Add(clusterNaam,new Cluster(clusterNaam));
             }
+
+            return clusters;
+        }
+
+
+        public static IEnumerable<HoofdGemeente> ImportHoofdGemeenten(string path, string clusterPath, string postcodePath)
+        {
+            List<HoofdGemeente> gemeenten = new List<HoofdGemeente>();
+
+            // Eventueel error throwen hier
+            if (!File.Exists(path)) return default(HashSet<HoofdGemeente>);
+
+            var book = new LinqToExcel.ExcelQueryFactory(postcodePath);
+            book.AddMapping<HoofdGemeente>(x => x.naam, "Hoofdgemeente");
+            book.AddMapping<HoofdGemeente>(x => x.provincie, "Provincie");
+            book.AddMapping<HoofdGemeente>(x => x.postCode, "PC Hoofdgemeente");
+
+            //var rows = from c in book.Worksheet<HoofdGemeente>("Postcodes").ToList()
+            //           group c by  c.naam  into c_grp
+            //           select c_grp
+            //    ;
+
+            var rows = from c in book.Worksheet("Postcodes")
+                       select c
+                ;
+
+            List<string> namen = new List<string>();
+            foreach (var r in rows)  
+            {
+                if (!namen.Contains(r["Hoofdgemeente"]))
+                {
+                    gemeenten.Add(new HoofdGemeente(r["Hoofdgemeente"],r["Provincie"],r["PC Hoofdgemeente"].Cast<int>()));
+                    gemeenten.Last().deelGemeenten = new HashSet<Gemeente>();
+                    namen.Add(r["Hoofdgemeente"]);
+                }
+
+                if (gemeenten.Count!=0) gemeenten.Last().deelGemeenten.Add(new Gemeente(r["gemeente"], r["Postcode"].Cast<int>())); 
+                
+                        
+            }
+
+            AddClustersToHoofdGemeentes(gemeenten, path, clusterPath);
 
             return gemeenten;
         }
+
+        public static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten,string path, string clusterPath)
+        {
+            // Eventueel error throwen hier
+            if (!File.Exists(path)) return default(List<HoofdGemeente>);
+            var book = new LinqToExcel.ExcelQueryFactory(path);
+
+            Dictionary<string, Cluster> clusterMap = (Dictionary<string, Cluster>)ImportClusters(clusterPath);
+            Dictionary<string, string> clusterGemeenteMap = (Dictionary<string, string>)MatchGemeenteCluster(path);
+
+            string s;
+            foreach (HoofdGemeente g in gemeenten)
+            {
+                if (clusterGemeenteMap.TryGetValue(g.naam, out s)) g.cluster = clusterMap[s];
+            }
+
+            return gemeenten;
+            
+        }
+
+        public static IDictionary<string, string> MatchGemeenteCluster(string path)
+        {
+            // Eventueel error throwen hier
+            if (!File.Exists(path)) return default(IDictionary<string, string>);
+            var book = new LinqToExcel.ExcelQueryFactory(path);
+
+            Dictionary<string, string> gemeenteCluster = new Dictionary<string, string>();
+
+            var rows = from c in book.Worksheet("Sheet1")
+                       select c
+                     ;
+
+            foreach (var r in rows)
+            {
+                gemeenteCluster.Add(r["gemeente"], r["clusters"]);
+            }
+
+            return gemeenteCluster;
+        }
+
+
+        public static IEnumerable<Gemeente> ImportGemeenten(string path)
+        {
+            List<Gemeente> gemeenten = new List<Gemeente>();
+
+            // Eventueel error throwen hier
+            if (!File.Exists(path)) return default(HashSet<Gemeente>);
+
+            var book = new LinqToExcel.ExcelQueryFactory(path);
+            book.AddMapping<Gemeente>(x => x.naam, "gemeente");
+            book.AddMapping<Gemeente>(x => x.provincie, "Provincie");
+            book.AddMapping<Gemeente>(x => x.postCode, "Postcode");
+
+
+            var rows = from c in book.Worksheet<Gemeente>("Postcodes")
+                       select c
+                ;
+
+            List<string> namen = new List<string>();
+            foreach (var r in rows)
+            {
+                if (!namen.Contains(r.naam))
+                {
+                    gemeenten.Add(r);
+                    namen.Add(r.naam);
+                }
+            }
+
+
+            return gemeenten;
+        }
+
+
+
 
         public static Dictionary<string, Categorie> ImportCategories(string path)
         {
@@ -94,7 +210,7 @@ namespace DAL
 
             GemeenteCategorie cat;
             Actie actie;
-            Gemeente gem;
+            HoofdGemeente gem;
             BestuurType bt;
             FinancieelOverzicht fo;
 
@@ -143,6 +259,6 @@ namespace DAL
 
         }
 
-
     }
 }
+

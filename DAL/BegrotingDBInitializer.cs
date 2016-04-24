@@ -11,7 +11,7 @@ using System.Data.Entity.Infrastructure.Annotations;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
     {
 
 
@@ -20,10 +20,21 @@ namespace DAL
             string importPath = @"..\..\..\DAL\lib\";
             string categoryFileCat = "Config_Categorien.xls";
             string categoryFileGem = "Config_Gemeenten.xls";
+            string categoryFileClu = "Config_Clusters.xls";
+            string categoryFilePos = "Config_postcodesHoofdgemeentes.xlsx";
+
 
             base.Seed(ctx);
 
-            foreach (Gemeente s in ExcelImporter.ImportGemeenten(importPath + categoryFileGem))
+            // foreach (Cluster s in ExcelImporter.ImportClusters(importPath + categoryFileClu))
+            // {
+            //     Console.WriteLine(s.ToString());
+            ////     ctx.Clusters.Add(s);
+            // }
+            //// ctx.SaveChanges();
+            // Console.ReadLine();
+
+            foreach (HoofdGemeente s in ExcelImporter.ImportHoofdGemeenten(importPath + categoryFileGem, importPath + categoryFileClu, importPath + categoryFilePos))
             {
                 Console.WriteLine(s.ToString());
                 ctx.Gemeenten.Add(s);

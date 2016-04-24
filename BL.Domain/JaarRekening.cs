@@ -8,7 +8,7 @@ namespace BL.Domain
 {
     public class JaarRekening : FinancieelOverzicht
     {
-        public JaarRekening(int boekJaar, Gemeente gemeente) : base(boekJaar, gemeente) {}
+        public JaarRekening(int boekJaar, HoofdGemeente gemeente) : base(boekJaar, gemeente) {}
         public JaarRekening() : base() { }
 
     }

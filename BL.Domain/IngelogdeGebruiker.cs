@@ -12,7 +12,7 @@ namespace BL.Domain
         public string naam { get; set; }
         public string accountID { get; set; }
         public string passwoord { get; set; }
-        public Gemeente gemeente { get; set; }
+        public HoofdGemeente gemeente { get; set; }
         public bool isActief { get; set; }
         public RolType rolType { get; set; }
         public HashSet<Account> accounts { get; set; }

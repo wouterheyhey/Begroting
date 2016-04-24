@@ -27,7 +27,7 @@ namespace BL.Domain
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
-        public Actie(string actieCode, string actieKort, string actieLang, Gemeente gemeente)
+        public Actie(string actieCode, string actieKort, string actieLang, HoofdGemeente gemeente)
         {
             this.actieCode = actieCode;
             this.actieKort = actieKort;

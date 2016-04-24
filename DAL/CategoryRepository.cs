@@ -90,19 +90,19 @@ namespace DAL
             return actie;
         }
 
-        public Gemeente CreateGemeente(Gemeente gemeente)
+        public HoofdGemeente CreateGemeente(HoofdGemeente gemeente)
         {
             ctx.Gemeenten.Add(gemeente);
             ctx.SaveChanges();
             return gemeente;
         }
 
-        public Gemeente ReadGemeente(string gemeenteNaam)
+        public HoofdGemeente ReadGemeente(string gemeenteNaam)
         {
-            return ctx.Gemeenten.Where<Gemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+            return ctx.Gemeenten.Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
-        public IEnumerable<Gemeente>  ReadGemeentes()
+        public IEnumerable<HoofdGemeente>  ReadGemeentes()
         {
             return ctx.Gemeenten;
         }
@@ -126,7 +126,7 @@ namespace DAL
 
         }
 
-        public FinancieelOverzicht ReadFinancieelOverzicht(int jaar, Gemeente gemeente)
+        public FinancieelOverzicht ReadFinancieelOverzicht(int jaar, HoofdGemeente gemeente)
         {
             return ctx.FinancieleOverzichten.Where<FinancieelOverzicht>(x => x.boekJaar == jaar).Where<FinancieelOverzicht>(x => x.gemeente.naam == gemeente.naam).SingleOrDefault();
         }
@@ -144,6 +144,11 @@ namespace DAL
             ctx.SaveChanges();
             return jaarRekening;
         }
+
+        //public Cluster ReadCluster(string clusterName)
+        //{
+        //    return ctx.Clusters.Where<Cluster>(x => x.name == clusterName).SingleOrDefault();
+        //}
 
     }
 }

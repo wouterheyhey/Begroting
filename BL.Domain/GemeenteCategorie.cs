@@ -17,7 +17,7 @@ namespace BL.Domain
             this.cat = cat;
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
-        public GemeenteCategorie(Categorie cat, Gemeente gemeente)
+        public GemeenteCategorie(Categorie cat, HoofdGemeente gemeente)
         {
             this.cat = cat;
             this.gemeente = gemeente;

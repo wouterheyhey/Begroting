@@ -24,12 +24,13 @@ namespace BL
             repo.ImportFinancieleLijnen(year);
         }
 
+
         public IEnumerable<Categorie> GetCategorien()
         {
             return repo.ReadCategories();
         }
 
-        public IEnumerable<Gemeente> GetCGemeenten()
+        public IEnumerable<HoofdGemeente> GetCGemeenten()
         {
             return repo.ReadGemeentes();
         }

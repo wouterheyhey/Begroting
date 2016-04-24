@@ -22,7 +22,7 @@ namespace DAL
             public DbSet<Actie> Acties { get; set; }
             public DbSet<InspraakItem> inspraakItems { get; set; }
             public DbSet<GemeenteCategorie> GemeenteCategorien { get; set; }
-            public DbSet<Gemeente> Gemeenten { get; set; }
+            public DbSet<HoofdGemeente> Gemeenten { get; set; }
             public DbSet<Politicus> Politici { get; set; }
             public DbSet<FinancieelOverzicht> FinancieleOverzichten { get; set; }
             public DbSet<IngelogdeGebruiker> Gebruikers { get; set; }
@@ -32,6 +32,7 @@ namespace DAL
             public DbSet<Account> Accounts { get; set; }
             public DbSet<Stem> Stemmen { get; set; }
             public DbSet<AntwoordEmail> AntwoordEmails { get; set; }
+           // public DbSet<Cluster> Clusters { get; set; }
 
     }
 }

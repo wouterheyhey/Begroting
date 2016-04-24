@@ -68,12 +68,14 @@
     <Compile Include="BudgetVerschuiving.cs" />
     <Compile Include="Categorie.cs" />
     <Compile Include="CategorieInput.cs" />
+    <Compile Include="Cluster.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="Desactivatie.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
     <Compile Include="FinancieelOverzicht.cs" />
     <Compile Include="Gemeente.cs" />
+    <Compile Include="HoofdGemeente.cs" />
     <Compile Include="GemeenteCategorie.cs" />
     <Compile Include="IngelogdeGebruiker.cs" />
     <Compile Include="InspraakItem.cs" />
