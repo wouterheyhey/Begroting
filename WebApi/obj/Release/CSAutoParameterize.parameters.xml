@@ -1,9 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<parameters>
-  <parameter name="BegrotingDB_EF-Web.config Connection String" description="BegrotingDB_EF Connection String used in web.config by the application to access the database." defaultValue="Data Source=.\SQLSERVER2012;Initial Catalog=BegrotingDB_EF;Integrated Security=True" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\kevin\\Source\\Repos\\Begroting\\WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BegrotingDB_EF']/@connectionString" />
-  </parameter>
-  <parameter name="BegrotingDB_Azure-Web.config Connection String" description="BegrotingDB_Azure Connection String used in web.config by the application to access the database." defaultValue="Server=tcp:begroting.database.windows.net,1433;Database=begroting;User ID=begroting@begroting;Password=Blended01;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;" tags="SqlConnectionString">
-    <parameterEntry kind="XmlFile" scope="C:\\Users\\kevin\\Source\\Repos\\Begroting\\WebApi\\obj\\Release\\Package\\PackageTmp\\Web\.config$" match="/configuration/connectionStrings/add[@name='BegrotingDB_Azure']/@connectionString" />
-  </parameter>
-</parameters>

@@ -1,4 +1,0 @@
-C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL.Domain\bin\x64\Debug\BL.Domain.dll
-C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL.Domain\bin\x64\Debug\BL.Domain.pdb
-C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL.Domain\obj\x64\Debug\BL.Domain.dll
-C:\Users\nadya\Desktop\jaar3\Integratieproject\Begroting\BL.Domain\obj\x64\Debug\BL.Domain.pdb

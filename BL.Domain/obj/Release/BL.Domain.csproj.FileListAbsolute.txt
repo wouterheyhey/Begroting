@@ -1,5 +1,0 @@
-C:\Users\kevin\Source\Repos\Begroting\BL.Domain\bin\Release\BL.Domain.dll
-C:\Users\kevin\Source\Repos\Begroting\BL.Domain\bin\Release\BL.Domain.pdb
-C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Release\BL.Domain.csprojResolveAssemblyReference.cache
-C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Release\BL.Domain.dll
-C:\Users\kevin\Source\Repos\Begroting\BL.Domain\obj\Release\BL.Domain.pdb
