@@ -99,12 +99,12 @@ namespace DAL
 
         public HoofdGemeente ReadGemeente(string gemeenteNaam)
         {
-            return ctx.Gemeenten.Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
         public IEnumerable<HoofdGemeente>  ReadGemeentes()
         {
-            return ctx.Gemeenten;
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten));
         }
 
         public List<Categorie> ReadChildrenCategories(Categorie cat)

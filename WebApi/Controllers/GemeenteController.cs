@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     {
         private CategoryManager mgr = new CategoryManager();
 
-        // GET: api/Category
+        // GET: api/Gemeente
         public IHttpActionResult Get()
         {
             var gemeenten = mgr.GetCGemeenten();
@@ -21,6 +21,15 @@ namespace WebApi.Controllers
                 return StatusCode(HttpStatusCode.NoContent);
 
             return Ok(gemeenten);
+        }
+        // GET: api/Gemeente?name=Brussel
+        public IHttpActionResult Get(string name)
+        {
+            var gemeente = mgr.GetGemeente(name);
+            if(gemeente==null)
+                return StatusCode(HttpStatusCode.NoContent);
+
+            return Ok(gemeente);
         }
     }
 }

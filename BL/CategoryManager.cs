@@ -35,6 +35,12 @@ namespace BL
             return repo.ReadGemeentes();
         }
 
+        public HoofdGemeente GetGemeente(string name)
+        {
+            return repo.ReadGemeente(name);
+        }
+
+
         public void SetChildrenCategorien()
         {
             repo.UpdateAllCategoriesChildren();
