@@ -9,12 +9,13 @@ using System.Web.Http;
 
 namespace WebApi.Controllers
 {
-    public class CategoryController : ApiController
+    public class CategorieController : ApiController
     {
-        private CategoryManager mgr = new CategoryManager();
+        private CategorieManager mgr = new CategorieManager();
+        
 
         // GET: api/Category
-        public IHttpActionResult Get()
+         public IHttpActionResult Get()
         {
             var categorien = mgr.GetCategorien();
 
@@ -22,7 +23,11 @@ namespace WebApi.Controllers
                 return StatusCode(HttpStatusCode.NoContent);
 
             return Ok(categorien);
-        }
+        } 
+
+       
+
+
 
     }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Domain;
+using DAL.repositories;
 
 namespace DAL
 {
@@ -196,7 +197,7 @@ namespace DAL
         }
 
         
-        public static List<FinancieleLijn> ImportFinancieleLijnen(string path,int year, CategoryRepository catRepo)
+        public static List<FinancieleLijn> ImportFinancieleLijnen(string path,int year, BegrotingRepository finRepo)
         {
             List<FinancieleLijn> lines = new List<FinancieleLijn>();
 
@@ -216,19 +217,19 @@ namespace DAL
 
             foreach (var r in rows)  //needs parameterless constructor
             {
-                cat = catRepo.ReadGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], r["Groep"].Cast<string>()); // lijn hangen aan laagste hierarchieniveau
-                actie = catRepo.ReadActie(r["Actie code"].Cast<string>(), r["Groep"].Cast<string>());
-                gem = catRepo.ReadGemeente(r["Groep"].Cast<string>());
-                fo = catRepo.ReadFinancieelOverzicht(year, gem);
+                cat = finRepo.ReadGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], r["Groep"].Cast<string>()); // lijn hangen aan laagste hierarchieniveau
+                actie = finRepo.ReadActie(r["Actie code"].Cast<string>(), r["Groep"].Cast<string>());
+                gem = finRepo.ReadGemeente(r["Groep"].Cast<string>());
+                fo = finRepo.ReadFinancieelOverzicht(year, gem);
 
                 if (actie == null)
                 {
-                    actie = catRepo.CreateActie(new Actie(r["Actie code"].Cast<string>(), r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(),gem));
+                    actie = finRepo.CreateActie(new Actie(r["Actie code"].Cast<string>(), r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(),gem));
                 }
 
                 if (cat == null)
                 {
-                    cat = catRepo.CreateGemeenteCategorie(new GemeenteCategorie(catRepo.ReadCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0]), gem));
+                    cat = finRepo.CreateGemeenteCategorie(new GemeenteCategorie(finRepo.ReadCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0]), gem));
                 }
 
 
@@ -239,10 +240,10 @@ namespace DAL
                     switch (check)
                         {
                         case true:
-                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
+                            fo = finRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
                             break;
                         case false:
-                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
+                            fo = finRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
                             break;
                     }
                          

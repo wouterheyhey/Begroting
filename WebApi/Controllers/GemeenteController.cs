@@ -10,12 +10,12 @@ namespace WebApi.Controllers
 {
     public class GemeenteController : ApiController
     {
-        private CategoryManager mgr = new CategoryManager();
+        private GemeenteManager mgr = new GemeenteManager();
 
         // GET: api/Gemeente
         public IHttpActionResult Get()
         {
-            var gemeenten = mgr.GetCGemeenten();
+            var gemeenten = mgr.GetGemeenten();
 
             if (gemeenten == null || gemeenten.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);

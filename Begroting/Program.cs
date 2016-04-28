@@ -14,7 +14,8 @@ namespace UI_CA
 
         static void Main(string[] args)
         {
-            CategoryManager mgr = new CategoryManager();
+            BegrotingManager mgr = new BegrotingManager();
+
             mgr.SetChildrenCategorien(); // geen invloed op EF
             mgr.LoadFinancieleLijnen(2020);
        //     Console.ReadLine();
