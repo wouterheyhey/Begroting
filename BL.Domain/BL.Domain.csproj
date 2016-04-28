@@ -65,7 +65,7 @@
     <Compile Include="BegrotingsVoorstel.cs" />
     <Compile Include="BegrotingsVoorstelReactie.cs" />
     <Compile Include="BestuurType.cs" />
-    <Compile Include="BudgetVerschuiving.cs" />
+    <Compile Include="BudgetWijziging.cs" />
     <Compile Include="Categorie.cs" />
     <Compile Include="CategorieInput.cs" />
     <Compile Include="Cluster.cs" />

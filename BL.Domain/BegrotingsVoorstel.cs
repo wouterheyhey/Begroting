@@ -17,7 +17,7 @@ namespace BL.Domain
         public string samenvatting { get; set; }
         [MaxLength(1000)]
         public string beschrijving { get; set; }
-        public HashSet<BudgetVerschuiving> budgetVerschuivingen { get; set; }
+        public HashSet<BudgetWijziging> budgetWijzigingen { get; set; }
         public HashSet<Stem> stemmen { get; set; }
         public VerificatieStatus verificatieStatus { get; set; }
         public DateTime verificatieDatum { get; set; }

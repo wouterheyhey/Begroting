@@ -27,6 +27,17 @@ namespace DAL
             return cat; 
         }
 
+        public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, HoofdGemeente gem)
+        {
+            GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
+            if (cat == null)
+            {
+                return CreateGemeenteCategorie(new GemeenteCategorie(ReadCategorie(catCode), gem));
+            }
+
+            return cat;
+        }
+
         public Categorie ReadCategorie(string categorieCode)
         {
             return ctx.Categorien.Find(categorieCode);
@@ -59,9 +70,10 @@ namespace DAL
             return finLijn;
         }
 
+        // meer dan enkel CRUD operaties op de DB -> verplaatsen naar andere DAL klasse of manager?
         public void ImportFinancieleLijnen(int year)
         {
-            string importPath = @"..\..\..\DAL\lib\";
+            string importPath = (new FileLocator()).findExcelSourceDir();
             string categoryFile = "gemeente_categorie_acties_jaartal_uitgaven.xlsx";
 
             FinancieleLijn fn;
@@ -87,6 +99,17 @@ namespace DAL
         {
             ctx.Acties.Add(actie);
             ctx.SaveChanges();
+            return actie;
+        }
+
+        public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem)
+        {
+            Actie actie = ReadActie(actieCode, gem.naam);
+            if (actie == null)
+            {
+                return CreateActie(new Actie(actieCode, actieKort,actieLang, gem));
+            }
+
             return actie;
         }
 

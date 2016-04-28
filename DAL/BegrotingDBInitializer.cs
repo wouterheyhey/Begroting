@@ -8,16 +8,17 @@ using BL.Domain;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Entity.Infrastructure.Annotations;
+using System.Reflection;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
     {
 
 
         protected override void Seed(BegrotingDBContext ctx)
         {
-            string importPath = @"..\..\..\DAL\lib\";
+            string importPath = (new FileLocator()).findExcelSourceDir();
             string categoryFileCat = "Config_Categorien.xls";
             string categoryFileGem = "Config_Gemeenten.xls";
             string categoryFileClu = "Config_Clusters.xls";

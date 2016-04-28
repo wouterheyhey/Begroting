@@ -92,6 +92,7 @@
     <Compile Include="CategoryRepository.cs" />
     <Compile Include="ExcelImporter.cs" />
     <Compile Include="BegrotingDBInitializer.cs" />
+    <Compile Include="FileLocator.cs" />
     <Compile Include="FinancieleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

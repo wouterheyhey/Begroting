@@ -216,20 +216,10 @@ namespace DAL
 
             foreach (var r in rows)  //needs parameterless constructor
             {
-                cat = catRepo.ReadGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], r["Groep"].Cast<string>()); // lijn hangen aan laagste hierarchieniveau
-                actie = catRepo.ReadActie(r["Actie code"].Cast<string>(), r["Groep"].Cast<string>());
                 gem = catRepo.ReadGemeente(r["Groep"].Cast<string>());
+                cat = catRepo.CreateIfNotExistsGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], gem); // lijn hangen aan laagste hierarchieniveau
+                actie = catRepo.CreateIfNotExistsActie(r["Actie code"].Cast<string>(), r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(), gem);
                 fo = catRepo.ReadFinancieelOverzicht(year, gem);
-
-                if (actie == null)
-                {
-                    actie = catRepo.CreateActie(new Actie(r["Actie code"].Cast<string>(), r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(),gem));
-                }
-
-                if (cat == null)
-                {
-                    cat = catRepo.CreateGemeenteCategorie(new GemeenteCategorie(catRepo.ReadCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0]), gem));
-                }
 
 
                 if (fo == null)
@@ -239,7 +229,7 @@ namespace DAL
                     switch (check)
                         {
                         case true:
-                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
+                            fo = catRepo.CreateJaarBegroting(new JaarRekening(year, gem));
                             break;
                         case false:
                             fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
