@@ -16,8 +16,10 @@ namespace UI_CA
         {
             BegrotingManager mgr = new BegrotingManager();
 
-            mgr.SetChildrenCategorien(); // geen invloed op EF
-            mgr.LoadFinancieleLijnen(2020);
+          // mgr.SetChildrenCategorien(); // geen invloed op EF
+
+          // mgr.LoadFinancieleLijnen(2020);
+            
        //     Console.ReadLine();
         }
     }

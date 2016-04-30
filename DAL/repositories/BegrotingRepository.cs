@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using BL.Domain.DTOs;
 
 namespace DAL.repositories
 {
@@ -40,17 +41,28 @@ namespace DAL.repositories
             return finLijn;
         }
 
-        public IEnumerable<FinancieleLijn> GetFinancieleLijnen(int jaar, int gemeenteId)
+        public IEnumerable<DTOfinancieleLijn> GetFinancieleLijnen(int jaar, int gemeenteId)
         {
 
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where<FinancieelOverzicht>(f1 => f1.gemeente.GemeenteID == gemeenteId)
+            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.GemeenteID == gemeenteId)
                 .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                 .Select(c => c.Id).SingleOrDefault();
 
-            //1 lijn --> 1 InspraakItem --> 1 gemeente en 1 categorie -> 1 Parent -> 1 Parent
-            return ctx.FinLijnen.Include(fin1 => fin1.cat.cat.categorieParent.categorieParent)
-                .Where<FinancieleLijn>(fin1 => fin1.financieelOverzicht.Id == id);
+            //1 lijn --> 1 InspraakItem(GemeenteCategorie)  --> 1 Parent -> 1 Parent
+               return ctx.FinLijnen.Include(fin1 => fin1.cat.cat.categorieParent.categorieParent)
+                   .Where<FinancieleLijn>(fin1 => fin1.financieelOverzicht.Id == id).Select(
 
+                   fin2 => new DTOfinancieleLijn()
+                   {
+
+                       naamCatx = fin2.cat.cat.categorieParent.categorieParent.categorieNaam,
+                       naamCaty = fin2.cat.cat.categorieParent.categorieNaam,
+                       naamCatz = fin2.cat.cat.categorieNaam,
+                       uitgave = fin2.uitgaven,
+                       catCode = fin2.cat.cat.categorieCode
+
+                   }
+                   );
         }
 
         public void ImportFinancieleLijnen(int year)
@@ -75,7 +87,6 @@ namespace DAL.repositories
         {
             return ctx.Acties.Where<Actie>(x => x.actieCode == actieCode).Where<Actie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
         }
-
 
         public Actie CreateActie(Actie actie)
         {

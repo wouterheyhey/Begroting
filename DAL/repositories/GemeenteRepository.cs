@@ -1,4 +1,5 @@
 ﻿using BL.Domain;
+using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +31,19 @@ namespace DAL.repositories
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
-        public IEnumerable<HoofdGemeente> ReadGemeentes()
+        public HoofdGemeente ReadGemeente(int id)
         {
-            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten));
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.GemeenteID == id).SingleOrDefault();
         }
 
+        public IEnumerable<HoofdGemeente> ReadGemeentes()
+        {
+            return ctx.Gemeenten;
+        }
+
+        
+
+      
 
     }
 }
