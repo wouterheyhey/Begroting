@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.repositories;
 using BL.Domain;
+using BL.Domain.DTOs;
 
 namespace BL
 {
@@ -22,9 +23,11 @@ namespace BL
             return repo.ReadGemeentes();
         }
 
-        public HoofdGemeente GetGemeente(string name)
+        public HoofdGemeente GetGemeente(int id)
         {
-            return repo.ReadGemeente(name);
+            return repo.ReadGemeente(id);
         }
+
+
     }
 }

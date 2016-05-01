@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManager.cs" />
+    <Compile Include="ActieManager.cs" />
     <Compile Include="CategorieManager.cs" />
     <Compile Include="BegrotingManager.cs" />
     <Compile Include="FinancieleLijnManager.cs" />

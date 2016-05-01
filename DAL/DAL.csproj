@@ -93,6 +93,7 @@
     <Compile Include="BegrotingDBInitializer.cs" />
     <Compile Include="FileLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="repositories\ActieRepository.cs" />
     <Compile Include="repositories\BegrotingRepository.cs" />
     <Compile Include="repositories\AccountRepository.cs" />
     <Compile Include="repositories\CategorieRepository.cs" />

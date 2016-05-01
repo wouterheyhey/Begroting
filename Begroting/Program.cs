@@ -28,7 +28,6 @@ namespace UI_CA
             */
 
 
-            //     Console.ReadLine();
         }
     }
 

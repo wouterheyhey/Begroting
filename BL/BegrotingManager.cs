@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using DAL;
 using BL.Domain;
 using DAL.repositories;
+using BL.Domain.DTOs;
 
 namespace BL
 {
@@ -17,7 +18,7 @@ namespace BL
            repo = new BegrotingRepository();
         }
 
-        public IEnumerable<FinancieleLijn> readFinancieleLijnen(int jaar, int gemeenteId )
+        public IEnumerable<DTOfinancieleLijn> readFinancieleLijnen(int jaar, int gemeenteId )
         {
             return repo.GetFinancieleLijnen(jaar, gemeenteId);
         }
@@ -25,6 +26,13 @@ namespace BL
         public void addFinancieleLijnen(IEnumerable<FinancieleLijn> lijnen)
         {
             repo.CreateFinancieleLijnen(lijnen);
+            return ;
+        }
+       
+        // Nodig?
+        public void LoadFinancieleLijnen(int year)
+        {
+       //     repo.CreateFinancieleLijnen(lijnen);
             return ;
         }
 

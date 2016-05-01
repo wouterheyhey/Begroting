@@ -1,5 +1,6 @@
 ﻿using BL;
 using BL.Domain;
+using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,12 +16,15 @@ namespace WebApi.Controllers
 
         public IHttpActionResult Get(int jaar, int gemeenteId)
         {
-            IEnumerable<FinancieleLijn> lijnen = mgr.readFinancieleLijnen(jaar, gemeenteId);
+            IEnumerable<DTOfinancieleLijn> lijnen = mgr.readFinancieleLijnen(jaar, gemeenteId);
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
+
             return Ok(lijnen);
         }
+
+       
     }
 }

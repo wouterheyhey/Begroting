@@ -125,6 +125,7 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ActieController.cs" />
     <Compile Include="Controllers\BegrotingController.cs" />
     <Compile Include="Controllers\CategorieController.cs" />
     <Compile Include="Controllers\GemeenteController.cs" />
