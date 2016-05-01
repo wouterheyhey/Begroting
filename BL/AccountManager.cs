@@ -24,6 +24,11 @@ namespace BL
             return repo.RegisterUser(account);
         }
 
+        public Task<IdentityUser> FindUser(String userName, String password)
+        {
+            return repo.FindUser(userName, password);
+        }
+
         public void Dispose()
         {
             repo.Dispose();
