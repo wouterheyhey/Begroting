@@ -48,6 +48,11 @@ namespace BL.Domain
             this.bestuurType = bt;
             this.financieelOverzicht = fo;
         }
+        public FinancieleLijn()
+        {
+
+        }
+
         public override string ToString()
         {
             return String.Format("Uitgave: " + uitgaven + ", Categorie: " + cat.ToString() );

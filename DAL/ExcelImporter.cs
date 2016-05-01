@@ -5,17 +5,18 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Domain;
+using DAL.repositories;
 
 namespace DAL
 {
     public class ExcelImporter
     {
-        public static IDictionary<string,Cluster> ImportClusters(string path)
+        public static IDictionary<string, Cluster> ImportClusters(string path)
         {
-            Dictionary<string,Cluster> clusters = new Dictionary<string, Cluster>();
+            Dictionary<string, Cluster> clusters = new Dictionary<string, Cluster>();
 
             // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(IDictionary<string,Cluster>);
+            if (!File.Exists(path)) return default(IDictionary<string, Cluster>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             var rows = from c in book.Worksheet("Sheet1")
@@ -26,7 +27,7 @@ namespace DAL
             foreach (var r in rows)  //needs parameterless constructor
             {
                 clusterNaam = r["ClusterNaam"].Cast<string>();
-                if (clusterNaam != null) clusters.Add(clusterNaam,new Cluster(clusterNaam));
+                if (clusterNaam != null) clusters.Add(clusterNaam, new Cluster(clusterNaam));
             }
 
             return clusters;
@@ -55,18 +56,18 @@ namespace DAL
                 ;
 
             List<string> namen = new List<string>();
-            foreach (var r in rows)  
+            foreach (var r in rows)
             {
                 if (!namen.Contains(r["Hoofdgemeente"]))
                 {
-                    gemeenten.Add(new HoofdGemeente(r["Hoofdgemeente"],r["Provincie"],r["PC Hoofdgemeente"].Cast<int>()));
+                    gemeenten.Add(new HoofdGemeente(r["Hoofdgemeente"], r["Provincie"], r["PC Hoofdgemeente"].Cast<int>()));
                     gemeenten.Last().deelGemeenten = new HashSet<Gemeente>();
                     namen.Add(r["Hoofdgemeente"]);
                 }
 
-                if (gemeenten.Count!=0) gemeenten.Last().deelGemeenten.Add(new Gemeente(r["gemeente"], r["Postcode"].Cast<int>())); 
-                
-                        
+                if (gemeenten.Count != 0) gemeenten.Last().deelGemeenten.Add(new Gemeente(r["gemeente"], r["Postcode"].Cast<int>()));
+
+
             }
 
             AddClustersToHoofdGemeentes(gemeenten, path, clusterPath);
@@ -74,7 +75,7 @@ namespace DAL
             return gemeenten;
         }
 
-        public static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten,string path, string clusterPath)
+        public static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten, string path, string clusterPath)
         {
             // Eventueel error throwen hier
             if (!File.Exists(path)) return default(List<HoofdGemeente>);
@@ -90,7 +91,7 @@ namespace DAL
             }
 
             return gemeenten;
-            
+
         }
 
         public static IDictionary<string, string> MatchGemeenteCluster(string path)
@@ -150,17 +151,17 @@ namespace DAL
 
         public static Dictionary<string, Categorie> ImportCategories(string path)
         {
-            Dictionary<string,Categorie> hmap = new Dictionary<string,Categorie>();
+            Dictionary<string, Categorie> hmap = new Dictionary<string, Categorie>();
 
             // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(Dictionary<string,Categorie>); 
+            if (!File.Exists(path)) return default(Dictionary<string, Categorie>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             foreach (string cat in Enum.GetNames(typeof(CategoryType)))
             {
                 // book.AddMapping<Categorie>(x => x.categorieNaam, "Categorie " + cat);
                 // char charcat = cat.ToCharArray()[0]; // enum contains string, not char
-               // char do not get mapped in EF !!! -> keep string
+                // char do not get mapped in EF !!! -> keep string
 
                 var rows = from c in book.Worksheet("Sheet1")
                            select c
@@ -195,59 +196,24 @@ namespace DAL
             return hmap;
         }
 
-        
-        public static List<FinancieleLijn> ImportFinancieleLijnen(string path,int year, CategoryRepository catRepo)
+
+        public static IQueryable<LinqToExcel.Row> ImportFinancieleLijnen(string path, int year)
         {
-            List<FinancieleLijn> lines = new List<FinancieleLijn>();
+
 
             // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(List<FinancieleLijn>);
+            if (!File.Exists(path)) return default(IQueryable<LinqToExcel.Row>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             var rows = from c in book.Worksheet("Actie_detail_2")
                        where c["Financieel boekjaar"].Cast<int>() == year
                        select c;
 
-            GemeenteCategorie cat;
-            Actie actie;
-            HoofdGemeente gem;
-            BestuurType bt;
-            FinancieelOverzicht fo;
-
-            foreach (var r in rows)  //needs parameterless constructor
-            {
-                gem = catRepo.ReadGemeente(r["Groep"].Cast<string>());
-                cat = catRepo.CreateIfNotExistsGemeenteCategorie(r["Categorie C"].Cast<string>().Split(new char[] { ' ' })[0], gem); // lijn hangen aan laagste hierarchieniveau
-                actie = catRepo.CreateIfNotExistsActie(r["Actie code"].Cast<string>(), r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(), gem);
-                fo = catRepo.ReadFinancieelOverzicht(year, gem);
-
-
-                if (fo == null)
-                {
-                    // logic to decide if begroting or rekening. beter ergens in een functie zetten
-                    bool check = year <= DateTime.Now.Year ;
-                    switch (check)
-                        {
-                        case true:
-                            fo = catRepo.CreateJaarBegroting(new JaarRekening(year, gem));
-                            break;
-                        case false:
-                            fo = catRepo.CreateJaarBegroting(new JaarBegroting(year, gem));
-                            break;
-                    }
-                         
-
-                    
-                }
-
-                bt = FinancieleLijn.MapBestuurType(r["Naam bestuur"].Cast<string>());
-
-                lines.Add(new FinancieleLijn(r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), cat, actie, bt, fo));  //creating new category objects with data
-            }
-
-            return lines;
+            return rows;
 
         }
+
+
 
     }
 }

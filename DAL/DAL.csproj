@@ -89,12 +89,16 @@
   <ItemGroup>
     <Compile Include="BegrotingDBConfiguration.cs" />
     <Compile Include="BegrotingDBContext.cs" />
-    <Compile Include="CategoryRepository.cs" />
     <Compile Include="ExcelImporter.cs" />
     <Compile Include="BegrotingDBInitializer.cs" />
     <Compile Include="FileLocator.cs" />
-    <Compile Include="FinancieleRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="repositories\BegrotingRepository.cs" />
+    <Compile Include="repositories\AccountRepository.cs" />
+    <Compile Include="repositories\CategorieRepository.cs" />
+    <Compile Include="repositories\FinancieleLijnRepository.cs" />
+    <Compile Include="repositories\GemeenteRepository.cs" />
+    <Compile Include="repositories\ProjectRepository.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BL.Domain\BL.Domain.csproj">

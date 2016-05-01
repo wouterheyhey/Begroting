@@ -58,8 +58,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CategoryManager.cs" />
-    <Compile Include="FinancieleManager.cs" />
+    <Compile Include="AccountManager.cs" />
+    <Compile Include="CategorieManager.cs" />
+    <Compile Include="BegrotingManager.cs" />
+    <Compile Include="FinancieleLijnManager.cs" />
+    <Compile Include="GemeenteManager.cs" />
+    <Compile Include="ProjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
