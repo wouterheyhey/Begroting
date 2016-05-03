@@ -10,7 +10,7 @@ namespace DAL
 {
     internal class FileLocator
     {
-        private const string libRelDir = "..\\DAL\\lib\\";
+        private const string libRelDir = @"C:\lib\";
 
         internal string findExcelSourceDir()
         {

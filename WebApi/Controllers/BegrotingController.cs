@@ -12,11 +12,13 @@ namespace WebApi.Controllers
 {
     public class BegrotingController : ApiController
     {
-        private BegrotingManager mgr = new BegrotingManager();
+        private BegrotingManager begMgr = new BegrotingManager();
+        private CategorieManager catMgr = new CategorieManager();
+        private FinancieleLijnManager finMgr = new FinancieleLijnManager();
 
         public IHttpActionResult Get(int jaar, int gemeenteId)
         {
-            IEnumerable<DTOfinancieleLijn> lijnen = mgr.readFinancieleLijnen(jaar, gemeenteId);
+            IEnumerable<DTOfinancieleLijn> lijnen = begMgr.readFinancieleLijnen(jaar, gemeenteId);
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
@@ -25,6 +27,21 @@ namespace WebApi.Controllers
             return Ok(lijnen);
         }
 
-       
+        public IHttpActionResult AddBegroting(int year)
+        {
+            try
+            {
+                catMgr.SetChildrenCategorien();
+                finMgr.LoadFinancieleLijnen(year);
+            }
+            catch
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return StatusCode(HttpStatusCode.OK);
+
+        }
+
+
     }
 }

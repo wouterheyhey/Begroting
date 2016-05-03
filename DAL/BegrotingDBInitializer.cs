@@ -30,20 +30,18 @@ namespace DAL
 
             foreach (HoofdGemeente s in ExcelImporter.ImportHoofdGemeenten(importPath + categoryFileGem, importPath + categoryFileClu, importPath + categoryFilePos))
             {
-                Console.WriteLine(s.ToString());
+                System.Diagnostics.Debug.WriteLine(s.ToString());
                 ctx.Gemeenten.Add(s);
             }
             ctx.SaveChanges();
-            Console.ReadLine();
 
 
             foreach (Categorie s in ExcelImporter.ImportCategories(importPath + categoryFileCat).Values)
             {
-                Console.WriteLine(s.ToString());
+                System.Diagnostics.Debug.WriteLine(s.ToString());
                 ctx.Categorien.Add(s);
             }
             ctx.SaveChanges();
-            Console.ReadLine();
 
 
         }
