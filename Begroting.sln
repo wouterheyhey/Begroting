@@ -1,8 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UI_CA", "Begroting\UI_CA.csproj", "{E4E89F88-286E-4DEB-974C-E4BF737FAD46}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{6E6C241B-B317-4DFC-9B09-403D14A3A91E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BL.Domain", "BL.Domain\BL.Domain.csproj", "{F74E1C27-D554-4716-BCC0-FED8D1041CF1}"
@@ -19,6 +21,14 @@ Global
 		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Debug|x64.ActiveCfg = Debug|x64
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Debug|x64.Build.0 = Debug|x64
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Release|x64.ActiveCfg = Release|x64
+		{E4E89F88-286E-4DEB-974C-E4BF737FAD46}.Release|x64.Build.0 = Release|x64
 		{6E6C241B-B317-4DFC-9B09-403D14A3A91E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6E6C241B-B317-4DFC-9B09-403D14A3A91E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E6C241B-B317-4DFC-9B09-403D14A3A91E}.Debug|x64.ActiveCfg = Debug|x64

@@ -67,8 +67,7 @@ namespace DAL.repositories
 
         public void ImportFinancieleLijnen(int year)
         {
-            //string importPath = @"..\..\..\DAL\lib\";
-            string importPath = @"C:\lib\";
+            string importPath = @"..\..\..\DAL\lib\";
             string categoryFile = "gemeente_categorie_acties_jaartal_uitgaven.xlsx";
 
             FinancieleLijn fn;
