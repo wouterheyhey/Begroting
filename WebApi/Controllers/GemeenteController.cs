@@ -25,9 +25,9 @@ namespace WebApi.Controllers
                 return Ok(gemeenten);
             }
             // GET: api/Gemeente/id
-            public IHttpActionResult Get(int id)
+            public IHttpActionResult Get(string naam)
             {
-                var gemeente = mgr.GetGemeente(id);
+                var gemeente = mgr.GetGemeente(naam);
                 if(gemeente==null)
                     return StatusCode(HttpStatusCode.NoContent);
 

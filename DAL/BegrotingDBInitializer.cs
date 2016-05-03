@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
     {
 
 
@@ -41,7 +41,7 @@ namespace DAL
                 System.Diagnostics.Debug.WriteLine(s.ToString());
                 ctx.Categorien.Add(s);
             }
-            ctx.SaveChanges();
+            ctx.SaveChanges(); 
 
 
         }

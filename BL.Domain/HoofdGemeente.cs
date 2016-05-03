@@ -63,10 +63,10 @@ namespace BL.Domain
 
 
         // Overriding to avoid creation of identical Hoofdgemeentes in de DBSet
-        public override bool Equals(object obj)
+     /*   public override bool Equals(object obj)
         {
             return naam.Equals(((HoofdGemeente)obj).naam);
-        }
+        } */
 
         public override int GetHashCode()
         {

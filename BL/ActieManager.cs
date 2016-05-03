@@ -16,9 +16,9 @@ namespace BL
         {
             repo = new ActieRepository();
         }
-        public IEnumerable<DTOActie> readActies(string catCode, int gemeentId)
+        public IEnumerable<DTOActie> readActies(string catCode, string naam)
         {
-            return repo.GetActie(catCode, gemeentId);
+            return repo.GetActie(catCode, naam);
         }
 
     }

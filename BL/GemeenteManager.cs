@@ -23,9 +23,9 @@ namespace BL
             return repo.ReadGemeentes();
         }
 
-        public HoofdGemeente GetGemeente(int id)
+        public HoofdGemeente GetGemeente(string naam)
         {
-            return repo.ReadGemeente(id);
+            return repo.ReadGemeente(naam);
         }
 
 

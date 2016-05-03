@@ -16,9 +16,9 @@ namespace WebApi.Controllers
         private CategorieManager catMgr = new CategorieManager();
         private FinancieleLijnManager finMgr = new FinancieleLijnManager();
 
-        public IHttpActionResult Get(int jaar, int gemeenteId)
+        public IHttpActionResult Get(int jaar, string naam)
         {
-            IEnumerable<DTOfinancieleLijn> lijnen = begMgr.readFinancieleLijnen(jaar, gemeenteId);
+            IEnumerable<DTOfinancieleLijn> lijnen = begMgr.readFinancieleLijnen(jaar, naam);
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
@@ -27,7 +27,7 @@ namespace WebApi.Controllers
             return Ok(lijnen);
         }
 
-        public IHttpActionResult AddBegroting(int year)
+        public IHttpActionResult Get(int year)
         {
             try
             {

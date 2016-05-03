@@ -45,12 +45,11 @@ namespace DAL.repositories
             return finLijn;
         }
 
-        public IEnumerable<DTOfinancieleLijn> GetFinancieleLijnen(int jaar, int gemeenteId)
+        public IEnumerable<DTOfinancieleLijn> GetFinancieleLijnen(int jaar, string naam)
         {
 
-           // var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where<FinancieelOverzicht>(f1 => f1.gemeente.HoofdGemeenteID == gemeenteId)
 
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.HoofdGemeenteID == gemeenteId)
+            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
                 .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                 .Select(c => c.Id).SingleOrDefault();
 

@@ -14,11 +14,13 @@ namespace BL.Domain.DTOs
 
         }
 
-
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCatx { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCaty { get; set; }
 
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCatz { get; set; }
 
         public float uitgave { get; set; }
