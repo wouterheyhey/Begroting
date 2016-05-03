@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.IO;
+using System.Reflection;
 
 namespace DAL.repositories
 {
@@ -55,8 +57,10 @@ namespace DAL.repositories
 
         public void ImportFinancieleLijnen(int year)
         {
-            string importPath = @"..\..\..\DAL\lib\";
+            //string importPath = @"..\..\..\DAL\lib\";
+            string importPath = @"C:\Users\kevin\Source\Repos\Begroting\DAL\lib\";
             string categoryFile = "gemeente_categorie_acties_jaartal_uitgaven.xlsx";
+           
 
             FinancieleLijn fn;
             int count = 0;
@@ -65,7 +69,7 @@ namespace DAL.repositories
             {
                 fn = CreateFinLijn(fl);
                 count++;
-                Console.WriteLine(count + " Lines imported");
+                System.Diagnostics.Debug.WriteLine(count + " Lines imported");
             }
             return;
         }
