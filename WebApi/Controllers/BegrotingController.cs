@@ -25,6 +25,21 @@ namespace WebApi.Controllers
             return Ok(lijnen);
         }
 
-       
+        public IHttpActionResult AddFinancieleLijnen(int year)
+        {
+            try
+            {
+                mgr.SetChildrenCategorien();
+                mgr.LoadFinancieleLijnen(year);
+            }
+            catch
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return StatusCode(HttpStatusCode.OK);
+
+        }
+
+
     }
 }
