@@ -62,6 +62,7 @@
     <Compile Include="ActieManager.cs" />
     <Compile Include="CategorieManager.cs" />
     <Compile Include="BegrotingManager.cs" />
+    <Compile Include="FinancieleLijnManager.cs" />
     <Compile Include="GemeenteManager.cs" />
     <Compile Include="ProjectManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

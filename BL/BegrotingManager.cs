@@ -23,17 +23,21 @@ namespace BL
             return repo.GetFinancieleLijnen(jaar, gemeenteId);
         }
 
+        public void addFinancieleLijnen(IEnumerable<FinancieleLijn> lijnen)
+        {
+            repo.CreateFinancieleLijnen(lijnen);
+            return ;
+        }
        
-
+        // Nodig?
         public void LoadFinancieleLijnen(int year)
         {
-            repo.ImportFinancieleLijnen(year);
+       //     repo.CreateFinancieleLijnen(lijnen);
+            return ;
         }
 
-        public void SetChildrenCategorien()
-        {
-            repo.UpdateAllCategoriesChildren();
-        }
+
+
 
 
     }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL.Domain
 {
-    public class BudgetVerschuiving
+    public class BudgetWijziging
     {
         public int ID { get; set; }
         public float bedrag { get; set; }

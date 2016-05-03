@@ -14,13 +14,20 @@ namespace UI_CA
 
         static void Main(string[] args)
         {
-            BegrotingManager mgr = new BegrotingManager();
+            FinancieleLijnManager FinMgr = new FinancieleLijnManager();
+            CategorieManager mgr = new CategorieManager();
 
-          // mgr.SetChildrenCategorien(); // geen invloed op EF
+            mgr.SetChildrenCategorien(); // geen invloed op EF
+            FinMgr.LoadFinancieleLijnen(2020);
+            /*
+            FinMgr.LoadFinancieleLijnen(2019);
+            FinMgr.LoadFinancieleLijnen(2018);
+            FinMgr.LoadFinancieleLijnen(2017);
+            FinMgr.LoadFinancieleLijnen(2016);
+            FinMgr.LoadFinancieleLijnen(2015);
+            */
 
-          // mgr.LoadFinancieleLijnen(2020);
-            
-       //     Console.ReadLine();
+
         }
     }
 

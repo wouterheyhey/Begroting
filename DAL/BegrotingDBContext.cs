@@ -17,6 +17,32 @@ namespace DAL
             {
             }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<HoofdGemeente>()
+                .Property(t => t.naam)
+                .IsRequired()
+                .HasMaxLength(60)
+                .HasColumnAnnotation(
+                IndexAnnotation.AnnotationName,
+                new IndexAnnotation(
+                new IndexAttribute("IX_Naam", 2) { IsUnique = true }));
+
+            modelBuilder
+                .Entity<Categorie>()
+                .Property(t => t.categorieCode)
+                .IsRequired()
+                .HasMaxLength(60)
+                .HasColumnAnnotation(
+                IndexAnnotation.AnnotationName,
+                new IndexAnnotation(
+                new IndexAttribute("IX_CatCode", 2) { IsUnique = true }));
+            
+        }
+
+
+
             public DbSet<Categorie> Categorien { get; set; }
             public DbSet<FinancieleLijn> FinLijnen { get; set; }
             public DbSet<Actie> Acties { get; set; }

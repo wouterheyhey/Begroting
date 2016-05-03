@@ -21,7 +21,7 @@ namespace DAL.repositories
 
         public IEnumerable<DTOActie> GetActie(string catCode, int gemeentId)
         {
-            return ctx.FinLijnen.Include(nameof(FinancieleLijn.actie)).Where(p => p.cat.cat.categorieCode == catCode && p.cat.gemeente.GemeenteID == gemeentId).Select(
+            return ctx.FinLijnen.Include(nameof(FinancieleLijn.actie)).Where(p => p.cat.cat.categorieCode == catCode && p.cat.gemeente.HoofdGemeenteID == gemeentId).Select(
 
                 fin => new DTOActie()
                 {

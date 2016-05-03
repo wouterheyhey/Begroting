@@ -33,7 +33,7 @@ namespace DAL.repositories
 
         public HoofdGemeente ReadGemeente(int id)
         {
-            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.GemeenteID == id).SingleOrDefault();
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.HoofdGemeenteID == id).SingleOrDefault();
         }
 
         public IEnumerable<HoofdGemeente> ReadGemeentes()

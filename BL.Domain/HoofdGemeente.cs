@@ -10,8 +10,7 @@ namespace BL.Domain
 {
     public class HoofdGemeente
     {
-        [Key]
-        public int GemeenteID { get; set; }
+        public int HoofdGemeenteID { get; set; }
         public string naam { get; set; }
         public int postCode { get; set; }
         public string provincie { get; set; }
@@ -60,6 +59,18 @@ namespace BL.Domain
         public override string ToString()
         {
             return String.Format("Gemeente: " + naam);
+        }
+
+
+        // Overriding to avoid creation of identical Hoofdgemeentes in de DBSet
+        public override bool Equals(object obj)
+        {
+            return naam.Equals(((HoofdGemeente)obj).naam);
+        }
+
+        public override int GetHashCode()
+        {
+            return naam.GetHashCode();
         }
     }
 }

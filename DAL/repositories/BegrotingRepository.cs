@@ -20,23 +20,27 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public GemeenteCategorie CreateGemeenteCategorie(GemeenteCategorie cat)
-        {
-            ctx.GemeenteCategorien.Add(cat);
-            ctx.SaveChanges();
 
-            return cat;
-        }
 
-        public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, string gemeenteNaam)
-        {
-            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.cat.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
-        }
 
+ 
         public FinancieleLijn CreateFinLijn(FinancieleLijn finLijn)
         {
+            ctx.Entry(finLijn.cat).State = EntityState.Unchanged;
+            ctx.Entry(finLijn.actie).State = EntityState.Unchanged;
+            ctx.Entry(finLijn.financieelOverzicht).State = EntityState.Unchanged;
             ctx.FinLijnen.Add(finLijn);
             ctx.SaveChanges();
+
+            return finLijn;
+        }
+
+        public FinancieleLijn CreateNoSaveFinLijn(FinancieleLijn finLijn)
+        {
+            ctx.Entry(finLijn.cat).State = EntityState.Unchanged;
+            ctx.Entry(finLijn.actie).State = EntityState.Unchanged;
+            ctx.Entry(finLijn.financieelOverzicht).State = EntityState.Unchanged;
+            ctx.FinLijnen.Add(finLijn);
 
             return finLijn;
         }
@@ -44,7 +48,9 @@ namespace DAL.repositories
         public IEnumerable<DTOfinancieleLijn> GetFinancieleLijnen(int jaar, int gemeenteId)
         {
 
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.GemeenteID == gemeenteId)
+           // var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where<FinancieelOverzicht>(f1 => f1.gemeente.HoofdGemeenteID == gemeenteId)
+
+            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.HoofdGemeenteID == gemeenteId)
                 .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                 .Select(c => c.Id).SingleOrDefault();
 
@@ -65,33 +71,57 @@ namespace DAL.repositories
                    );
         }
 
-        public void ImportFinancieleLijnen(int year)
-        {
-            string importPath = @"..\..\..\DAL\lib\";
-            string categoryFile = "gemeente_categorie_acties_jaartal_uitgaven.xlsx";
 
-            FinancieleLijn fn;
+
+
+        public void CreateFinancieleLijnen(IEnumerable<FinancieleLijn> lijnen)
+        {
             int count = 0;
-            foreach (FinancieleLijn fl in
-                ExcelImporter.ImportFinancieleLijnen(importPath + categoryFile, year, this))
+            foreach (FinancieleLijn fl in lijnen)
             {
-                fn = CreateFinLijn(fl);
+                ctx.Entry(fl.financieelOverzicht).State = EntityState.Unchanged;
+                CreateNoSaveFinLijn(fl);
                 count++;
-                Console.WriteLine(count + " Lines imported");
             }
+            Console.WriteLine(count + " Lines imported");
+            ctx.SaveChanges();
             return;
         }
 
-        // move to actie repo??
+
         public Actie ReadActie(string actieCode, string gemeenteNaam)
         {
             return ctx.Acties.Where<Actie>(x => x.actieCode == actieCode).Where<Actie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
         }
 
+        public IEnumerable<Actie> ReadActies()
+        {
+            return ctx.Acties;
+        }
+
+
         public Actie CreateActie(Actie actie)
         {
             ctx.Acties.Add(actie);
             ctx.SaveChanges();
+            return actie;
+        }
+
+        public Actie CreateNoSaveActie(Actie actie)
+        {
+            ctx.Acties.Add(actie);
+            return actie;
+        }
+
+        public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem, List<Actie> acties)
+        {
+            Actie actie = acties.Find(x => x.actieCode.Equals(actieCode) && x.gemeente.naam.Equals(gem.naam));
+            if (actie == null)
+            {
+                ctx.Entry(gem).State = EntityState.Unchanged;
+                return CreateActie(new Actie(actieCode, actieKort,actieLang, gem));
+            }
+
             return actie;
         }
 
@@ -103,59 +133,62 @@ namespace DAL.repositories
             return ctx.FinancieleOverzichten.Where<FinancieelOverzicht>(x => x.boekJaar == jaar).Where<FinancieelOverzicht>(x => x.gemeente.naam == gemeente.naam).SingleOrDefault();
         }
 
-        public JaarBegroting CreateJaarBegroting(JaarBegroting jaarBegroting)
+        public IEnumerable<FinancieelOverzicht> ReadFinancieelOverzichten()
+        {
+            return ctx.FinancieleOverzichten;
+        }
+
+        public JaarBegroting CreateFinancieelOverzicht(JaarBegroting jaarBegroting)
         {
             ctx.FinancieleOverzichten.Add(jaarBegroting);
             ctx.SaveChanges();
             return jaarBegroting;
         }
 
-        public JaarRekening CreateJaarBegroting(JaarRekening jaarRekening)
+        public JaarRekening CreateFinancieelOverzicht(JaarRekening jaarRekening)
         {
             ctx.FinancieleOverzichten.Add(jaarRekening);
             ctx.SaveChanges();
             return jaarRekening;
         }
 
-
-        //DEZE STAAN HIER AANGEZIEN EXCELLIPMORTER DEZE NODIG HEEFT --> ZIE METHODE ImportFinancieleLijnen
-        public HoofdGemeente ReadGemeente(string gemeenteNaam)
+        public JaarBegroting CreateNoSaveFinancieelOverzicht(JaarBegroting jaarBegroting)
         {
-            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+            ctx.FinancieleOverzichten.Add(jaarBegroting);
+            return jaarBegroting;
         }
 
-        public Categorie ReadCategorie(string categorieCode)
+        public JaarRekening CreateNoSaveFinancieelOverzicht(JaarRekening jaarRekening)
         {
-            return ctx.Categorien.Find(categorieCode);
+            ctx.FinancieleOverzichten.Add(jaarRekening);
+            return jaarRekening;
         }
 
-        public void UpdateAllCategoriesChildren()
+        public FinancieelOverzicht CreateIfNotExistsFinancieelOverzicht(int jaar, HoofdGemeente gem, List<FinancieelOverzicht> fos)
         {
-            foreach (Categorie cat in ReadCategories().ToList())
+            FinancieelOverzicht fo = fos.Find(x => x.boekJaar.Equals(jaar) && x.gemeente.HoofdGemeenteID.Equals(gem.HoofdGemeenteID));
+            if (fo == null)
             {
-                cat.categrorieChildren = ReadChildrenCategories(cat);
-                // Voor debuggen
-                Console.WriteLine(cat.categrorieChildren.Count() + " added to " + cat.categorieCode);
+                // logic to decide if begroting or rekening. 
+                bool check = jaar <= DateTime.Now.Year;
+                switch (check)
+                {
+                    case true:
+                        fo = CreateFinancieelOverzicht(new JaarRekening(jaar, gem));
+                        break;
+                    case false:
+                        fo = CreateFinancieelOverzicht(new JaarBegroting(jaar, gem));
+                        break;
+                }
+
             }
-            ctx.SaveChanges();
 
+            return fo;
         }
 
-        public IEnumerable<Categorie> ReadCategories()
-        {
-            return ctx.Categorien;
-        }
+       
 
-        public List<Categorie> ReadChildrenCategories(Categorie cat)
-        {
-            // Subcategorien beginnen altijd met dezelfde categoriecode
-            return ctx.Categorien.Where<Categorie>(x => x.categorieCode.StartsWith(cat.categorieCode) && x.categorieCode != cat.categorieCode).ToList<Categorie>();
-        }
 
-        //public Cluster ReadCluster(string clusterName)
-        //{
-        //    return ctx.Clusters.Where<Cluster>(x => x.name == clusterName).SingleOrDefault();
-        //}
 
 
     }
