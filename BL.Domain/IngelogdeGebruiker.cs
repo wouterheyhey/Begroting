@@ -15,6 +15,18 @@ namespace BL.Domain
         public HoofdGemeente gemeente { get; set; }
         public bool isActief { get; set; }
         public RolType rolType { get; set; }
-        public HashSet<Account> accounts { get; set; }
+        //public HashSet<Account> accounts { get; set; }
+
+        public IngelogdeGebruiker(int Id, string naam, string accountID, string passwoord, bool isActief, RolType roltype)
+        {
+            this.Id = Id;
+            this.naam = naam;
+            this.accountID = accountID;
+            this.passwoord = passwoord;
+            this.gemeente = null;
+            this.isActief = isActief;
+            this.rolType = rolType;
+            //this.gemeente = new HoofdGemeente("Brussel");
+        }
     }
 }
