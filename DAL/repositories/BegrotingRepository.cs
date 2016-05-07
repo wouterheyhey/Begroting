@@ -114,7 +114,8 @@ namespace DAL.repositories
 
         public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem, List<Actie> acties)
         {
-            Actie actie = acties.Find(x => x.actieCode.Equals(actieCode) && x.gemeente.naam.Equals(gem.naam));
+            List<Actie> actiesSubList = acties.FindAll(x => !HoofdGemeente.Equals(x.gemeente, null));
+            Actie actie = actiesSubList.Find(x => x.actieCode.Equals(actieCode) && x.gemeente.naam.Equals(gem.naam));
             if (actie == null)
             {
                 ctx.Entry(gem).State = EntityState.Unchanged;
@@ -165,7 +166,8 @@ namespace DAL.repositories
 
         public FinancieelOverzicht CreateIfNotExistsFinancieelOverzicht(int jaar, HoofdGemeente gem, List<FinancieelOverzicht> fos)
         {
-            FinancieelOverzicht fo = fos.Find(x => x.boekJaar.Equals(jaar) && x.gemeente.HoofdGemeenteID.Equals(gem.HoofdGemeenteID));
+            List<FinancieelOverzicht> fosSubList = fos.FindAll(x => !HoofdGemeente.Equals(x.gemeente, null));
+            FinancieelOverzicht fo = fosSubList.Find(x => x.boekJaar.Equals(jaar) && x.gemeente.HoofdGemeenteID.Equals(gem.HoofdGemeenteID));
             if (fo == null)
             {
                 // logic to decide if begroting or rekening. 

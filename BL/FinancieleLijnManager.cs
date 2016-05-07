@@ -25,7 +25,7 @@ namespace BL
 
         public void LoadFinancieleLijnen(int year)
         {
-            List<FinancieleLijn> lijnen = finRepo.ImportFinancieleLijnen(year);
+            List<FinancieleLijn> lijnen = finRepo.ImportFinancieleLijnen(year); 
             begManager.addFinancieleLijnen(lijnen);
         }
 

@@ -22,7 +22,6 @@ namespace DAL
             path = Directory.GetParent(Directory.GetCurrentDirectory()).Parent.FullName;
             string relativePath = libRelDir;    // Relatief t.o.v. the CA
             string importPath = Path.GetFullPath(Path.Combine(path, relativePath));
-
             return importPath;
         }
     }

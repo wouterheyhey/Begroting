@@ -32,7 +32,7 @@ namespace BL
         // Nodig?
         public void LoadFinancieleLijnen(int year)
         {
-       //     repo.CreateFinancieleLijnen(lijnen);
+            //repo.CreateFinancieleLijnen(year);
             return ;
         }
 

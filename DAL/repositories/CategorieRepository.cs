@@ -62,7 +62,9 @@ namespace DAL.repositories
         public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, HoofdGemeente gem, List<GemeenteCategorie> gemCats, List<Categorie> cats)
         {
             //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
-            GemeenteCategorie cat = gemCats.Find(x => x.cat.categorieCode.Equals(catCode) && x.gemeente.naam.Equals(gem.naam));
+            List<GemeenteCategorie> gemCatsSubList = gemCats.FindAll(x => !HoofdGemeente.Equals(x.gemeente, null));
+            GemeenteCategorie cat = gemCatsSubList.Find(x => x.cat.categorieCode.Equals(catCode) && x.gemeente.naam.Equals(gem.naam));
+
 
             if (cat == null)
             {
