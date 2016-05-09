@@ -13,14 +13,14 @@ namespace WebApi.Controllers
     {
         private ActieManager mgr = new ActieManager();
 
-        public IHttpActionResult Get(string catCode, string naam)
+      /*  public IHttpActionResult Get(string catCode, string naam)
         {
             IEnumerable<DTOActie> acties = mgr.readActies(catCode, naam);
            /* if (acties == null || acties.Count() == 0)
-                return StatusCode(HttpStatusCode.NoContent); */
+                return StatusCode(HttpStatusCode.NoContent); 
 
 
             return Ok(acties);
-        }
+        } */
     }
 }

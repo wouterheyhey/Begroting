@@ -18,7 +18,7 @@ namespace BL
            repo = new BegrotingRepository();
         }
 
-        public IEnumerable<DTOfinancieleLijn> readFinancieleLijnen(int jaar, string naam )
+   /*     public IEnumerable<DTOfinancieleLijn> readFinancieleLijnen(int jaar, string naam )
         {
             return repo.GetFinancieleLijnen(jaar, naam);
         }
@@ -34,11 +34,7 @@ namespace BL
         {
             //repo.CreateFinancieleLijnen(year);
             return ;
-        }
-
-
-
-
+        } */
 
     }
 }

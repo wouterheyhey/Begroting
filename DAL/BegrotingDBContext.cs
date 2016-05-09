@@ -44,7 +44,6 @@ namespace DAL
 
 
             public DbSet<Categorie> Categorien { get; set; }
-            public DbSet<FinancieleLijn> FinLijnen { get; set; }
             public DbSet<Actie> Acties { get; set; }
             public DbSet<InspraakItem> inspraakItems { get; set; }
             public DbSet<GemeenteCategorie> GemeenteCategorien { get; set; }

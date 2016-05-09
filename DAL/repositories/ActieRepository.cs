@@ -19,7 +19,7 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public IEnumerable<DTOActie> GetActie(string catCode, string naam)
+     /*   public IEnumerable<DTOActie> GetActie(string catCode, string naam)
         {
             return ctx.FinLijnen.Include(nameof(FinancieleLijn.actie)).Where(p => p.cat.cat.categorieCode == catCode && p.cat.gemeente.naam == naam).Select(
 
@@ -30,6 +30,6 @@ namespace DAL.repositories
                 }
 
                 ).Distinct();
-        }
+        } */
     }
 }

@@ -16,10 +16,10 @@ namespace BL
         {
             repo = new ActieRepository();
         }
-        public IEnumerable<DTOActie> readActies(string catCode, string naam)
+       /* public IEnumerable<DTOActie> readActies(string catCode, string naam)
         {
             return repo.GetActie(catCode, naam);
-        }
+        } */
 
     }
 }
