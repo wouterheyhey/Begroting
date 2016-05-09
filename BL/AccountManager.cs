@@ -31,6 +31,11 @@ namespace BL
             return repo.FindUser(context.UserName, context.Password);
         }
 
+        public Task<IdentityUser> FindAsync(UserLoginInfo loginInfo)
+        {
+            return repo.FindAsync(loginInfo);
+        }
+
         public bool CreateRole(String roleName)
         {
             if (repo.RoleExists(roleName))
