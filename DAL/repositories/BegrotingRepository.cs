@@ -21,6 +21,32 @@ namespace DAL.repositories
         }
 
 
+        //alle categorieen ophalen die bij een gemeente horen binnen een begroting. Hierbij halen we ook de categorieen
+        //die hiervan de parent zijn en halen we het totaal van deze categorie op binnen deze begroting en gemeente
+        public IEnumerable<DTOGemeenteCategorie> getInspraakItems(int jaar, string naam)
+        {
+
+
+            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
+                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
+                .Select(c => c.Id).SingleOrDefault();
+
+            //1 lijn --> 1 InspraakItem(GemeenteCategorie)  --> 1 Parent -> 1 Parent
+            return ctx.GemeenteCategorien.Include(fin1 => fin1.cat.categorieParent.categorieParent)
+                .Where<GemeenteCategorie>(fin1 => fin1.financieelOverzicht.Id == id).Select(
+
+                fin2 => new DTOGemeenteCategorie()
+                {
+
+                    naamCatx = fin2.cat.categorieParent.categorieParent.categorieNaam,
+                    naamCaty = fin2.cat.categorieParent.categorieNaam,
+                    naamCatz = fin2.cat.categorieNaam,
+                    totaal = fin2.totaal,
+                    ID = fin2.ID
+
+                }
+                );
+        }
 
 
 

@@ -16,16 +16,16 @@ namespace WebApi.Controllers
         private CategorieManager catMgr = new CategorieManager();
         private FinancieleLijnManager finMgr = new FinancieleLijnManager();
 
-      /*  public IHttpActionResult Get(int jaar, string naam)
+        public IHttpActionResult Get(int jaar, string naam)
         {
-            IEnumerable<DTOfinancieleLijn> lijnen = begMgr.readFinancieleLijnen(jaar, naam);
+            IEnumerable<DTOGemeenteCategorie> lijnen = begMgr.readInspraakItems(jaar, naam);
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
 
             return Ok(lijnen);
-        } */
+        } 
 
         public IHttpActionResult Get(int year)
         {
