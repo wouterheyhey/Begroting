@@ -19,17 +19,17 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-     /*   public IEnumerable<DTOActie> GetActie(string catCode, string naam)
+      public IEnumerable<DTOActie> GetActie(int id)
         {
-            return ctx.FinLijnen.Include(nameof(FinancieleLijn.actie)).Where(p => p.cat.cat.categorieCode == catCode && p.cat.gemeente.naam == naam).Select(
+            return ctx.Acties.Where(a => a.gemCat.ID == id).Select(
 
                 fin => new DTOActie()
                 {
-                    actieKort = fin.actie.actieKort,
-                    actieLang = fin.actie.actieLang
+                    actieKort = fin.actieKort,
+                    actieLang = fin.actieLang
                 }
 
                 ).Distinct();
-        } */
+        } 
     }
 }
