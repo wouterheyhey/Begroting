@@ -53,8 +53,9 @@ namespace WebApi
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new AccountAuthorizationServerProvider()
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                Provider = new AccountAuthorizationServerProvider(),
+                RefreshTokenProvider = new AccountRefreshTokenProvider()
             };
 
             // Hier maken we de token aan
