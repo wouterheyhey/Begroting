@@ -36,6 +36,11 @@ namespace BL
             return repo.FindAsync(loginInfo);
         }
 
+        public Task<string> FindClient()
+        {
+            return null;
+        }
+
         public bool CreateRole(String roleName)
         {
             if (repo.RoleExists(roleName))

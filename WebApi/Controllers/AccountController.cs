@@ -14,6 +14,7 @@ using Microsoft.Owin.Security;
 using WebApi.Results;
 using System.Security.Claims;
 using Microsoft.AspNet.Identity.EntityFramework;
+using WebApi.Models;
 
 namespace WebApi.Controllers
 {
@@ -178,7 +179,7 @@ namespace WebApi.Controllers
                 return "redirect_uri is required";
             }
 
-            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out.redirectUri);
+            bool validUri = Uri.TryCreate(redirectUriString, UriKind.Absolute, out redirectUri);
 
             if (!validUri)
             {
@@ -191,15 +192,15 @@ namespace WebApi.Controllers
             {
                 return "client_id is required";
             }
-
-            var client = accMgr.FindClient(clientId);
+            //Remove quotations - KLA
+            var client = "accMgr.FindClient(clientId)";
 
             if (client == null)
             {
                 return string.Format("client_id '{0}' is not registered in the system.", clientId);
             }
-
-            if (!string.Equals(client.AllowedOrigin, redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
+            //Remove Quotations - KLA
+            if (!string.Equals("client.AllowedOrigin", redirectUri.GetLeftPart(UriPartial.Authority), StringComparison.OrdinalIgnoreCase))
             {
                 return string.Format("The given URL s not allowed by the client_id '{0}' configuration.", clientId);
             }
