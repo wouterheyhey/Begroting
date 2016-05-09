@@ -24,7 +24,7 @@ namespace DAL.repositories
 
 
  
-        public FinancieleLijn CreateFinLijn(FinancieleLijn finLijn)
+   /*    public FinancieleLijn CreateFinLijn(FinancieleLijn finLijn)
         {
             ctx.Entry(finLijn.cat).State = EntityState.Unchanged;
             ctx.Entry(finLijn.actie).State = EntityState.Unchanged;
@@ -85,13 +85,13 @@ namespace DAL.repositories
             Console.WriteLine(count + " Lines imported");
             ctx.SaveChanges();
             return;
-        }
+        } 
 
 
         public Actie ReadActie(string actieCode, string gemeenteNaam)
         {
             return ctx.Acties.Where<Actie>(x => x.actieCode == actieCode).Where<Actie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
-        }
+        } */
 
         public IEnumerable<Actie> ReadActies()
         {
@@ -105,6 +105,17 @@ namespace DAL.repositories
             ctx.SaveChanges();
             return actie;
         }
+        public void UpdateActie(Actie a)
+        {
+            ctx.Entry(a).State = EntityState.Modified;
+            ctx.SaveChanges();
+        }
+
+        public void UpdateGemeenteCat(GemeenteCategorie gc)
+        {
+            ctx.Entry(gc).State = EntityState.Modified;
+            ctx.SaveChanges();
+        }
 
         public Actie CreateNoSaveActie(Actie actie)
         {
@@ -112,17 +123,44 @@ namespace DAL.repositories
             return actie;
         }
 
-        public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem, List<Actie> acties)
+        /*   public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem, List<Actie> acties)
+           {
+               Actie actie = acties.Find(x => x.actieCode.Equals(actieCode) && x.gemeente.naam.Equals(gem.naam));
+               if (actie == null)
+               {
+                   ctx.Entry(gem).State = EntityState.Unchanged;
+                   return CreateActie(new Actie(actieCode, actieKort,actieLang, gem));
+               }
+
+               return actie;
+           } */
+
+        public Actie CreateIfNotExistsActie(string actieKort, string actieLang, List<Actie> acties, BestuurType bt, float inkomsten, float uitgaven, FinancieelOverzicht fo, int gemCatID)
         {
-            Actie actie = acties.Find(x => x.actieCode.Equals(actieCode) && x.gemeente.naam.Equals(gem.naam));
+
+            //nakijken of het om dezelfde actie gaat zoja optellen van inkomsten en uitgaven anders nieuwe actie maken
+
+            GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
+            // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
+            // gemC.totaal += (uitgaven - inkomsten);
+
+            UpdateGemeenteCat(gemC);
+
+            Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
+              && x.bestuurType == bt && x.gemCat.ID == gemCatID);
             if (actie == null)
             {
-                ctx.Entry(gem).State = EntityState.Unchanged;
-                return CreateActie(new Actie(actieCode, actieKort,actieLang, gem));
+                ctx.Entry(fo).State = EntityState.Unchanged;
+                return CreateActie(new Actie(actieKort, actieLang, bt, inkomsten, uitgaven, fo, gemC));
             }
 
+            actie.inkomsten += inkomsten;
+            actie.uitgaven += uitgaven;
+            UpdateActie(actie);
             return actie;
+
         }
+
 
 
 
@@ -169,6 +207,7 @@ namespace DAL.repositories
             if (fo == null)
             {
                 // logic to decide if begroting or rekening. 
+                ctx.Entry(gem).State = EntityState.Unchanged;
                 bool check = jaar <= DateTime.Now.Year;
                 switch (check)
                 {

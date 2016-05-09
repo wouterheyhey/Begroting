@@ -11,18 +11,26 @@ namespace BL.Domain
     public class GemeenteCategorie : InspraakItem
     {
         public Categorie cat { get; set; }
+        public IEnumerable<InspraakItem> inspraakItems { get; set; }
 
         public GemeenteCategorie(Categorie cat)
         {
             this.cat = cat;
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
-        public GemeenteCategorie(Categorie cat, HoofdGemeente gemeente)
+        public GemeenteCategorie(Categorie cat, FinancieelOverzicht fo)
         {
             this.cat = cat;
-            this.gemeente = gemeente;
+            this.financieelOverzicht = fo;
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
+
+        /*  public GemeenteCategorie(Categorie cat, HoofdGemeente gemeente)
+          {
+              this.cat = cat;
+              this.gemeente = gemeente;
+              this.inspraakNiveau = InspraakNiveau.Auto;
+          } */
 
         public GemeenteCategorie()  // Required by EF
         {

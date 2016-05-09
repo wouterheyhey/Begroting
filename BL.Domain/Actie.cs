@@ -13,6 +13,10 @@ namespace BL.Domain
         public string actieCode { get; set; }
         public string actieKort { get; set; }
         public string actieLang { get; set; }
+        public BestuurType bestuurType { get; set; }
+        public float inkomsten { get; set; }
+        public float uitgaven { get; set; }
+        public GemeenteCategorie gemCat { get; set; }
 
         public Actie()
         {
@@ -27,13 +31,27 @@ namespace BL.Domain
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
-        public Actie(string actieCode, string actieKort, string actieLang, HoofdGemeente gemeente)
+        public Actie(string actieKort, string actieLang, BestuurType bt, float inkomsten, float uitgaven, FinancieelOverzicht fo, GemeenteCategorie gemCat)
         {
-            this.actieCode = actieCode;
             this.actieKort = actieKort;
             this.actieLang = actieLang;
-            this.gemeente = gemeente;
             this.inspraakNiveau = InspraakNiveau.Auto;
+            this.bestuurType = bt;
+            this.inkomsten = inkomsten;
+            this.uitgaven = uitgaven;
+            this.financieelOverzicht = fo;
+            this.gemCat = gemCat;
+        }
+
+        public static BestuurType MapBestuurType(string bt)
+        {
+            if (bt.Contains("OCMW")) { return BestuurType.OCMW; }
+            if (!bt.Contains(" "))  // Moet later beter uitgewerkt worden
+            {
+                return BestuurType.Gemeente;
+            }
+            else return BestuurType.AutonoomGemeenteBedrijf;
+
         }
     }
 

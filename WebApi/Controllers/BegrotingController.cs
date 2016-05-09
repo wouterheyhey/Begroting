@@ -16,7 +16,7 @@ namespace WebApi.Controllers
         private CategorieManager catMgr = new CategorieManager();
         private FinancieleLijnManager finMgr = new FinancieleLijnManager();
 
-        public IHttpActionResult Get(int jaar, string naam)
+      /*  public IHttpActionResult Get(int jaar, string naam)
         {
             IEnumerable<DTOfinancieleLijn> lijnen = begMgr.readFinancieleLijnen(jaar, naam);
 
@@ -25,7 +25,7 @@ namespace WebApi.Controllers
 
 
             return Ok(lijnen);
-        }
+        } */
 
         public IHttpActionResult Get(int year)
         {

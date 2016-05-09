@@ -59,26 +59,48 @@ namespace DAL.repositories
             return ctx.Categorien.Where<Categorie>(x => x.categorieCode.StartsWith(cat.categorieCode) && x.categorieCode != cat.categorieCode).ToList<Categorie>();
         }
 
-        public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, HoofdGemeente gem, List<GemeenteCategorie> gemCats, List<Categorie> cats)
+        /*   public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, HoofdGemeente gem, List<GemeenteCategorie> gemCats, List<Categorie> cats)
+           {
+               //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
+               GemeenteCategorie cat = gemCats.Find(x => x.cat.categorieCode.Equals(catCode) && x.gemeente.naam.Equals(gem.naam));
+
+               if (cat == null)
+               {
+                   Categorie c = cats.Find(x => x.categorieCode.Equals(catCode));
+                   ctx.Entry(gem).State = EntityState.Unchanged;
+                   ctx.Entry(c).State = EntityState.Unchanged;
+                   return CreateGemeenteCategorie(new GemeenteCategorie(c, gem));
+               }
+
+               return cat;
+           } */
+
+        public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, int foId, List<GemeenteCategorie> gemCats, List<Categorie> cats)
         {
             //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
-            GemeenteCategorie cat = gemCats.Find(x => x.cat.categorieCode.Equals(catCode) && x.gemeente.naam.Equals(gem.naam));
+            GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.cat.categorieCode == catCode);
 
-            if (cat == null)
+            if (gemCat == null)
             {
                 Categorie c = cats.Find(x => x.categorieCode.Equals(catCode));
-                ctx.Entry(gem).State = EntityState.Unchanged;
+                FinancieelOverzicht f = ctx.FinancieleOverzichten.Find(foId);
                 ctx.Entry(c).State = EntityState.Unchanged;
-                return CreateGemeenteCategorie(new GemeenteCategorie(c, gem));
+                return CreateGemeenteCategorie(new GemeenteCategorie(c, f));
             }
 
-            return cat;
+            return gemCat;
         }
 
+        public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, int foId)
+        {
+            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.cat.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
+        }
+
+        /*
         public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, string gemeenteNaam)
         {
             return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.cat.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
-        }
+        } */
 
 
         public IEnumerable<GemeenteCategorie> ReadGemeenteCategories()
