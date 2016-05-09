@@ -16,7 +16,8 @@ namespace BL.Domain
         public BestuurType bestuurType { get; set; }
         public float inkomsten { get; set; }
         public float uitgaven { get; set; }
-        public GemeenteCategorie gemCat { get; set; }
+        //verplaatsen naar inspraakItem
+        
 
         public Actie()
         {
