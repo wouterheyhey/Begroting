@@ -42,6 +42,18 @@ namespace WebApi.Controllers
 
         }
 
-
+        public IHttpActionResult Get()
+        {
+            try
+            {
+                catMgr.SetChildrenCategorien();
+                finMgr.LoadFinancieleLijnen();
+            }
+            catch
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return StatusCode(HttpStatusCode.OK);
+        }
     }
 }

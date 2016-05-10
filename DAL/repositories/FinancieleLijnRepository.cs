@@ -32,6 +32,7 @@ namespace DAL.repositories
             List<Actie> acties = begRepo.ReadActies().ToList<Actie>();
             List<FinancieelOverzicht> fos = begRepo.ReadFinancieelOverzichten().ToList<FinancieelOverzicht>();
 
+
             foreach (var r in ExcelImporter.ImportFinancieleLijnen(importPath + categoryFile, year))
             {
                 gem = gems.Find(x => x.naam.Equals(r["Groep"].Cast<string>()));
@@ -46,9 +47,6 @@ namespace DAL.repositories
 
                 actie = begRepo.CreateIfNotExistsActie(r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(), acties, bt, r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), fo, gemCat.ID);
                 acties.Add(actie);
-
-
-
                 // inspraakItems.Add(new Actie(r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), gemCat, actie, bt, fo));  //creating new category objects with data
             }
 

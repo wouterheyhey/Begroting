@@ -61,18 +61,17 @@ namespace DAL.repositories
 
         public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, int foId, List<GemeenteCategorie> gemCats, List<Categorie> cats)
         {
-            //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
-            GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.cat.categorieCode == catCode);
+                //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
+                GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.cat.categorieCode == catCode);
 
-            if (gemCat == null)
-            {
-                Categorie c = cats.Find(x => x.categorieCode.Equals(catCode));
-                FinancieelOverzicht f = ctx.FinancieleOverzichten.Find(foId);
-                ctx.Entry(c).State = EntityState.Unchanged;
-                return CreateGemeenteCategorie(new GemeenteCategorie(c, f));
-            }
-
-            return gemCat;
+                if (gemCat == null)
+                {
+                    Categorie c = cats.Find(x => x.categorieCode.Equals(catCode));
+                    FinancieelOverzicht f = ctx.FinancieleOverzichten.Find(foId);
+                    ctx.Entry(c).State = EntityState.Unchanged;
+                    return CreateGemeenteCategorie(new GemeenteCategorie(c, f));
+                }
+                return gemCat;
         }
 
         public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, int foId)

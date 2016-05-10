@@ -165,27 +165,26 @@ namespace DAL.repositories
 
         public Actie CreateIfNotExistsActie(string actieKort, string actieLang, List<Actie> acties, BestuurType bt, float inkomsten, float uitgaven, FinancieelOverzicht fo, int gemCatID)
         {
+                //nakijken of het om dezelfde actie gaat zoja optellen van inkomsten en uitgaven anders nieuwe actie maken
 
-            //nakijken of het om dezelfde actie gaat zoja optellen van inkomsten en uitgaven anders nieuwe actie maken
+                GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
+                // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
+                // gemC.totaal += (uitgaven - inkomsten);
 
-            GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
-            // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
-            // gemC.totaal += (uitgaven - inkomsten);
+                UpdateGemeenteCat(gemC);
 
-            UpdateGemeenteCat(gemC);
+                Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
+                  && x.bestuurType == bt && x.gemCat.ID == gemCatID);
+                if (actie == null)
+                {
+                    ctx.Entry(fo).State = EntityState.Unchanged;
+                    return CreateActie(new Actie(actieKort, actieLang, bt, inkomsten, uitgaven, fo, gemC));
+                }
 
-            Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
-              && x.bestuurType == bt && x.gemCat.ID == gemCatID);
-            if (actie == null)
-            {
-                ctx.Entry(fo).State = EntityState.Unchanged;
-                return CreateActie(new Actie(actieKort, actieLang, bt, inkomsten, uitgaven, fo, gemC));
-            }
-
-            actie.inkomsten += inkomsten;
-            actie.uitgaven += uitgaven;
-            UpdateActie(actie);
-            return actie;
+                actie.inkomsten += inkomsten;
+                actie.uitgaven += uitgaven;
+                UpdateActie(actie);
+                return actie;
 
         }
 
