@@ -18,9 +18,6 @@ namespace BL.Domain.DTOs
         public string Password { get; set; }
 
         [Required]
-        public string accountID { get; set; }
-
-        [Required]
         public string bevestigPaswoord { get; set; }
 
         [Required]
