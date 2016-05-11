@@ -30,8 +30,10 @@ namespace WebApi.Controllers
         {
             accMgr = new AccountManager();
         }
-        
+
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
+        [AllowAnonymous]
+        [Route("SetRoles")]
         public IHttpActionResult SetRoles()
         {
             try

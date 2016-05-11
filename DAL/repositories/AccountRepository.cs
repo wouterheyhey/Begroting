@@ -17,12 +17,14 @@ namespace DAL.repositories
         private BegrotingDBContext ctx;
 
         private UserManager<IdentityUser> _userManager;
+        private RoleManager<IdentityRole> _roleManager;
 
         public AccountRepository()
         {
             _ctx = new AuthDBContext();
             ctx = new BegrotingDBContext();
             _userManager = new UserManager<IdentityUser>(new UserStore<IdentityUser>(_ctx));
+            _roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(_ctx));
         }
         
         //Gebruiker beheer - Identity User
@@ -38,6 +40,14 @@ namespace DAL.repositories
 
             if (result == IdentityResult.Success)
             {
+                if (!RoleExists(RolType.standaard.ToString()))
+                {
+                    var values = Enum.GetValues(typeof(RolType));
+                    foreach (var str in values)
+                    {
+                        if (!RoleExists(str.ToString())) CreateRole(str.ToString());
+                    }
+                }
                 _userManager.AddToRole(user.Id, RolType.standaard.ToString());
                 IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard );
                 ctx.Gebruikers.Add(gebruiker);
@@ -72,15 +82,11 @@ namespace DAL.repositories
         //Rol beheer
         public bool RoleExists(string name)
         {
-            var rm = new RoleManager<IdentityRole>(
-                new RoleStore<IdentityRole>(_ctx));
-            return rm.RoleExists(name);
+            return _roleManager.RoleExists(name);
         }
         public bool CreateRole(string name)
         {
-            var rm = new RoleManager<IdentityRole>(
-                new RoleStore<IdentityRole>(_ctx));
-            var idResult = rm.Create(new IdentityRole(name));
+            var idResult = _roleManager.Create(new IdentityRole(name));
             return idResult.Succeeded;
         }
 
