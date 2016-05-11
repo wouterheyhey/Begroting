@@ -1,4 +1,5 @@
-﻿using BL.Domain.DTOs;
+﻿using BL.Domain;
+using BL.Domain.DTOs;
 using DAL.repositories;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,5 @@ namespace BL
         {
             return repo.GetActie(id);
         }
-
     }
 }

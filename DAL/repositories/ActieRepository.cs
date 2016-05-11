@@ -26,10 +26,14 @@ namespace DAL.repositories
                 fin => new DTOActie()
                 {
                     actieKort = fin.actieKort,
-                    actieLang = fin.actieLang
+                    actieLang = fin.actieLang,
+                    uitgaven = fin.uitgaven,
+                    ID = fin.ID,
+                    inspraakNiveau = fin.inspraakNiveau
                 }
 
                 ).Distinct();
-        } 
+        }
+
     }
 }

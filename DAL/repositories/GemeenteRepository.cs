@@ -44,17 +44,22 @@ namespace DAL.repositories
 
            public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man , float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
            {
+            
                HoofdGemeente g = ctx.Gemeenten.Where(x => x.naam == naam).SingleOrDefault();
-               g.aantalBewoners = aantalBewoners;
+            g.aantalBewoners = aantalBewoners;
                g.oppervlakte = opp;
                g.oppervlakteMaat = maat;
                g.isMan = man;
                g.isVrouw = vrouw;
                g.isKind = kind;
-               g.bestuur = bestuur;
                g.aanslagVoet = aanslagvoet;
                ctx.SaveChanges();
            }
+
+        public void saveContext()
+        {
+            ctx.SaveChanges();
+        }
 
     }
 }

@@ -23,8 +23,8 @@ namespace WebApi.Controllers
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
-
             return Ok(lijnen);
+
         } 
 
         public IHttpActionResult Get(int year)

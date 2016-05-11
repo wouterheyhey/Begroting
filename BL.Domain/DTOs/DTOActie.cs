@@ -8,7 +8,10 @@ namespace BL.Domain.DTOs
 {
    public class DTOActie
     {
+        public int ID { get; set; }
         public string actieKort { get; set; }
         public string actieLang { get; set; }
+        public float uitgaven { get; set; }
+        public InspraakNiveau inspraakNiveau { get; set; }
     }
 }

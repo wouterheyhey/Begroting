@@ -193,6 +193,7 @@
     <Compile Include="Controllers\GemeenteController.cs" />
     <Compile Include="Controllers\ParsedExternalAccessToken.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
+    <Compile Include="Models\DTO\DTOProject.cs" />
     <Compile Include="Models\ExternalLoginData.cs" />
     <Compile Include="Models\ExternalLoginModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -34,19 +34,20 @@ namespace DAL.repositories
             //1 lijn --> 1 InspraakItem(GemeenteCategorie)  --> 1 Parent -> 1 Parent
             return ctx.GemeenteCategorien.Include(fin1 => fin1.cat.categorieParent.categorieParent)
                 .Where<GemeenteCategorie>(fin1 => fin1.financieelOverzicht.Id == id).Select(
-
+                
                 fin2 => new DTOGemeenteCategorie()
                 {
-
                     naamCatx = fin2.cat.categorieParent.categorieParent.categorieNaam,
                     naamCaty = fin2.cat.categorieParent.categorieNaam,
                     naamCatz = fin2.cat.categorieNaam,
                     totaal = fin2.totaal,
                     ID = fin2.ID
-
                 }
+                
                 );
         }
+
+        
 
 
 

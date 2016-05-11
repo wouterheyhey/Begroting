@@ -9,9 +9,9 @@ namespace BL.Domain
     public class Project
     {
         public int Id { get; set; }
-        ProjectScenario projectScenario { get; set; }
-        string titel { get; set; }
-        string vraag { get; set; }
+        public ProjectScenario projectScenario { get; set; }
+        public string titel { get; set; }
+        public string vraag { get; set; }
         public string extraInfo { get; set; }
         public float bedrag { get; set; }
         public DateRange dateRange { get; set; } 
