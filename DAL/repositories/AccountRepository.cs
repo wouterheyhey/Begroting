@@ -28,7 +28,7 @@ namespace DAL.repositories
         }
         
         //Gebruiker beheer - Identity User
-        public async Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker aspGebruiker)
+        public async Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker aspGebruiker, HoofdGemeente gem)
         {
             IdentityUser user = new IdentityUser
             {
@@ -49,7 +49,7 @@ namespace DAL.repositories
                     }
                 }
                 _userManager.AddToRole(user.Id, RolType.standaard.ToString());
-                IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard );
+                IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard, gem);
                 ctx.Gebruikers.Add(gebruiker);
                 ctx.SaveChanges();
             }

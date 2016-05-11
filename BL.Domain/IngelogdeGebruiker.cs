@@ -16,12 +16,12 @@ namespace BL.Domain
         public RolType rolType { get; set; }
         //public HashSet<Account> accounts { get; set; }
 
-        public IngelogdeGebruiker(string email, string naam, string accountID, RolType roltype)
+        public IngelogdeGebruiker(string email, string naam, string accountID, RolType roltype, HoofdGemeente gemeente)
         {
             this.userId = email;
             this.naam = naam;
             this.email = email;
-            this.gemeente = null;
+            this.gemeente = gemeente;
             this.rolType = rolType;
         }
     }

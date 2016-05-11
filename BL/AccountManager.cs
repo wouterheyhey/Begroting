@@ -15,6 +15,7 @@ namespace BL
     public class AccountManager
     {
         AccountRepository repo;
+        
 
         public AccountManager()
         {
@@ -23,7 +24,8 @@ namespace BL
 
         public Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker gebruiker)
         {
-            Task<IdentityResult> res = repo.RegisterUser(gebruiker);
+            GemeenteRepository repoGem = new GemeenteRepository();
+            Task<IdentityResult> res = repo.RegisterUser(gebruiker, repoGem.ReadGemeente(gebruiker.gemeente));
             return res;
         }
 
