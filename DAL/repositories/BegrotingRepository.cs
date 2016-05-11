@@ -170,7 +170,7 @@ namespace DAL.repositories
 
                 GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
                 // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
-                // gemC.totaal += (uitgaven - inkomsten);
+                gemC.totaal += (uitgaven - inkomsten);
 
                 UpdateGemeenteCat(gemC);
 
