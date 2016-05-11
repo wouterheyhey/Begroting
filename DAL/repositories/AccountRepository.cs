@@ -31,7 +31,7 @@ namespace DAL.repositories
             IdentityUser user = new IdentityUser
             {
                 UserName = aspGebruiker.email,
-                Email = aspGebruiker.email,
+                Email = aspGebruiker.email 
             };
 
             var result = await _userManager.CreateAsync(user, aspGebruiker.Password);
@@ -39,7 +39,7 @@ namespace DAL.repositories
             if (result == IdentityResult.Success)
             {
                 _userManager.AddToRole(user.Id, RolType.standaard.ToString());
-                IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(2, aspGebruiker.Naam, aspGebruiker.email, null, true, RolType.moderator);
+                IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard );
                 ctx.Gebruikers.Add(gebruiker);
                 ctx.SaveChanges();
             }

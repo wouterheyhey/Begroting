@@ -26,6 +26,10 @@ namespace BL.Domain.DTOs
         [Required]
         public string email { get; set; }
 
+        [Required]
+        public string gemeente { get; set; }
+
+
         //public HoofdGemeente gemeente { get; set; }
         //public bool isActief { get; set; }
 
