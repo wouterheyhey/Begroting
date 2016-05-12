@@ -47,7 +47,7 @@ namespace WebApi.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest();
+                return BadRequest(ex.Message);
             }
         }
 
@@ -56,6 +56,7 @@ namespace WebApi.Controllers
         [Route("Register")]
         public async Task<IHttpActionResult> Register(DTOIngelogdeGebruiker gebruiker)
         {
+            string data = "U heeft zich succesvol geregistreerd";
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -67,10 +68,10 @@ namespace WebApi.Controllers
 
             if (errorResult != null)
             {
-                return errorResult;
+                return BadRequest(errorResult.ToString());
             }
 
-            return Ok();
+            return Ok(data);
         }
 
         protected override void Dispose(bool disposing)

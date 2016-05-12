@@ -12,7 +12,7 @@ namespace BL.Domain
         public string userId { get; set; }
         public string naam { get; set; }
         public string email { get; set; }
-        public HoofdGemeente gemeente { get; set; }
+        public int gemeenteId { get; set; }
         public RolType rolType { get; set; }
         //public HashSet<Account> accounts { get; set; }
 
@@ -21,7 +21,7 @@ namespace BL.Domain
             this.userId = email;
             this.naam = naam;
             this.email = email;
-            this.gemeente = gemeente;
+            this.gemeenteId = gemeente.HoofdGemeenteID;
             this.rolType = rolType;
         }
     }

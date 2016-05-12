@@ -33,7 +33,8 @@ namespace DAL.repositories
             IdentityUser user = new IdentityUser
             {
                 UserName = aspGebruiker.email,
-                Email = aspGebruiker.email 
+                Email = aspGebruiker.email,
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(user, aspGebruiker.Password);
