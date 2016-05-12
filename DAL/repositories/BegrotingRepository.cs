@@ -144,12 +144,12 @@ namespace DAL.repositories
 
             GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
             // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
-            // gemC.totaal += (uitgaven - inkomsten);
+            gemC.totaal += (uitgaven - inkomsten);
 
             UpdateGemeenteCat(gemC);
 
             Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
-              && x.bestuurType == bt && x.gemCat.ID == gemCatID);
+              && x.bestuurType == bt && x.parentGemCat.ID == gemCatID);
             if (actie == null)
             {
                 ctx.Entry(fo).State = EntityState.Unchanged;

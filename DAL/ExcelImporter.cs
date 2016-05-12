@@ -157,38 +157,56 @@ namespace DAL
             if (!File.Exists(path)) return default(Dictionary<string, Categorie>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
-            foreach (string cat in Enum.GetNames(typeof(CategoryType)))
+            CategoryType highestCatType = Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().Min();
+
+            // First import highest levels, then second, etc
+            foreach (CategoryType cat in Enum.GetValues(typeof(CategoryType)))
             {
                 // book.AddMapping<Categorie>(x => x.categorieNaam, "Categorie " + cat);
                 // char charcat = cat.ToCharArray()[0]; // enum contains string, not char
                 // char do not get mapped in EF !!! -> keep string
 
-                var rows = from c in book.Worksheet("Sheet1")
+                var rows = from c in book.Worksheet("Sheet1").Where(x => x["Categorie A"] != null).ToList() // Exclude empty rows by looking at first column
                            select c
                     ;
 
                 string[] split;
+                string nonsplit;
+                string catString = cat.ToString();
+                string catStringMinusOne;
                 Categorie parent;
-                foreach (var r in rows)  //needs parameterless constructor
+                foreach (var r in rows)  
                 {
                     split = r["Categorie " + cat].Cast<string>().Split(new char[] { ' ' }, 2);
-                    switch (cat)
+                    nonsplit = catString+r["Categorie " + catString].Cast<string>();
+
+                    // finding parent with first enum that has lower int (higher in the tree)
+                    if(cat!= highestCatType)
                     {
-                        case "B":
-                            parent = hmap[r["Categorie " + 'A'].Cast<string>().Split(' ')[0]];
-                            break;
-                        case "C":
-                            parent = hmap[r["Categorie " + 'B'].Cast<string>().Split(' ')[0]];
-                            break;
-                        default:
-                            parent = null;
-                            break;
+                        catStringMinusOne= Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().First(e => (int)e == (int)cat - 1).ToString();
+                        parent = hmap[catStringMinusOne + r["Categorie " + catStringMinusOne]];
                     }
-
-
-                    if (!hmap.ContainsKey(split[0]))
+                    else
                     {
-                        hmap.Add(split[0], new Categorie(split[0], split[1], cat, parent));  //creating new category objects with data
+                        parent = null;
+                    }
+                    //switch (cat)
+                    //{
+                    //    case "B":
+                    //        parent = hmap[r["Categorie " + 'A'].Cast<string>()];
+                    //        break;
+                    //    case "C":
+                    //        parent = hmap[r["Categorie " + 'B'].Cast<string>()];
+                    //        break;
+                    //    default:
+                    //        parent = null;
+                    //        break;
+                    //}
+
+
+                    if (!hmap.ContainsKey(nonsplit))
+                    {
+                        hmap.Add(nonsplit, new Categorie(split[0], split[1], cat.ToString(), parent));  //creating new category objects with data
                     }
                 }
             }
@@ -206,7 +224,7 @@ namespace DAL
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             var rows = from c in book.Worksheet("Actie_detail_2")
-                       where c["Financieel boekjaar"].Cast<int>() == year
+                       where c["Financieel boekjaar"].Cast<int>() == year && c["Niveau B volledig"]!="I.2 Investeringsontvangsten" && c["Niveau B volledig"] != "E.II Exploitatie-ontvangsten"
                        select c;
 
             return rows;

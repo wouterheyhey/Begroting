@@ -41,7 +41,7 @@ namespace BL.Domain
             this.inkomsten = inkomsten;
             this.uitgaven = uitgaven;
             this.financieelOverzicht = fo;
-            this.gemCat = gemCat;
+            this.parentGemCat = gemCat;
         }
 
         public static BestuurType MapBestuurType(string bt)

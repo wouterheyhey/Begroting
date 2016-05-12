@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
     {
 
 
@@ -35,7 +35,7 @@ namespace DAL
             }
             ctx.SaveChanges();
 
-
+            // Only takes distinct categories!!
             foreach (Categorie s in ExcelImporter.ImportCategories(importPath + categoryFileCat).Values)
             {
                 System.Diagnostics.Debug.WriteLine(s.ToString());

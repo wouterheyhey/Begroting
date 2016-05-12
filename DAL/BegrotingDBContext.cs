@@ -13,7 +13,7 @@ namespace DAL
 {
         internal class BegrotingDBContext : DbContext 
         {
-            public BegrotingDBContext() : base("BegrotingDB_Azure")
+            public BegrotingDBContext() : base("BegrotingDB_EF")
             {
             }
 
@@ -29,16 +29,26 @@ namespace DAL
                 new IndexAnnotation(
                 new IndexAttribute("IX_Naam", 2) { IsUnique = true }));
 
-            modelBuilder
-                .Entity<Categorie>()
-                .Property(t => t.categorieCode)
-                .IsRequired()
-                .HasMaxLength(60)
-                .HasColumnAnnotation(
-                IndexAnnotation.AnnotationName,
-                new IndexAnnotation(
-                new IndexAttribute("IX_CatCode", 2) { IsUnique = true }));
-            
+
+            // Table per Type inheritance: 
+
+            // modelBuilder.Entity<GemeenteCategorie>().ToTable("GemeenteCategories");
+            //  modelBuilder.Entity<Actie>().ToTable("Acties");
+
+
+
+            // Kan niet toegepast worden! Codes 0830 en 00 komen voor op meerdere niveaus!
+
+            //modelBuilder
+            //    .Entity<Categorie>()
+            //    .Property(t => t.categorieCode)
+            //    .IsRequired()
+            //    .HasMaxLength(60)
+            //    .HasColumnAnnotation(
+            //    IndexAnnotation.AnnotationName,
+            //    new IndexAnnotation(
+            //    new IndexAttribute("IX_CatCode", 2) { IsUnique = true }));
+
         }
 
 

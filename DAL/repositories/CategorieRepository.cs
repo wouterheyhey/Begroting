@@ -59,25 +59,47 @@ namespace DAL.repositories
             return ctx.Categorien.Where<Categorie>(x => x.categorieCode.StartsWith(cat.categorieCode) && x.categorieCode != cat.categorieCode).ToList<Categorie>();
         }
 
-        public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(string catCode, int foId, List<GemeenteCategorie> gemCats, List<Categorie> cats)
+        public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(int catId, int foId, List<GemeenteCategorie> gemCats, List<Categorie> cats)
         {
-            //GemeenteCategorie cat = ReadGemeenteCategorie(catCode, gem.naam);
-            GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.cat.categorieCode == catCode);
+            GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.categorieId == catId);
+
 
             if (gemCat == null)
             {
-                Categorie c = cats.Find(x => x.categorieCode.Equals(catCode));
+                Categorie c = cats.Find(x => x.categorieId == catId); // Exception for cat not found? 
                 FinancieelOverzicht f = ctx.FinancieleOverzichten.Find(foId);
-                ctx.Entry(c).State = EntityState.Unchanged;
-                return CreateGemeenteCategorie(new GemeenteCategorie(c, f));
-            }
 
+                // get parent id
+                int? parentId = null;
+                 if (c.categorieParent != null)
+                {
+                    parentId = (ReadGemeenteCategorie(c.categorieParent.categorieId, foId)).ID;
+                }
+
+                ctx.Entry(c).State = EntityState.Unchanged;
+                gemCat = new GemeenteCategorie(c, f, parentId);
+
+                //      ctx.Entry(gemCats).State = EntityState.Unchanged; // werkt niet
+                //if (gemCat.parentGemCat != null)
+                //{
+                //    ctx.Entry(gemCat.parentGemCat).State = EntityState.Unchanged;
+                //}
+                return CreateGemeenteCategorie(gemCat);
+            }
+            
             return gemCat;
         }
 
+
+        // Geeft geen unieke gemeentecategorien terug!
         public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, int foId)
         {
-            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.cat.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
+            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
+        }
+
+        public GemeenteCategorie ReadGemeenteCategorie(int categorieId, int foId)
+        {
+            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.categorieId == categorieId).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
         }
 
         /*  public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, string gemeenteNaam)

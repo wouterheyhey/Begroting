@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BL.Domain
 {
     public abstract class InspraakItem
     {
-        [Key]
         public int ID { get; set; }
         public float totaal { get; set; }
         public float relatiefAandeel { get; set; }
@@ -18,7 +18,10 @@ namespace BL.Domain
         public InspraakNiveau inspraakNiveau { get; set; }
         //deze weglaten
         public FinancieelOverzicht financieelOverzicht { get; set; }
-        public GemeenteCategorie gemCat { get; set; }
+
+        [ForeignKey("parentGemCat")]
+        public int? parentGemCatId { get; set; }
+        public GemeenteCategorie parentGemCat { get; set; }
 
     }
 }

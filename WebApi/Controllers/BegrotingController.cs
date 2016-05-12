@@ -31,7 +31,8 @@ namespace WebApi.Controllers
         {
             try
             {
-                catMgr.SetChildrenCategorien();
+                //whe 11/5 niet meer nodig??
+                //catMgr.SetChildrenCategorien();
                 finMgr.LoadFinancieleLijnen(year);
             }
             catch
