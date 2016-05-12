@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BL.Domain
 {
@@ -16,7 +17,6 @@ namespace BL.Domain
         public byte[] logo { get; set; }  // byte[] as type for the image for EF
        // public HoofdGemeente gemeente { get; set; }
         public InspraakNiveau inspraakNiveau { get; set; }
-        //deze weglaten
         public FinancieelOverzicht financieelOverzicht { get; set; }
         public GemeenteCategorie gemCat { get; set; }
 

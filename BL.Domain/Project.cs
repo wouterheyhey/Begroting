@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +23,8 @@ namespace BL.Domain
         public HashSet<ProjectAfbeelding> afbeeldingen { get; set; }
         public IngelogdeGebruiker beheerder { get; set; }
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
+
+        //public FinancieelOverzicht fo { get; set; }
 
     }
 }

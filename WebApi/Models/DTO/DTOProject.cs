@@ -1,4 +1,5 @@
-﻿using BL.Domain.DTOs;
+﻿using BL.Domain;
+using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,8 @@ namespace WebApi.Models.DTO
         public float minBedrag { get; set; }
         public float maxBedrag { get; set; }
         public List<DTOGemeenteCategorie> cats { get; set; }
+        public int? boekjaar { get; set; }
+        public string gemeente { get; set; }
+
     }
 }

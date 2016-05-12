@@ -9,7 +9,9 @@ namespace BL.Domain.DTOs
 {
    public class DTOGemeenteCategorie
     {
-       [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int ID { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCatx { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
@@ -23,6 +25,6 @@ namespace BL.Domain.DTOs
 
         public float totaal { get; set; }
 
-        public int ID { get; set; } 
+        
     }
 }

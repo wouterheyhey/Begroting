@@ -20,7 +20,7 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public void createProject(Project p, List<DTOGemeenteCategorie> inspraakItems)
+        public void createProject(Project p, List<DTOGemeenteCategorie> inspraakItems, int? boekjaar, string gemeente)
         {
             p.inspraakItems = new HashSet<InspraakItem>();
 
@@ -36,6 +36,17 @@ namespace DAL.repositories
                     }
                         
                 }
+            }
+
+            if(boekjaar !=0 && gemeente !=null)
+            {
+                FinancieelOverzicht fov = ctx.FinancieleOverzichten.Where(fo => fo.gemeente.naam == gemeente && fo.boekJaar == boekjaar).SingleOrDefault();
+             /*   if(fov != null)
+                {
+                    p.fo = fov;
+
+                } */
+
             }
             
             
@@ -81,6 +92,17 @@ namespace DAL.repositories
                 );
         }
 
+        //ophalen van project met de inspraakitems erbij
+        public Project readProject(int jaar, string gemeente)
+        {
+            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == gemeente)
+                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
+                .Select(c => c.Id).SingleOrDefault();
+
+            return ctx.Projecten.Include(x => x.inspraakItems).Where(p => p.Id == 1).SingleOrDefault();
+        }
+
+      
         public void saveContext()
         {
             ctx.SaveChanges();
