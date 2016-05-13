@@ -29,6 +29,15 @@ namespace DAL
                 new IndexAnnotation(
                 new IndexAttribute("IX_Naam", 2) { IsUnique = true }));
 
+            //modelBuilder.Entity<GemeenteCategorie>().Ignore(x => x.categorieId);
+
+
+            //modelBuilder
+            //    .Entity<InspraakItem>()
+            //    .HasOptional<GemeenteCategorie>(x => x.parentGemCat)
+            //    .WithOptionalDependent()
+            //;
+
 
             // Table per Type inheritance: 
 

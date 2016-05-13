@@ -16,12 +16,12 @@ namespace DAL.repositories
         public List<FinancieleLijn> ImportFinancieleLijnen() { return null; }  // Uit te werken
 
 
-        public CategoryType FindLowestNonBlankCategoryType(LinqToExcel.Row row)
+        public CategoryType FindLowestNonBlankCategoryType(FinancieleLijnImport r)
         {
             // looping over enum elements in descending order
             foreach (CategoryType catType in ((CategoryType[])Enum.GetValues(typeof(CategoryType))).OrderByDescending(x => x))
             {
-                if (row["categorie " + catType.ToString()].Cast<string>().Length > 0)
+                if (r.categorien[catType.ToString()].Length > 0)
                 {
                     return catType;
                 }
@@ -52,29 +52,28 @@ namespace DAL.repositories
 
             foreach (var r in ExcelImporter.ImportFinancieleLijnen(importPath + categoryFile, year))
             {
-                gem = gems.Find(x => x.naam.Equals(r["Groep"].Cast<string>()));
+                gem = gems.Find(x => x.naam.Equals(r.gemeente));
                 fo = begRepo.CreateIfNotExistsFinancieelOverzicht(year, gem, fos);
                 fos.Add(fo);
                 ct = FindLowestNonBlankCategoryType(r);
 
                 foreach (CategoryType catType in Enum.GetValues(typeof(CategoryType)))
                 {
-                    cat=cats.Where(x => x.categorieType == catType.ToString()).Where(x => x.categorieCode.Equals(r["categorie " + catType.ToString()].Cast<string>().Split(new char[] { ' ' })[0])).SingleOrDefault();
+                    cat=cats.Where(x => x.categorieType == catType.ToString()).Where(x => x.categorieCode.Equals(r.categorien[catType.ToString()].Split(new char[] { ' ' })[0])).SingleOrDefault();
 
-                    gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats); // lijn hangen aan laagste hierarchieniveau
+                    gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats); 
                     gemCats.Add(gemCat);
 
                     if( catType == ct)  
                         {
-                        bt = Actie.MapBestuurType(r["Naam bestuur"].Cast<string>());
+                        bt = Actie.MapBestuurType(r.bestuur);
 
-                        actie = begRepo.CreateIfNotExistsActie(r["Actie kort"].Cast<string>(), r["Actie lang"].Cast<string>(), acties, bt, r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), fo, gemCat.ID);
+                        actie = begRepo.CreateIfNotExistsActie(r.actieKort, r.actieLang, acties, bt,r.inkomsten,r.uitgaven, fo, gemCat.ID);
                         acties.Add(actie);
                     }
                 }
 
                
-                // inspraakItems.Add(new Actie(r["Bedrag ontvangst per niveau"].Cast<float>(), r["Bedrag uitgave per niveau"].Cast<float>(), gemCat, actie, bt, fo));  //creating new category objects with data
             }
 
             catRepo.SaveContext();

@@ -9,14 +9,12 @@ namespace BL.Domain
 {
     public class Actie : InspraakItem
     {
-        //[Unique]
         public string actieCode { get; set; }
         public string actieKort { get; set; }
         public string actieLang { get; set; }
         public BestuurType bestuurType { get; set; }
         public float inkomsten { get; set; }
         public float uitgaven { get; set; }
-        //verplaatsen naar inspraakItem
         
 
         public Actie()
@@ -42,17 +40,23 @@ namespace BL.Domain
             this.uitgaven = uitgaven;
             this.financieelOverzicht = fo;
             this.parentGemCat = gemCat;
+            this.totaal = calculateTotal(inkomsten,uitgaven);
         }
 
         public static BestuurType MapBestuurType(string bt)
         {
             if (bt.Contains("OCMW")) { return BestuurType.OCMW; }
-            if (!bt.Contains(" "))  // Moet later beter uitgewerkt worden
+            if (!bt.Contains(" "))  // Er wordt aangenomen dat steden geen spaties bevatten (niet 100% waar: e.g. La Louvière, La Hulpe, ...)
             {
                 return BestuurType.Gemeente;
             }
             else return BestuurType.AutonoomGemeenteBedrijf;
 
+        }
+
+        public float calculateTotal(float inkomsten, float uitgaven)
+        {
+            return (uitgaven - inkomsten);
         }
     }
 

@@ -29,9 +29,9 @@ namespace DAL.repositories
         }
 
 
-        public Categorie ReadCategorie(string categorieCode)
+        public Categorie ReadCategorie(string categoriecode)
         {
-            return ctx.Categorien.Where<Categorie>(x => x.categorieCode == categorieCode).Single();
+            return ctx.Categorien.Where<Categorie>(x => x.categorieCode == categoriecode).Single();
         }
 
         public IEnumerable<Categorie> ReadCategories()
@@ -39,25 +39,6 @@ namespace DAL.repositories
             return ctx.Categorien;
         }
 
-
-        public void UpdateAllCategoriesChildren()
-        {
-            foreach (Categorie cat in ReadCategories().ToList())
-            {
-                cat.categrorieChildren = ReadChildrenCategories(cat);
-                // Voor debuggen
-                Console.WriteLine(cat.categrorieChildren.Count() + " added to " + cat.categorieCode);
-            }
-            ctx.SaveChanges();
-
-        }
-
-
-        public List<Categorie> ReadChildrenCategories(Categorie cat)
-        {
-            // Subcategorien beginnen altijd met dezelfde categoriecode
-            return ctx.Categorien.Where<Categorie>(x => x.categorieCode.StartsWith(cat.categorieCode) && x.categorieCode != cat.categorieCode).ToList<Categorie>();
-        }
 
         public GemeenteCategorie CreateIfNotExistsGemeenteCategorie(int catId, int foId, List<GemeenteCategorie> gemCats, List<Categorie> cats)
         {
@@ -79,11 +60,6 @@ namespace DAL.repositories
                 ctx.Entry(c).State = EntityState.Unchanged;
                 gemCat = new GemeenteCategorie(c, f, parentId);
 
-                //      ctx.Entry(gemCats).State = EntityState.Unchanged; // werkt niet
-                //if (gemCat.parentGemCat != null)
-                //{
-                //    ctx.Entry(gemCat.parentGemCat).State = EntityState.Unchanged;
-                //}
                 return CreateGemeenteCategorie(gemCat);
             }
             

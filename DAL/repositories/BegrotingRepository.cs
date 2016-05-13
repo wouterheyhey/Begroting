@@ -144,7 +144,7 @@ namespace DAL.repositories
 
             GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
             // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
-            gemC.totaal += (uitgaven - inkomsten);
+            gemC.totaal += gemC.calculateTotal(inkomsten, uitgaven);
 
             UpdateGemeenteCat(gemC);
 
@@ -156,11 +156,18 @@ namespace DAL.repositories
                 return CreateActie(new Actie(actieKort, actieLang, bt, inkomsten, uitgaven, fo, gemC));
             }
 
-            actie.inkomsten += inkomsten;
-            actie.uitgaven += uitgaven;
-            UpdateActie(actie);
+            UpdateActie(actie,inkomsten,uitgaven);
             return actie;
 
+        }
+
+        private void UpdateActie(Actie actie, float inkomsten, float uitgaven)
+        {
+            actie.inkomsten += inkomsten;
+            actie.uitgaven += uitgaven;
+            actie.totaal += actie.calculateTotal(inkomsten, uitgaven); // logica naar manager?
+            UpdateActie(actie);
+            return;
         }
 
 
@@ -208,7 +215,7 @@ namespace DAL.repositories
             FinancieelOverzicht fo = fosSubList.Find(x => x.boekJaar.Equals(jaar) && x.gemeente.HoofdGemeenteID.Equals(gem.HoofdGemeenteID));
             if (fo == null)
             {
-                // logic to decide if begroting or rekening. 
+                // logic to decide if begroting or rekening. naar manager/domain?
                 ctx.Entry(gem).State = EntityState.Unchanged;
                 bool check = jaar <= DateTime.Now.Year;
                 switch (check)

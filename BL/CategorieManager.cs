@@ -25,7 +25,7 @@ namespace BL
 
         public void SetChildrenCategorien()
         {
-            repo.UpdateAllCategoriesChildren();
+        //    repo.UpdateAllCategoriesChildren();
         }
 
 

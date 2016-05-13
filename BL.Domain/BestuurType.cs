@@ -8,9 +8,9 @@ namespace BL.Domain
 {
     public enum BestuurType
     {
-        Gemeente,
-        OCMW,
-        AutonoomGemeenteBedrijf
+        Gemeente=1,
+        OCMW=2,
+        AutonoomGemeenteBedrijf=3
     };
 
 

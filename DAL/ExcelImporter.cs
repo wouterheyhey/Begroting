@@ -175,33 +175,21 @@ namespace DAL
                 string catString = cat.ToString();
                 string catStringMinusOne;
                 Categorie parent;
-                foreach (var r in rows)  
+                foreach (var r in rows)
                 {
                     split = r["Categorie " + cat].Cast<string>().Split(new char[] { ' ' }, 2);
-                    nonsplit = catString+r["Categorie " + catString].Cast<string>();
+                    nonsplit = catString + r["Categorie " + catString].Cast<string>();
 
                     // finding parent with first enum that has lower int (higher in the tree)
-                    if(cat!= highestCatType)
+                    if (cat != highestCatType)
                     {
-                        catStringMinusOne= Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().First(e => (int)e == (int)cat - 1).ToString();
+                        catStringMinusOne = Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().First(e => (int)e == (int)cat - 1).ToString();
                         parent = hmap[catStringMinusOne + r["Categorie " + catStringMinusOne]];
                     }
                     else
                     {
                         parent = null;
                     }
-                    //switch (cat)
-                    //{
-                    //    case "B":
-                    //        parent = hmap[r["Categorie " + 'A'].Cast<string>()];
-                    //        break;
-                    //    case "C":
-                    //        parent = hmap[r["Categorie " + 'B'].Cast<string>()];
-                    //        break;
-                    //    default:
-                    //        parent = null;
-                    //        break;
-                    //}
 
 
                     if (!hmap.ContainsKey(nonsplit))
@@ -215,24 +203,50 @@ namespace DAL
         }
 
 
-        public static IQueryable<LinqToExcel.Row> ImportFinancieleLijnen(string path, int year)
+        public static List<FinancieleLijnImport> ImportFinancieleLijnen(string path, int year)
         {
-
+            List<FinancieleLijnImport> lijnen = new List<FinancieleLijnImport>();
+            FinancieleLijnImport fl = new FinancieleLijnImport();
 
             // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(IQueryable<LinqToExcel.Row>);
+            if (!File.Exists(path)) return default(List<FinancieleLijnImport>);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
-            var rows = from c in book.Worksheet("Actie_detail_2")
-                       where c["Financieel boekjaar"].Cast<int>() == year && c["Niveau B volledig"]!="I.2 Investeringsontvangsten" && c["Niveau B volledig"] != "E.II Exploitatie-ontvangsten"
-                       select c;
 
-            return rows;
+        var rows = from c in book.Worksheet("Actie_detail_2")
+                   where c["Financieel boekjaar"].Cast<int>() == year && c["Niveau B volledig"] != "I.2 Investeringsontvangsten" && c["Niveau B volledig"] != "E.II Exploitatie-ontvangsten"
+                   select c;
 
+            foreach(var r in rows)
+            {
+                fl = 
+                    new FinancieleLijnImport
+                    (
+                    r["Groep"],
+                    r["Naam bestuur"],
+                    r["Actie kort"],
+                    r["Actie lang"],
+                    r["Financieel boekjaar"].Cast<int>(),
+                    r["Bedrag uitgave per niveau"].Cast<float>(),
+                    r["Bedrag ontvangst per niveau"].Cast<float>()
+                    )
+                    ;
+
+                foreach (CategoryType catType in Enum.GetValues(typeof(CategoryType)))
+                {
+                    fl.categorien.Add(catType.ToString(),r["categorie " + catType.ToString()].Cast<string>());
+                }
+
+                lijnen.Add(fl);
+            }
+
+            return lijnen;
         }
 
-
-
+           
+        
     }
 }
+        
+
 

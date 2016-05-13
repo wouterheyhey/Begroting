@@ -35,7 +35,6 @@ namespace DAL
             }
             ctx.SaveChanges();
 
-            // Only takes distinct categories!!
             foreach (Categorie s in ExcelImporter.ImportCategories(importPath + categoryFileCat).Values)
             {
                 System.Diagnostics.Debug.WriteLine(s.ToString());

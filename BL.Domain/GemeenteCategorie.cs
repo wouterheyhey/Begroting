@@ -58,5 +58,10 @@ namespace BL.Domain
             this.inspraakNiveau = InspraakNiveau.Auto;
         }
 
+        public float calculateTotal(float inkomsten, float uitgaven)
+        {
+            return (uitgaven - inkomsten);
+        }
+
     }
 }
