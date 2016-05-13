@@ -9,9 +9,9 @@ using DAL.repositories;
 
 namespace DAL
 {
-    public class ExcelImporter
+    internal class ExcelImporter
     {
-        public static IDictionary<string, Cluster> ImportClusters(string path)
+        internal static IDictionary<string, Cluster> ImportClusters(string path)
         {
             Dictionary<string, Cluster> clusters = new Dictionary<string, Cluster>();
 
@@ -34,7 +34,7 @@ namespace DAL
         }
 
 
-        public static IEnumerable<HoofdGemeente> ImportHoofdGemeenten(string path, string clusterPath, string postcodePath)
+        internal static IEnumerable<HoofdGemeente> ImportHoofdGemeenten(string path, string clusterPath, string postcodePath)
         {
             List<HoofdGemeente> gemeenten = new List<HoofdGemeente>();
 
@@ -75,7 +75,7 @@ namespace DAL
             return gemeenten;
         }
 
-        public static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten, string path, string clusterPath)
+        internal static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten, string path, string clusterPath)
         {
             // Eventueel error throwen hier
             if (!File.Exists(path)) return default(List<HoofdGemeente>);
@@ -94,7 +94,7 @@ namespace DAL
 
         }
 
-        public static IDictionary<string, string> MatchGemeenteCluster(string path)
+        internal static IDictionary<string, string> MatchGemeenteCluster(string path)
         {
             // Eventueel error throwen hier
             if (!File.Exists(path)) return default(IDictionary<string, string>);
@@ -115,7 +115,7 @@ namespace DAL
         }
 
 
-        public static IEnumerable<Gemeente> ImportGemeenten(string path)
+        internal static IEnumerable<Gemeente> ImportGemeenten(string path)
         {
             List<Gemeente> gemeenten = new List<Gemeente>();
 
@@ -149,7 +149,7 @@ namespace DAL
 
 
 
-        public static Dictionary<string, Categorie> ImportCategories(string path)
+        internal static Dictionary<string, Categorie> ImportCategories(string path)
         {
             Dictionary<string, Categorie> hmap = new Dictionary<string, Categorie>();
 
@@ -203,10 +203,10 @@ namespace DAL
         }
 
 
-        public static List<FinancieleLijnImport> ImportFinancieleLijnen(string path, int year)
+        internal static List<FinancieleLijnImport> ImportFinancieleLijnen(string path, int year)
         {
             List<FinancieleLijnImport> lijnen = new List<FinancieleLijnImport>();
-            FinancieleLijnImport fl = new FinancieleLijnImport();
+            FinancieleLijnImport fl;
 
             // Eventueel error throwen hier
             if (!File.Exists(path)) return default(List<FinancieleLijnImport>);

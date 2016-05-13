@@ -6,28 +6,28 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class FinancieleLijnImport
+    internal class FinancieleLijnImport
     {
 
-        public string gemeente { get; set; }
-        public float inkomsten { get; set; }
-        public float uitgaven { get; set; }
-        public string actieCode { get; set; }
-        public string actieKort { get; set; }
-        public string actieLang { get; set; }
-        public Dictionary<string,string> categorien { get; set; }
-        public string bestuur { get; set; }
-        public int jaar { get; set; }
+        internal string gemeente { get; set; }
+        internal float inkomsten { get; set; }
+        internal float uitgaven { get; set; }
+        internal string actieCode { get; set; }
+        internal string actieKort { get; set; }
+        internal string actieLang { get; set; }
+        internal Dictionary<string,string> categorien { get; set; }
+        internal string bestuur { get; set; }
+        internal int jaar { get; set; }
 
-        public FinancieleLijnImport()
+        internal FinancieleLijnImport()
             {
             }
 
-        public FinancieleLijnImport(string groep,string bestuur, string actieKort, string actieLang,int jaar, float uitgaven, float inkomsten   )
+        internal FinancieleLijnImport(string groep,string bestuur, string actieKort, string actieLang,int jaar, float uitgaven, float inkomsten   )
         {
             this.gemeente = groep;
-           this.bestuur = bestuur;        
-           this.actieKort = actieKort;
+            this.bestuur = bestuur;        
+            this.actieKort = actieKort;
             this.actieLang = actieLang;
             this.jaar = jaar;
             this.inkomsten = inkomsten;

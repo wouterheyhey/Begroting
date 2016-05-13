@@ -16,7 +16,7 @@ namespace DAL.repositories
         public List<FinancieleLijn> ImportFinancieleLijnen() { return null; }  // Uit te werken
 
 
-        public CategoryType FindLowestNonBlankCategoryType(FinancieleLijnImport r)
+        internal CategoryType FindLowestNonBlankCategoryType(FinancieleLijnImport r)
         {
             // looping over enum elements in descending order
             foreach (CategoryType catType in ((CategoryType[])Enum.GetValues(typeof(CategoryType))).OrderByDescending(x => x))
