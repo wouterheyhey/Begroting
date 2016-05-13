@@ -11,12 +11,22 @@ namespace DAL
 {
     internal class ExcelImporter
     {
+
+        private static void CheckIfFileExists(string path)
+        {
+            if (!File.Exists(path))
+            {
+                System.Diagnostics.Debug.WriteLine("File " + path + " could not be found");
+                throw new FileNotFoundException();
+            }
+            return;
+        }
+
         internal static IDictionary<string, Cluster> ImportClusters(string path)
         {
             Dictionary<string, Cluster> clusters = new Dictionary<string, Cluster>();
 
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(IDictionary<string, Cluster>);
+            CheckIfFileExists(path);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             var rows = from c in book.Worksheet("Sheet1")
@@ -38,8 +48,7 @@ namespace DAL
         {
             List<HoofdGemeente> gemeenten = new List<HoofdGemeente>();
 
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(HashSet<HoofdGemeente>);
+            CheckIfFileExists(path);
 
             var book = new LinqToExcel.ExcelQueryFactory(postcodePath);
             book.AddMapping<HoofdGemeente>(x => x.naam, "Hoofdgemeente");
@@ -77,8 +86,7 @@ namespace DAL
 
         internal static IEnumerable<HoofdGemeente> AddClustersToHoofdGemeentes(IEnumerable<HoofdGemeente> gemeenten, string path, string clusterPath)
         {
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(List<HoofdGemeente>);
+            CheckIfFileExists(path);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             Dictionary<string, Cluster> clusterMap = (Dictionary<string, Cluster>)ImportClusters(clusterPath);
@@ -96,8 +104,8 @@ namespace DAL
 
         internal static IDictionary<string, string> MatchGemeenteCluster(string path)
         {
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(IDictionary<string, string>);
+
+            CheckIfFileExists(path);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             Dictionary<string, string> gemeenteCluster = new Dictionary<string, string>();
@@ -119,8 +127,7 @@ namespace DAL
         {
             List<Gemeente> gemeenten = new List<Gemeente>();
 
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(HashSet<Gemeente>);
+            CheckIfFileExists(path);
 
             var book = new LinqToExcel.ExcelQueryFactory(path);
             book.AddMapping<Gemeente>(x => x.naam, "gemeente");
@@ -148,13 +155,12 @@ namespace DAL
 
 
 
-
         internal static Dictionary<string, Categorie> ImportCategories(string path)
         {
             Dictionary<string, Categorie> hmap = new Dictionary<string, Categorie>();
 
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(Dictionary<string, Categorie>);
+            CheckIfFileExists(path);
+
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
             CategoryType highestCatType = Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().Min();
@@ -203,23 +209,23 @@ namespace DAL
         }
 
 
+
         internal static List<FinancieleLijnImport> ImportFinancieleLijnen(string path, int year)
         {
             List<FinancieleLijnImport> lijnen = new List<FinancieleLijnImport>();
             FinancieleLijnImport fl;
 
-            // Eventueel error throwen hier
-            if (!File.Exists(path)) return default(List<FinancieleLijnImport>);
+            CheckIfFileExists(path);
             var book = new LinqToExcel.ExcelQueryFactory(path);
 
 
-        var rows = from c in book.Worksheet("Actie_detail_2")
-                   where c["Financieel boekjaar"].Cast<int>() == year && c["Niveau B volledig"] != "I.2 Investeringsontvangsten" && c["Niveau B volledig"] != "E.II Exploitatie-ontvangsten"
-                   select c;
+            var rows = from c in book.Worksheet("Actie_detail_2")
+                       where c["Financieel boekjaar"].Cast<int>() == year && c["Niveau B volledig"] != "I.2 Investeringsontvangsten" && c["Niveau B volledig"] != "E.II Exploitatie-ontvangsten"
+                       select c;
 
-            foreach(var r in rows)
+            foreach (var r in rows)
             {
-                fl = 
+                fl =
                     new FinancieleLijnImport
                     (
                     r["Groep"],
@@ -234,7 +240,7 @@ namespace DAL
 
                 foreach (CategoryType catType in Enum.GetValues(typeof(CategoryType)))
                 {
-                    fl.categorien.Add(catType.ToString(),r["categorie " + catType.ToString()].Cast<string>());
+                    fl.categorien.Add(catType.ToString(), r["categorie " + catType.ToString()].Cast<string>());
                 }
 
                 lijnen.Add(fl);
@@ -242,6 +248,8 @@ namespace DAL
 
             return lijnen;
         }
+
+
 
            
         

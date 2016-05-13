@@ -110,6 +110,21 @@ namespace DAL.repositories
         }
 
 
+        internal void UpdateGemeenteCatCumulative(GemeenteCategorie gemCat, float inkomsten, float uitgaven)
+        {
+            // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
+            gemCat.totaal += gemCat.calculateTotal(inkomsten, uitgaven);
+            UpdateGemeenteCat(gemCat);
+            return;
+        }
+
+        public void UpdateGemeenteCat(GemeenteCategorie gc)
+        {
+            ctx.Entry(gc).State = EntityState.Modified;
+            ctx.SaveChanges();
+        }
+
+
 
 
 

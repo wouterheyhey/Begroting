@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class AuthDBContext : IdentityDbContext<IdentityUser>
+    internal class AuthDBContext : IdentityDbContext<IdentityUser>
     {
-        public AuthDBContext()
+        internal AuthDBContext()
             : base("BegrotingDB_Azure")
         {
 

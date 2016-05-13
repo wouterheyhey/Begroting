@@ -12,8 +12,6 @@ namespace BL
     public class FinancieleLijnManager
     {
         private readonly BegrotingManager begManager;
-        private readonly CategorieManager catManager;
-        private readonly GemeenteManager gemManager;
         private FinancieleLijnRepository  finRepo;
 
         public FinancieleLijnManager()
@@ -26,7 +24,6 @@ namespace BL
         public void LoadFinancieleLijnen(int year)
         {
             List<InspraakItem> lijnen = finRepo.ImportFinancieleLijnen(year); 
-           // begManager.addFinancieleLijnen(lijnen);
         }
 
 

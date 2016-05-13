@@ -43,6 +43,17 @@ namespace BL.Domain
             this.totaal = calculateTotal(inkomsten,uitgaven);
         }
 
+        public Actie(string actieKort, string actieLang, BestuurType bt, FinancieelOverzicht fo, GemeenteCategorie gemCat)
+        {
+            this.actieKort = actieKort;
+            this.actieLang = actieLang;
+            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.bestuurType = bt;
+            this.financieelOverzicht = fo;
+            this.parentGemCat = gemCat;
+            this.totaal = calculateTotal(inkomsten, uitgaven);
+        }
+
         public static BestuurType MapBestuurType(string bt)
         {
             if (bt.Contains("OCMW")) { return BestuurType.OCMW; }

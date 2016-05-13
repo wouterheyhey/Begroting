@@ -118,11 +118,7 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
-        public void UpdateGemeenteCat(GemeenteCategorie gc)
-        {
-            ctx.Entry(gc).State = EntityState.Modified;
-            ctx.SaveChanges();
-        }
+
 
         /* public Actie CreateIfNotExistsActie(string actieCode, string actieKort, string actieLang, HoofdGemeente gem, List<Actie> acties)
          {
@@ -137,34 +133,31 @@ namespace DAL.repositories
              return actie;
          } */
 
-        public Actie CreateIfNotExistsActie(string actieKort, string actieLang, List<Actie> acties, BestuurType bt, float inkomsten, float uitgaven, FinancieelOverzicht fo, int gemCatID)
+        public Actie CreateIfNotExistsActie(string actieKort, string actieLang, List<Actie> acties, BestuurType bt, FinancieelOverzicht fo, int gemCatID)
         {
 
             //nakijken of het om dezelfde actie gaat zoja optellen van inkomsten en uitgaven anders nieuwe actie maken
-
+            
             GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
-            // inkomsten af trekken om te weten hoeveel de gemeente gaat uitgeven aan deze categorie
-            gemC.totaal += gemC.calculateTotal(inkomsten, uitgaven);
 
-            UpdateGemeenteCat(gemC);
 
             Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
               && x.bestuurType == bt && x.parentGemCat.ID == gemCatID);
             if (actie == null)
             {
                 ctx.Entry(fo).State = EntityState.Unchanged;
-                return CreateActie(new Actie(actieKort, actieLang, bt, inkomsten, uitgaven, fo, gemC));
+                // Actie creeeren zonder inkomsten en uitgaven aangezien deze later aangevuld worden
+                return CreateActie(new Actie(actieKort, actieLang, bt, fo, gemC));
             }
 
-            UpdateActie(actie,inkomsten,uitgaven);
             return actie;
 
         }
 
-        private void UpdateActie(Actie actie, float inkomsten, float uitgaven)
+        internal void UpdateActieCumulative(Actie actie, float inkomsten, float uitgaven)
         {
-            actie.inkomsten += inkomsten;
             actie.uitgaven += uitgaven;
+            actie.inkomsten += inkomsten;
             actie.totaal += actie.calculateTotal(inkomsten, uitgaven); // logica naar manager?
             UpdateActie(actie);
             return;

@@ -61,15 +61,18 @@ namespace DAL.repositories
                 {
                     cat=cats.Where(x => x.categorieType == catType.ToString()).Where(x => x.categorieCode.Equals(r.categorien[catType.ToString()].Split(new char[] { ' ' })[0])).SingleOrDefault();
 
-                    gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats); 
+                    gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats);
                     gemCats.Add(gemCat);
+                    catRepo.UpdateGemeenteCatCumulative(gemCat, r.inkomsten, r.uitgaven);
 
-                    if( catType == ct)  
+                    if ( catType == ct)  
                         {
                         bt = Actie.MapBestuurType(r.bestuur);
 
-                        actie = begRepo.CreateIfNotExistsActie(r.actieKort, r.actieLang, acties, bt,r.inkomsten,r.uitgaven, fo, gemCat.ID);
+                        actie = begRepo.CreateIfNotExistsActie(r.actieKort, r.actieLang, acties, bt,fo, gemCat.ID);
                         acties.Add(actie);
+                        begRepo.UpdateActieCumulative(actie, r.inkomsten, r.uitgaven);
+                        
                     }
                 }
 
