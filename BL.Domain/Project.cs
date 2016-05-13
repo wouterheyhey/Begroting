@@ -23,5 +23,7 @@ namespace BL.Domain
         public IngelogdeGebruiker beheerder { get; set; }
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
 
+        public JaarBegroting begroting { get; set; }
+
     }
 }

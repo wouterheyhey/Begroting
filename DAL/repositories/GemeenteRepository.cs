@@ -2,6 +2,7 @@
 using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,6 +32,7 @@ namespace DAL.repositories
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
+        // SPRINT2: wordt niet gebruikt
         public HoofdGemeente ReadGemeente(int id)
         {
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.HoofdGemeenteID == id).SingleOrDefault();
@@ -41,9 +43,32 @@ namespace DAL.repositories
             return ctx.Gemeenten;
         }
 
-        
+        public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man, float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
+        {
 
-      
+            HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
+
+            if (g.bestuur != null)
+            {
+                foreach (var item in g.bestuur)
+                {
+                    ctx.Entry(item).State = EntityState.Unchanged;
+                }
+            }
+
+
+            g.aantalBewoners = aantalBewoners;
+            g.oppervlakte = opp;
+            g.oppervlakteMaat = maat;
+            g.isMan = man;
+            g.isVrouw = vrouw;
+            g.isKind = kind;
+            g.aanslagVoet = aanslagvoet;
+            g.bestuur = bestuur;
+            ctx.SaveChanges();
+        }
+
+
 
     }
 }

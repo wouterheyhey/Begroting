@@ -18,11 +18,17 @@ namespace BL
            repo = new BegrotingRepository();
         }
 
-   /*     public IEnumerable<DTOfinancieleLijn> readFinancieleLijnen(int jaar, string naam )
+        public IEnumerable<GemeenteCategorie> readGemeenteCategories(int jaar, string naam)
         {
-            return repo.GetFinancieleLijnen(jaar, naam);
+            return repo.getGemeenteCategories(jaar, naam);
         }
 
+        public IEnumerable<Actie> readActies(int id)
+        {
+            return repo.GetActies(id);
+        }
+
+        /*
         public void addFinancieleLijnen(IEnumerable<FinancieleLijn> lijnen)
         {
             repo.CreateFinancieleLijnen(lijnen);
