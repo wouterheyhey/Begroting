@@ -65,6 +65,32 @@ namespace WebApi.Controllers
 
             return Ok(gemcats);
         }
+
+        [HttpPost]
+        public IHttpActionResult Post(DTOProject p)
+        {
+            //K= id + V= inspraakNiveau
+            IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
+
+            foreach (var item in p.cats)
+            {
+                inspraakItems.Add(new KeyValuePair<int, int>(item.ID, (int)item.inspraakNiveau));
+
+                if(item.acties != null)
+                {
+                    foreach (var actie in item.acties)
+                    {
+                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                    }
+                }
+                
+            }
+
+            mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente);
+            return Ok();
+        }
+
     }
 }
 

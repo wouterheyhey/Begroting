@@ -192,6 +192,7 @@
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Models\DTOs\DTOActie.cs" />
     <Compile Include="Models\DTOs\DTOGemeenteCategorie.cs" />
+    <Compile Include="Models\DTOs\DTOProject.cs" />
     <Compile Include="Models\ExternalLoginData.cs" />
     <Compile Include="Models\ExternalLoginModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
