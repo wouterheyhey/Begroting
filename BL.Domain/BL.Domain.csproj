@@ -82,16 +82,19 @@
     <Compile Include="Account.cs" />
     <Compile Include="AccountType.cs" />
     <Compile Include="AntwoordEmail.cs" />
+    <Compile Include="ApplicationTypes.cs" />
     <Compile Include="BegrotingsVoorstel.cs" />
     <Compile Include="BegrotingsVoorstelReactie.cs" />
     <Compile Include="BestuurType.cs" />
     <Compile Include="BudgetWijziging.cs" />
     <Compile Include="Categorie.cs" />
     <Compile Include="CategorieInput.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="Cluster.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="Desactivatie.cs" />
-    <Compile Include="DTOs\DTOfinancieleLijn.cs" />
+    <Compile Include="DTOs\DTOActie.cs" />
+    <Compile Include="DTOs\DTOGemeenteCategorie.cs" />
     <Compile Include="DTOs\DTOIngelogdeGebruiker.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
@@ -111,14 +114,13 @@
     <Compile Include="ProjectAfbeelding.cs" />
     <Compile Include="ProjectScenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RefreshTokens.cs" />
     <Compile Include="RolType.cs" />
     <Compile Include="Stem.cs" />
     <Compile Include="VerificatieStatus.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

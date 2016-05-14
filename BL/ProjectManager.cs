@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.repositories;
 using BL.Domain;
+using BL.Domain.DTOs;
 
 namespace BL
 {
@@ -22,7 +23,7 @@ namespace BL
             return repo.getInspraakItems(jaar, gemeente);
         }
 
-        public void addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int,int> inspraakItems, int? boekjaar, string gemeente)
+        public void addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, List<DTOGemeenteCategorie> inspraakItems, int? boekjaar, string gemeente)
         {
             Project p = new Project()
             {
@@ -32,11 +33,18 @@ namespace BL
                 extraInfo = info,
                 bedrag = bedrag,
                 minBedrag = min,
+
                 maxBedrag = max,
 
             };
 
             repo.createProject(p, inspraakItems, boekjaar, gemeente);
         }
+
+        public Project getProject(int jaar, string gemeente)
+        {
+            return repo.readProject(jaar, gemeente);
+        }
+        
     }
 }

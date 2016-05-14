@@ -18,11 +18,16 @@ namespace WebApi.Controllers
 
         public IHttpActionResult Get(int jaar, string naam)
         {
+<<<<<<< HEAD
             IEnumerable<GemeenteCategorie> lijnen = begMgr.readGemeenteCategories(jaar, naam);
+=======
+            IEnumerable<DTOGemeenteCategorie> lijnen = begMgr.readInspraakItems(jaar, naam);
+>>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
+<<<<<<< HEAD
             List<DTOGemeenteCategorie> DTOgemcats = new List<DTOGemeenteCategorie>();
 
             foreach (var item in lijnen)
@@ -71,6 +76,11 @@ namespace WebApi.Controllers
 
             return Ok(DTOacties);
         }
+=======
+            return Ok(lijnen);
+
+        } 
+>>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
 
         //Deze heb ik even aangepast omdat we nu 2 get hebben met zelfde paramaters
         public IHttpActionResult Get()
@@ -89,6 +99,18 @@ namespace WebApi.Controllers
 
         }
 
-
+        public IHttpActionResult Get()
+        {
+            try
+            {
+                catMgr.SetChildrenCategorien();
+                finMgr.LoadFinancieleLijnen();
+            }
+            catch
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return StatusCode(HttpStatusCode.OK);
+        }
     }
 }

@@ -22,6 +22,11 @@ namespace BL
         {
             return repo.getGemeenteCategories(jaar, naam);
         }
+       public IEnumerable<DTOGemeenteCategorie> readInspraakItems(int jaar, string naam )
+        {
+            return repo.getInspraakItems(jaar, naam);
+        }
+        /*
 
         public IEnumerable<Actie> readActies(int id)
         {

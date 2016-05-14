@@ -29,7 +29,7 @@ namespace DAL.repositories
 
         public HoofdGemeente ReadGemeente(string gemeenteNaam)
         {
-            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.bestuur)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
         // SPRINT2: wordt niet gebruikt
@@ -43,12 +43,13 @@ namespace DAL.repositories
             return ctx.Gemeenten;
         }
 
-        public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man, float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
-        {
 
-            HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
+           public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man , float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
+           {
+            
+               HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
 
-            if (g.bestuur != null)
+            if(g.bestuur != null)
             {
                 foreach (var item in g.bestuur)
                 {
@@ -56,19 +57,27 @@ namespace DAL.repositories
                 }
             }
 
+           
+               g.aantalBewoners = aantalBewoners;
+               g.oppervlakte = opp;
+               g.oppervlakteMaat = maat;
+               g.isMan = man;
+               g.isVrouw = vrouw;
+               g.isKind = kind;
+               g.aanslagVoet = aanslagvoet;
+               g.bestuur = bestuur;
+               ctx.SaveChanges();
+           }
 
-            g.aantalBewoners = aantalBewoners;
-            g.oppervlakte = opp;
-            g.oppervlakteMaat = maat;
-            g.isMan = man;
-            g.isVrouw = vrouw;
-            g.isKind = kind;
-            g.aanslagVoet = aanslagvoet;
-            g.bestuur = bestuur;
-            ctx.SaveChanges();
+        public int CreateBestuur(Politicus p)
+        {
+            ctx.Politici.Add(p);
+            return p.PoliticusId;
         }
 
-
-
+        public void saveContext()
+        {
+            ctx.SaveChanges();
+        }
     }
 }

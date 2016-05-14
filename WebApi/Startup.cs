@@ -23,6 +23,7 @@ namespace WebApi
 
         public void Configuration(IAppBuilder app)
         {
+            ConfigureOAuth(app);
             HttpConfiguration config = new HttpConfiguration();
             WebApiConfig.Register(config);
             app.UseCors(Microsoft.Owin.Cors.CorsOptions.AllowAll);
@@ -37,15 +38,15 @@ namespace WebApi
 
             googleAuthOptions = new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "xxx",
-                ClientSecret = "xxx",
+                ClientId = "296143598651-48u160ccgpqse9efarlb9r09odlpmat7.apps.googleusercontent.com",
+                ClientSecret = "dcf6_6ta_tbrgn0-D3SvQIQA",
                 Provider = new GoogleAuthorizationProvider()
             };
 
             facebookAuthOptions = new FacebookAuthenticationOptions()
             {
-                AppId = "xxx",
-                AppSecret = "xxx",
+                AppId = "102290830189355",
+                AppSecret = "2c6298c49ccced5ff639594285437a21",
                 Provider = new FacebookAuthorizationProvider()
             };
 
@@ -53,8 +54,9 @@ namespace WebApi
             {
                 AllowInsecureHttp = true,
                 TokenEndpointPath = new PathString("/token"),
-                AccessTokenExpireTimeSpan = TimeSpan.FromDays(1),
-                Provider = new AccountAuthorizationServerProvider()
+                AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
+                Provider = new AccountAuthorizationServerProvider(),
+                RefreshTokenProvider = new AccountRefreshTokenProvider()
             };
 
             // Hier maken we de token aan

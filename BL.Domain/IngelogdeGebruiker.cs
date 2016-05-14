@@ -9,24 +9,20 @@ namespace BL.Domain
     public class IngelogdeGebruiker
     {
         public int Id { get; set; }
+        public string userId { get; set; }
         public string naam { get; set; }
-        public string accountID { get; set; }
-        public string passwoord { get; set; }
-        public HoofdGemeente gemeente { get; set; }
-        public bool isActief { get; set; }
+        public string email { get; set; }
+        public int gemeenteId { get; set; }
         public RolType rolType { get; set; }
         //public HashSet<Account> accounts { get; set; }
 
-        public IngelogdeGebruiker(int Id, string naam, string accountID, string passwoord, bool isActief, RolType roltype)
+        public IngelogdeGebruiker(string email, string naam, string accountID, RolType roltype, HoofdGemeente gemeente)
         {
-            this.Id = Id;
+            this.userId = email;
             this.naam = naam;
-            this.accountID = accountID;
-            this.passwoord = passwoord;
-            this.gemeente = null;
-            this.isActief = isActief;
+            this.email = email;
+            this.gemeenteId = gemeente.HoofdGemeenteID;
             this.rolType = rolType;
-            //this.gemeente = new HoofdGemeente("Brussel");
         }
     }
 }

@@ -7,12 +7,9 @@ using System.Threading.Tasks;
 
 namespace BL.Domain.DTOs
 {
-    public class DTOfinancieleLijn
+   public class DTOGemeenteCategorie
     {
-        public DTOfinancieleLijn()
-        {
-
-        }
+        public int ID { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCatx { get; set; }
@@ -23,9 +20,11 @@ namespace BL.Domain.DTOs
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string naamCatz { get; set; }
 
-        public float uitgave { get; set; }
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? inspraakNiveau { get; set; }
 
-        public string catCode { get; set; }
+        public float totaal { get; set; }
 
+        
     }
 }

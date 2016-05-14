@@ -44,7 +44,6 @@ namespace DAL.repositories
         {
             GemeenteCategorie gemCat = gemCats.Find(x => x.financieelOverzicht.Id == foId && x.categorieId == catId);
 
-
             if (gemCat == null)
             {
                 Categorie c = cats.Find(x => x.categorieId == catId); // Exception for cat not found? 

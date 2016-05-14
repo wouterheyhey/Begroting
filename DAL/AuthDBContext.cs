@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNet.Identity.EntityFramework;
+
+﻿using BL.Domain;
+using Microsoft.AspNet.Identity.EntityFramework;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace DAL
 {
-    internal class AuthDBContext : IdentityDbContext<IdentityUser>
+    public class AuthDBContext : IdentityDbContext<IdentityUser>
     {
-        internal AuthDBContext()
+        public AuthDBContext()
             : base("BegrotingDB_Azure")
         {
 
         }
+
+        public DbSet<Client> Clients { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 
 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DAL.repositories;
+using BL.Domain;
 using BL.Domain.DTOs;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -14,6 +15,7 @@ namespace BL
     public class AccountManager
     {
         AccountRepository repo;
+        
 
         public AccountManager()
         {
@@ -22,7 +24,8 @@ namespace BL
 
         public Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker gebruiker)
         {
-            Task<IdentityResult> res = repo.RegisterUser(gebruiker);
+            GemeenteRepository repoGem = new GemeenteRepository();
+            Task<IdentityResult> res = repo.RegisterUser(gebruiker, repoGem.ReadGemeente(gebruiker.gemeente));
             return res;
         }
 
@@ -36,9 +39,44 @@ namespace BL
             return repo.FindAsync(loginInfo);
         }
 
-        public Task<string> FindClient()
+        public Task<IdentityResult> CreateAsync(IdentityUser user)
         {
-            return null;
+            return repo.CreateAsync(user);
+        }
+
+        public Task<IdentityResult> AddLoginAsync(string userId, UserLoginInfo loginInfo)
+        {
+            return repo.AddLoginAsync(userId, loginInfo);
+        }
+
+        public Client FindClient(string clientId)
+        {
+            return repo.FindClient(clientId);
+        }
+
+        public Task<bool> AddRefreshToken(RefreshToken token)
+        {
+            return repo.AddRefreshToken(token);
+        }
+
+        public Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
+        {
+            return repo.RemoveRefreshToken(refreshToken);
+        }
+
+        public Task<bool> RemoveRefreshToken(string refreshTokenId)
+        {
+            return repo.RemoveRefreshToken(refreshTokenId);
+        }
+
+        public Task<RefreshToken> FindRefreshToken(string refreshTokenId)
+        {
+            return repo.FindRefreshToken(refreshTokenId);
+        }
+
+        public List<RefreshToken> GetAllRefreshTokens()
+        {
+            return repo.GetAllRefreshTokens();
         }
 
         public bool CreateRole(String roleName)

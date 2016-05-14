@@ -18,13 +18,14 @@ namespace BL.Domain.DTOs
         public string Password { get; set; }
 
         [Required]
-        public string accountID { get; set; }
-
-        [Required]
         public string bevestigPaswoord { get; set; }
 
         [Required]
         public string email { get; set; }
+
+        [Required]
+        public string gemeente { get; set; }
+
 
         //public HoofdGemeente gemeente { get; set; }
         //public bool isActief { get; set; }

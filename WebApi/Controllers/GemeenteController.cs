@@ -37,12 +37,21 @@ namespace WebApi.Controllers
         [HttpPut]
         public IHttpActionResult Put(HoofdGemeente h)
         {
+<<<<<<< HEAD
             /* Politicus p = new Politicus()
               {
                   naam = "polleke",
                   type = PoliticusType.Gemeenteraadslid
               };
               h.bestuur.Add(p); */
+=======
+          /* Politicus p = new Politicus()
+            {
+                naam = "polleke",
+                type = PoliticusType.Gemeenteraadslid
+            };
+            h.bestuur.Add(p); */
+>>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
             mgr.ChangeGemeente(h.naam, h.aantalBewoners, h.oppervlakte, h.oppervlakteMaat, h.isMan, h.isVrouw,
                 h.isKind, h.bestuur, h.aanslagVoet);
 

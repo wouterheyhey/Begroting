@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ namespace BL.Domain
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
 
         public JaarBegroting begroting { get; set; }
+
 
     }
 }

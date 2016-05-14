@@ -12,7 +12,9 @@ namespace BL.Domain
         public string naam { get; set; }
         public int postCode { get; set; }
         public string provincie { get; set; }
-        public HoofdGemeente hoofdGemeente { get; set; }
+
+        //Dit veroorzaakt circulaire referentie. We hebben de bidirectionele relatie niet nodig
+      //  public HoofdGemeente hoofdGemeente { get; set; }
 
         public Gemeente() { }
         public Gemeente(string naam,int postcode)
