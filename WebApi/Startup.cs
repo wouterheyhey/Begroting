@@ -38,15 +38,15 @@ namespace WebApi
 
             googleAuthOptions = new GoogleOAuth2AuthenticationOptions()
             {
-                ClientId = "xxx",
-                ClientSecret = "xxx",
+                ClientId = "296143598651-48u160ccgpqse9efarlb9r09odlpmat7.apps.googleusercontent.com",
+                ClientSecret = "dcf6_6ta_tbrgn0-D3SvQIQA",
                 Provider = new GoogleAuthorizationProvider()
             };
 
             facebookAuthOptions = new FacebookAuthenticationOptions()
             {
-                AppId = "xxx",
-                AppSecret = "xxx",
+                AppId = "102290830189355",
+                AppSecret = "2c6298c49ccced5ff639594285437a21",
                 Provider = new FacebookAuthorizationProvider()
             };
 
