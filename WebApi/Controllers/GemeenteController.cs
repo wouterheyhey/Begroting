@@ -15,43 +15,34 @@ namespace WebApi.Controllers
         private GemeenteManager mgr = new GemeenteManager();
 
         // GET: api/Gemeente
-           public IHttpActionResult Get()
-            {
-                var gemeenten = mgr.GetGemeenten();
+        public IHttpActionResult Get()
+        {
+            var gemeenten = mgr.GetGemeenten();
 
-                if (gemeenten == null || gemeenten.Count() == 0)
-                    return StatusCode(HttpStatusCode.NoContent);
+            if (gemeenten == null || gemeenten.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
 
-                return Ok(gemeenten);
-            }
-            // GET: api/Gemeente/id
-            public IHttpActionResult Get(string naam)
-            {
-                var gemeente = mgr.GetGemeente(naam);
-                if(gemeente==null)
-                    return StatusCode(HttpStatusCode.NoContent);
+            return Ok(gemeenten);
+        }
+        // GET: api/Gemeente/id
+        public IHttpActionResult Get(string naam)
+        {
+            var gemeente = mgr.GetGemeente(naam);
+            if (gemeente == null)
+                return StatusCode(HttpStatusCode.NoContent);
 
-                return Ok(gemeente);
-            }
+            return Ok(gemeente);
+        }
 
         [HttpPut]
         public IHttpActionResult Put(HoofdGemeente h)
         {
-<<<<<<< HEAD
             /* Politicus p = new Politicus()
               {
                   naam = "polleke",
                   type = PoliticusType.Gemeenteraadslid
               };
               h.bestuur.Add(p); */
-=======
-          /* Politicus p = new Politicus()
-            {
-                naam = "polleke",
-                type = PoliticusType.Gemeenteraadslid
-            };
-            h.bestuur.Add(p); */
->>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
             mgr.ChangeGemeente(h.naam, h.aantalBewoners, h.oppervlakte, h.oppervlakteMaat, h.isMan, h.isVrouw,
                 h.isKind, h.bestuur, h.aanslagVoet);
 

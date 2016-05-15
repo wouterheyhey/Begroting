@@ -8,8 +8,8 @@ namespace BL.Domain
 {
     public enum VerificatieStatus
     {
-        teBehandelen,
-        goedgekeurd,
-        afgekeurd
+        teBehandelen=1,
+        goedgekeurd=2,
+        afgekeurd=3
     }
 }

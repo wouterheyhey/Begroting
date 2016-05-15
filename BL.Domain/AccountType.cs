@@ -8,8 +8,8 @@ namespace BL.Domain
 {
     public enum AccountType
     {
-        systeem,
-        twitter,
-        facebook
+        systeem=1,
+        twitter=2,
+        facebook=3
     }
 }

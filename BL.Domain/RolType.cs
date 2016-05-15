@@ -8,9 +8,9 @@ namespace BL.Domain
 {
     public enum RolType
     {
-        standaard,
-        admin,
-        superadmin,
-        moderator
+        standaard=1,
+        admin=2,
+        superadmin=3,
+        moderator=4
     }
 }

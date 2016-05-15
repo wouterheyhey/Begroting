@@ -22,30 +22,10 @@ namespace BL
         {
             return repo.getGemeenteCategories(jaar, naam);
         }
-       public IEnumerable<DTOGemeenteCategorie> readInspraakItems(int jaar, string naam )
-        {
-            return repo.getInspraakItems(jaar, naam);
-        }
-        /*
-
         public IEnumerable<Actie> readActies(int id)
         {
             return repo.GetActies(id);
         }
-
-        /*
-        public void addFinancieleLijnen(IEnumerable<FinancieleLijn> lijnen)
-        {
-            repo.CreateFinancieleLijnen(lijnen);
-            return ;
-        }
-       
-        // Nodig?
-        public void LoadFinancieleLijnen(int year)
-        {
-            //repo.CreateFinancieleLijnen(year);
-            return ;
-        } */
 
     }
 }

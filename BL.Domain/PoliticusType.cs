@@ -8,7 +8,7 @@ namespace BL.Domain
 {
     public enum PoliticusType
     {
-        Gemeenteraadslid,
-        Schepen
+        Gemeenteraadslid=1,
+        Schepen=2
     }
 }

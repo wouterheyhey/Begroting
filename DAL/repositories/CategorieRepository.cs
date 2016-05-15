@@ -77,11 +77,7 @@ namespace DAL.repositories
             return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.categorieId == categorieId).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
         }
 
-        /*  public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, string gemeenteNaam)
-          {
-              return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.cat.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.gemeente.naam == gemeenteNaam).SingleOrDefault();
-          } */
-
+      
 
         public IEnumerable<GemeenteCategorie> ReadGemeenteCategories()
         {

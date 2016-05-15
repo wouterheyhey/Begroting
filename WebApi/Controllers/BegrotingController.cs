@@ -1,13 +1,12 @@
 ﻿using BL;
 using BL.Domain;
-using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using WebApi.Models.DTOs;
+using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
@@ -18,16 +17,11 @@ namespace WebApi.Controllers
 
         public IHttpActionResult Get(int jaar, string naam)
         {
-<<<<<<< HEAD
             IEnumerable<GemeenteCategorie> lijnen = begMgr.readGemeenteCategories(jaar, naam);
-=======
-            IEnumerable<DTOGemeenteCategorie> lijnen = begMgr.readInspraakItems(jaar, naam);
->>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
 
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
-<<<<<<< HEAD
             List<DTOGemeenteCategorie> DTOgemcats = new List<DTOGemeenteCategorie>();
 
             foreach (var item in lijnen)
@@ -39,7 +33,7 @@ namespace WebApi.Controllers
                     naamCatz = item.categorieNaam
                 };
 
-                if(item.parentGemCat !=null)
+                if (item.parentGemCat != null)
                 {
                     d.naamCaty = item.parentGemCat.categorieNaam;
                     if (item.parentGemCat.parentGemCat != null)
@@ -47,8 +41,8 @@ namespace WebApi.Controllers
                         d.naamCatx = item.parentGemCat.parentGemCat.categorieNaam;
                     }
                 }
-                
-               
+
+
                 DTOgemcats.Add(d);
             }
 
@@ -68,7 +62,7 @@ namespace WebApi.Controllers
                 {
                     ID = item.ID,
                     actieKort = item.actieKort,
-                   actieLang = item.actieLang,
+                    actieLang = item.actieLang,
                     uitgaven = item.uitgaven,
                     inspraakNiveau = (int)item.inspraakNiveau
                 });
@@ -76,11 +70,6 @@ namespace WebApi.Controllers
 
             return Ok(DTOacties);
         }
-=======
-            return Ok(lijnen);
-
-        } 
->>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
 
         //Deze heb ik even aangepast omdat we nu 2 get hebben met zelfde paramaters
         public IHttpActionResult Get()
@@ -99,18 +88,5 @@ namespace WebApi.Controllers
 
         }
 
-        public IHttpActionResult Get()
-        {
-            try
-            {
-                catMgr.SetChildrenCategorien();
-                finMgr.LoadFinancieleLijnen();
-            }
-            catch
-            {
-                return StatusCode(HttpStatusCode.BadRequest);
-            }
-            return StatusCode(HttpStatusCode.OK);
-        }
     }
 }

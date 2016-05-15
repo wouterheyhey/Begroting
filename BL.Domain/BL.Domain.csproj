@@ -93,8 +93,6 @@
     <Compile Include="Cluster.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="Desactivatie.cs" />
-    <Compile Include="DTOs\DTOActie.cs" />
-    <Compile Include="DTOs\DTOGemeenteCategorie.cs" />
     <Compile Include="DTOs\DTOIngelogdeGebruiker.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />

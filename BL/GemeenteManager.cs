@@ -32,11 +32,6 @@ namespace BL
         {
             repo.UpdateGemeente(naam, aantalBewoners, opp, maat, man, vrouw, kind, bestuur, aanslagvoet);
         }
-<<<<<<< HEAD
-
-
-=======
->>>>>>> 51d21a0e085018b6f294792f0f8e5db245266cf4
 
     }
 }

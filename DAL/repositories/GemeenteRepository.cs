@@ -44,36 +44,41 @@ namespace DAL.repositories
         }
 
 
-           public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man , float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
-           {
-            
-               HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
+        public void UpdateGemeente(string naam, int aantalBewoners, int opp, string maat, float man, float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
+        {
 
-            if(g.bestuur != null)
+            HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
+
+            if (g.bestuur != null)
             {
-                foreach (var item in g.bestuur)
+                foreach (var item in bestuur)
                 {
-                    ctx.Entry(item).State = EntityState.Unchanged;
+                    if (item.PoliticusId == 0)
+                    {
+                        g.bestuur.Add(item);
+
+                    }
                 }
             }
 
-           
-               g.aantalBewoners = aantalBewoners;
-               g.oppervlakte = opp;
-               g.oppervlakteMaat = maat;
-               g.isMan = man;
-               g.isVrouw = vrouw;
-               g.isKind = kind;
-               g.aanslagVoet = aanslagvoet;
-               g.bestuur = bestuur;
-               ctx.SaveChanges();
-           }
-
-        public int CreateBestuur(Politicus p)
-        {
-            ctx.Politici.Add(p);
-            return p.PoliticusId;
+            g.aantalBewoners = aantalBewoners;
+            g.oppervlakte = opp;
+            g.oppervlakteMaat = maat;
+            g.isMan = man;
+            g.isVrouw = vrouw;
+            g.isKind = kind;
+            g.aanslagVoet = aanslagvoet;
+            ctx.SaveChanges();
         }
+
+
+        public void deleteBestuurlid(int id)
+        {
+            Politicus p = ctx.Politici.Find(id);
+            ctx.Politici.Remove(p);
+            ctx.SaveChanges();
+        }
+
 
         public void saveContext()
         {

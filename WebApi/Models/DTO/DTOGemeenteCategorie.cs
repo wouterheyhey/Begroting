@@ -2,12 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Web;
 
-namespace BL.Domain.DTOs
+namespace WebApi.Models.DTO
 {
-   public class DTOGemeenteCategorie
+    public class DTOGemeenteCategorie
     {
         public int ID { get; set; }
 
@@ -25,6 +24,12 @@ namespace BL.Domain.DTOs
 
         public float totaal { get; set; }
 
-        
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<DTOActie> acties { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public int? gemcatID { get; set; }
+
+
     }
 }
