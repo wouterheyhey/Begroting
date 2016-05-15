@@ -83,7 +83,7 @@ namespace DAL.repositories
                 .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                 .Select(c => c.Id).SingleOrDefault();
 
-            return ctx.Projecten.Include(x => x.inspraakItems).Where(p => p.Id == 1).SingleOrDefault();
+            return ctx.Projecten.Where(p => p.Id == 1).SingleOrDefault();
         }
 
 

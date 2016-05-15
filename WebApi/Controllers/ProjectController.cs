@@ -10,11 +10,13 @@ using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
+    [RoutePrefix("api/Project")]
     public class ProjectController : ApiController
     {
         private ProjectManager mgr = new ProjectManager();
         private BegrotingManager begMgr = new BegrotingManager();
-
+        [Route("itemsGET")]
+        [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
             IEnumerable<InspraakItem> lijnen = mgr.getInspraakItems(jaar, naam);
@@ -90,6 +92,27 @@ namespace WebApi.Controllers
             mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente);
             return Ok();
+        }
+
+        [Route("projectGET")]
+        [HttpGet]
+        public IHttpActionResult GetProject(int jaar, string naam)
+        {
+            Project p = mgr.getProject(jaar, naam);
+
+            DTOProject dp = new DTOProject()
+            {
+                projectScenario = (int)p.projectScenario,
+                titel = p.titel,
+                vraag = p.vraag,
+                extraInfo = p.extraInfo,
+                bedrag = p.bedrag,
+                minBedrag = p.minBedrag,
+                maxBedrag = p.maxBedrag,
+                boekjaar = (int?)jaar,
+                gemeente = naam
+            };
+            return Ok(dp);
         }
 
     }
