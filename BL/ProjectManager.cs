@@ -43,7 +43,12 @@ namespace BL
         public Project getProject(int jaar, string gemeente)
         {
             return repo.readProject(jaar, gemeente);
-        } 
-        
+        }
+
+        public IEnumerable<Project> getProjects( string gemeente)
+        {
+            return repo.readProjects( gemeente);
+        }
+
     }
 }

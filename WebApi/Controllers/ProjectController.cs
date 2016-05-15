@@ -60,7 +60,8 @@ namespace WebApi.Controllers
                         actieLang = actie.actieLang,
                         inspraakNiveau = (int)actie.inspraakNiveau,
                         uitgaven = actie.uitgaven,
-                        ID = actie.ID
+                        ID = actie.ID,
+                        bestuurtype = (int)actie.bestuurType
                     });
                 }
             }
@@ -98,6 +99,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetProject(int jaar, string naam)
         {
+
             Project p = mgr.getProject(jaar, naam);
 
             DTOProject dp = new DTOProject()
@@ -114,6 +116,34 @@ namespace WebApi.Controllers
             };
             return Ok(dp);
         }
+        [HttpGet]
+        public IHttpActionResult GetProjects( string naam)
+        {
+            IEnumerable<Project> p = mgr.getProjects( naam);
+
+            if (p == null || p.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
+
+            List<DTOProject> dp = new List<DTOProject>();
+            foreach (var item in p)
+            {
+                dp.Add(new DTOProject()
+                {
+                    projectScenario = (int)item.projectScenario,
+                    titel = item.titel,
+                    vraag = item.vraag,
+                    extraInfo = item.extraInfo,
+                    bedrag = item.bedrag,
+                    minBedrag = item.minBedrag,
+                    maxBedrag = item.maxBedrag,
+                    boekjaar = (int?)item.begroting.boekJaar,
+                    gemeente = naam
+                });
+            }
+            return Ok(dp);
+        }
+
+
 
     }
 }

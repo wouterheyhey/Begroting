@@ -64,7 +64,8 @@ namespace WebApi.Controllers
                     actieKort = item.actieKort,
                     actieLang = item.actieLang,
                     uitgaven = item.uitgaven,
-                    inspraakNiveau = (int)item.inspraakNiveau
+                    inspraakNiveau = (int)item.inspraakNiveau,
+                    bestuurtype = (int)item.bestuurType
                 });
             }
 

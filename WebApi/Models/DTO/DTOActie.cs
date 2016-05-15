@@ -12,5 +12,6 @@ namespace WebApi.Models.DTO
         public string actieLang { get; set; }
         public float uitgaven { get; set; }
         public int inspraakNiveau { get; set; }
+        public int bestuurtype { get; set; }
     }
 }

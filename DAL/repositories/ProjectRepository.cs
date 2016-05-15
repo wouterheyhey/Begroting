@@ -75,8 +75,6 @@ namespace DAL.repositories
             return ip;
         }
 
-
-        //ophalen van project met de inspraakitems erbij
         public Project readProject(int jaar, string gemeente)
         {
             var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == gemeente)
@@ -84,6 +82,11 @@ namespace DAL.repositories
                 .Select(c => c.Id).SingleOrDefault();
 
             return ctx.Projecten.Where(p => p.Id == 1).SingleOrDefault();
+        }
+
+        public IEnumerable<Project> readProjects(string gemeente)
+        {
+            return ctx.Projecten.Include(nameof(Project.begroting)).Where(p => p.Id == 1 && p.begroting.gemeente.naam == gemeente);
         }
 
 
