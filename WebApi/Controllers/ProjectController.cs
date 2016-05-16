@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
                         ID = gemCat.ID,
                         totaal = gemCat.totaal,
-                        naamCatz = gemCat.categorieNaam,
+                        catC = gemCat.categorieNaam,
                         inspraakNiveau = (int?)gemCat.inspraakNiveau,
                         gemcatID = gemCat.parentGemCatId,
                     });
@@ -90,9 +90,12 @@ namespace WebApi.Controllers
 
             }
 
-            mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+           int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente);
-            return Ok();
+
+            if(id == 0)
+                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
+            return Ok(id);
         }
 
         [Route("projectGET")]

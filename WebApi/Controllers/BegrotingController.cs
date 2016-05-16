@@ -30,18 +30,25 @@ namespace WebApi.Controllers
                 {
                     ID = item.ID,
                     totaal = item.totaal,
-                    naamCatz = item.categorieNaam
                 };
-
-                if (item.parentGemCat != null)
+                if(item.parentGemCat == null)
                 {
-                    d.naamCaty = item.parentGemCat.categorieNaam;
-                    if (item.parentGemCat.parentGemCat != null)
+                    d.catA = item.categorieNaam;
+                }
+                else
+                {
+                    if (item.parentGemCat.parentGemCat == null)
                     {
-                        d.naamCatx = item.parentGemCat.parentGemCat.categorieNaam;
+                        d.catA = item.parentGemCat.categorieNaam;
+                        d.catB = item.categorieNaam;
+                    }
+                    else
+                    {
+                        d.catA = item.parentGemCat.parentGemCat.categorieNaam;
+                        d.catB = item.parentGemCat.categorieNaam;
+                        d.catC = item.categorieNaam;
                     }
                 }
-
 
                 DTOgemcats.Add(d);
             }
