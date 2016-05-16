@@ -32,5 +32,9 @@ namespace BL
             repo.UpdateGemeente(naam, aantalBewoners, opp, maat, man, vrouw, kind, bestuur, aanslagvoet);
         }
 
+        public void deleteBestuurlid(int id)
+        {
+            repo.deleteBestuurlid(id);
+        }
     }
 }

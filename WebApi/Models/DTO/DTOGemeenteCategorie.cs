@@ -11,13 +11,13 @@ namespace WebApi.Models.DTO
         public int ID { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string naamCatx { get; set; }
+        public string catA { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string naamCaty { get; set; }
+        public string catB { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
-        public string naamCatz { get; set; }
+        public string catC { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? inspraakNiveau { get; set; }

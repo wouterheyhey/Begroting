@@ -19,7 +19,7 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public void createProject(Project p, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente)
+        public int createProject(Project p, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente)
         {
             p.inspraakItems = new HashSet<InspraakItem>();
 
@@ -49,6 +49,7 @@ namespace DAL.repositories
 
             ctx.Projecten.Add(p);
             ctx.SaveChanges();
+            return p.Id;
         }
 
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
@@ -75,15 +76,18 @@ namespace DAL.repositories
             return ip;
         }
 
-
-        //ophalen van project met de inspraakitems erbij
         public Project readProject(int jaar, string gemeente)
         {
             var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == gemeente)
                 .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                 .Select(c => c.Id).SingleOrDefault();
 
-            return ctx.Projecten.Include(x => x.inspraakItems).Where(p => p.Id == 1).SingleOrDefault();
+            return ctx.Projecten.Where(p => p.Id == id).SingleOrDefault();
+        }
+
+        public IEnumerable<Project> readProjects(string gemeente)
+        {
+            return ctx.Projecten.Include(nameof(Project.begroting)).Where(p => p.begroting.gemeente.naam == gemeente);
         }
 
 

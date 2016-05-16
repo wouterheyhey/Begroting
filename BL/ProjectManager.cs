@@ -22,7 +22,7 @@ namespace BL
             return repo.getInspraakItems(jaar, gemeente);
         }
 
-        public void addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente)
+        public int addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente)
         {
             Project p = new Project()
             {
@@ -36,13 +36,18 @@ namespace BL
 
             };
 
-            repo.createProject(p, inspraakItems, boekjaar, gemeente);
+           return  repo.createProject(p, inspraakItems, boekjaar, gemeente);
         }
 
         public Project getProject(int jaar, string gemeente)
         {
             return repo.readProject(jaar, gemeente);
-        } 
-        
+        }
+
+        public IEnumerable<Project> getProjects( string gemeente)
+        {
+            return repo.readProjects( gemeente);
+        }
+
     }
 }

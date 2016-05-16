@@ -10,11 +10,13 @@ using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
+    [RoutePrefix("api/Project")]
     public class ProjectController : ApiController
     {
         private ProjectManager mgr = new ProjectManager();
         private BegrotingManager begMgr = new BegrotingManager();
-
+        [Route("itemsGET")]
+        [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
             IEnumerable<InspraakItem> lijnen = mgr.getInspraakItems(jaar, naam);
@@ -34,7 +36,7 @@ namespace WebApi.Controllers
 
                         ID = gemCat.ID,
                         totaal = gemCat.totaal,
-                        naamCatz = gemCat.categorieNaam,
+                        catC = gemCat.categorieNaam,
                         inspraakNiveau = (int?)gemCat.inspraakNiveau,
                         gemcatID = gemCat.parentGemCatId,
                     });
@@ -58,7 +60,8 @@ namespace WebApi.Controllers
                         actieLang = actie.actieLang,
                         inspraakNiveau = (int)actie.inspraakNiveau,
                         uitgaven = actie.uitgaven,
-                        ID = actie.ID
+                        ID = actie.ID,
+                        bestuurtype = (int)actie.bestuurType
                     });
                 }
             }
@@ -87,10 +90,63 @@ namespace WebApi.Controllers
 
             }
 
-            mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+           int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente);
-            return Ok();
+
+            if(id == 0)
+                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
+            return Ok(id);
         }
+
+        [Route("projectGET")]
+        [HttpGet]
+        public IHttpActionResult GetProject(int jaar, string naam)
+        {
+
+            Project p = mgr.getProject(jaar, naam);
+
+            DTOProject dp = new DTOProject()
+            {
+                projectScenario = (int)p.projectScenario,
+                titel = p.titel,
+                vraag = p.vraag,
+                extraInfo = p.extraInfo,
+                bedrag = p.bedrag,
+                minBedrag = p.minBedrag,
+                maxBedrag = p.maxBedrag,
+                boekjaar = (int?)jaar,
+                gemeente = naam
+            };
+            return Ok(dp);
+        }
+        [HttpGet]
+        public IHttpActionResult GetProjects( string naam)
+        {
+            IEnumerable<Project> p = mgr.getProjects( naam);
+
+            if (p == null || p.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
+
+            List<DTOProject> dp = new List<DTOProject>();
+            foreach (var item in p)
+            {
+                dp.Add(new DTOProject()
+                {
+                    projectScenario = (int)item.projectScenario,
+                    titel = item.titel,
+                    vraag = item.vraag,
+                    extraInfo = item.extraInfo,
+                    bedrag = item.bedrag,
+                    minBedrag = item.minBedrag,
+                    maxBedrag = item.maxBedrag,
+                    boekjaar = (int?)item.begroting.boekJaar,
+                    gemeente = naam
+                });
+            }
+            return Ok(dp);
+        }
+
+
 
     }
 }
