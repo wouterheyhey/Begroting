@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using BL.Domain.DTOs;
 using Microsoft.AspNet.Identity;
 using System.Web.Security;
 using BL.Domain;

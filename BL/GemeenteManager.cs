@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.repositories;
 using BL.Domain;
-using BL.Domain.DTOs;
 
 namespace BL
 {

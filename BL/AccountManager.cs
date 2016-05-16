@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL.repositories;
 using BL.Domain;
-using BL.Domain.DTOs;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security.OAuth;
@@ -22,7 +21,7 @@ namespace BL
             repo = new AccountRepository();
         }
 
-        public Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker gebruiker)
+        public Task<IdentityResult> RegisterUser(InTeLoggenGebruiker gebruiker)
         {
             GemeenteRepository repoGem = new GemeenteRepository();
             Task<IdentityResult> res = repo.RegisterUser(gebruiker, repoGem.ReadGemeente(gebruiker.gemeente));
@@ -90,6 +89,11 @@ namespace BL
                 repo.CreateRole(roleName);
                 return true;
             }
+        }
+
+        public Gebruiker GetGebruiker(string userName)
+        {
+            return repo.GetGebruiker(userName);
         }
 
         public void Dispose()

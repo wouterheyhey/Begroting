@@ -1,5 +1,4 @@
 ﻿using BL.Domain;
-using BL.Domain.DTOs;
 using DAL;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
@@ -28,7 +27,7 @@ namespace DAL.repositories
         }
         
         //Gebruiker beheer - Identity User
-        public async Task<IdentityResult> RegisterUser(DTOIngelogdeGebruiker aspGebruiker, HoofdGemeente gem)
+        public async Task<IdentityResult> RegisterUser(InTeLoggenGebruiker aspGebruiker, HoofdGemeente gem)
         {
             IdentityUser user = new IdentityUser
             {
@@ -50,7 +49,8 @@ namespace DAL.repositories
                     }
                 }
                 _userManager.AddToRole(user.Id, RolType.standaard.ToString());
-                IngelogdeGebruiker gebruiker = new IngelogdeGebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard, gem);
+                Gebruiker gebruiker = new Gebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard, gem);
+                ctx.Entry(gebruiker.gemeente).State = System.Data.Entity.EntityState.Unchanged;
                 ctx.Gebruikers.Add(gebruiker);
                 ctx.SaveChanges();
             }
@@ -63,6 +63,11 @@ namespace DAL.repositories
 
             return user;
         }
+        public Gebruiker GetGebruiker(string userName)
+        {
+            return ctx.Gebruikers.Include(nameof(HoofdGemeente)).Include(nameof(RolType)).Where<Gebruiker>(x => x.userId == userName).SingleOrDefault();
+        }
+
         //Gebruiker beheer - Social User
         public async Task<IdentityUser> FindAsync(UserLoginInfo loginInfo)
         {
@@ -98,7 +103,6 @@ namespace DAL.repositories
 
             return client;
         }
-
         public async Task<bool> AddRefreshToken(RefreshToken token)
         {
 
@@ -113,7 +117,6 @@ namespace DAL.repositories
 
             return await _ctx.SaveChangesAsync() > 0;
         }
-
         public async Task<bool> RemoveRefreshToken(string refreshTokenId)
         {
             var refreshToken = await _ctx.RefreshTokens.FindAsync(refreshTokenId);
@@ -126,25 +129,21 @@ namespace DAL.repositories
 
             return false;
         }
-
         public async Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
         {
             _ctx.RefreshTokens.Remove(refreshToken);
             return await _ctx.SaveChangesAsync() > 0;
         }
-
         public async Task<RefreshToken> FindRefreshToken(string refreshTokenId)
         {
             var refreshToken = await _ctx.RefreshTokens.FindAsync(refreshTokenId);
 
             return refreshToken;
         }
-
         public List<RefreshToken> GetAllRefreshTokens()
         {
             return _ctx.RefreshTokens.ToList();
         }
-
         public void Dispose()
         {
             _ctx.Dispose();

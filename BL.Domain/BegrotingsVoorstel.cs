@@ -21,7 +21,7 @@ namespace BL.Domain
         public HashSet<Stem> stemmen { get; set; }
         public VerificatieStatus verificatieStatus { get; set; }
         public DateTime verificatieDatum { get; set; }
-        public IngelogdeGebruiker verificator { get; set; }
-        public IngelogdeGebruiker auteur { get; set; }
+        public Gebruiker verificator { get; set; }
+        public Gebruiker auteur { get; set; }
     }
 }

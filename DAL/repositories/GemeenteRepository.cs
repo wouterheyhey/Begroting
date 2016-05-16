@@ -1,5 +1,4 @@
 ﻿using BL.Domain;
-using BL.Domain.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;

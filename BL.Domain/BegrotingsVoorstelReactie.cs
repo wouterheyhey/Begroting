@@ -11,6 +11,6 @@ namespace BL.Domain
         public int Id { get; set; }
         public DateTime reactieDatum { get; set; }
         public string beschrijving { get; set; }
-        public IngelogdeGebruiker auteur { get; set; }
+        public Gebruiker auteur { get; set; }
     }
 }

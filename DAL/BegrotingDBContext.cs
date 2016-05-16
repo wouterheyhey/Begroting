@@ -69,7 +69,7 @@ namespace DAL
             public DbSet<HoofdGemeente> Gemeenten { get; set; }
             public DbSet<Politicus> Politici { get; set; }
             public DbSet<FinancieelOverzicht> FinancieleOverzichten { get; set; }
-            public DbSet<IngelogdeGebruiker> Gebruikers { get; set; }
+            public DbSet<Gebruiker> Gebruikers { get; set; }
             public DbSet<BegrotingsVoorstel> Voorstellen { get; set; }
             public DbSet<Project> Projecten { get; set; }
             public DbSet<BegrotingsVoorstelReactie> Reacties { get; set; }

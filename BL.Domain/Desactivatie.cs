@@ -10,7 +10,7 @@ namespace BL.Domain
     {
         public DateRange range { get; set; }
         public string reden { get; set; }
-        public IngelogdeGebruiker burger { get; set; }
-        public IngelogdeGebruiker moderator { get; set; }
+        public Gebruiker burger { get; set; }
+        public Gebruiker moderator { get; set; }
     }
 }

@@ -21,7 +21,7 @@ namespace BL.Domain
         public string[] toegestanePostcodes { get; set; }
         public HashSet<InspraakItem> inspraakItems { get; set; }
         public HashSet<ProjectAfbeelding> afbeeldingen { get; set; }
-        public IngelogdeGebruiker beheerder { get; set; }
+        public Gebruiker beheerder { get; set; }
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
 
         public JaarBegroting begroting { get; set; }

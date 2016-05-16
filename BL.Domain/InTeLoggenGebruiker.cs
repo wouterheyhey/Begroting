@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace BL.Domain.DTOs
+namespace BL.Domain
 {
-    public class DTOIngelogdeGebruiker
+    public class InTeLoggenGebruiker
     {
 
         [Required]
@@ -25,7 +25,6 @@ namespace BL.Domain.DTOs
 
         [Required]
         public string gemeente { get; set; }
-
 
         //public HoofdGemeente gemeente { get; set; }
         //public bool isActief { get; set; }

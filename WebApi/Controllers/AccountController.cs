@@ -6,7 +6,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using BL.Domain.DTOs;
 using Microsoft.AspNet.Identity;
 using System.Web.Security;
 using BL.Domain;
@@ -18,6 +17,7 @@ using WebApi.Models;
 using Newtonsoft.Json.Linq;
 using Microsoft.Owin.Security.OAuth;
 using Microsoft.AspNet.Identity.Owin;
+using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
@@ -30,6 +30,12 @@ namespace WebApi.Controllers
         {
             accMgr = new AccountManager();
         }
+
+        public DTOGebruiker Get(string userName)
+        {
+            Gebruiker g = accMgr.GetGebruiker(userName);
+            return new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType.ToString());
+        } 
 
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]
@@ -54,7 +60,7 @@ namespace WebApi.Controllers
         // POST api/Account/Register
         [AllowAnonymous]
         [Route("Register")]
-        public async Task<IHttpActionResult> Register(DTOIngelogdeGebruiker gebruiker)
+        public async Task<IHttpActionResult> Register(InTeLoggenGebruiker gebruiker)
         {
             string data = "U heeft zich succesvol geregistreerd";
             if (!ModelState.IsValid)

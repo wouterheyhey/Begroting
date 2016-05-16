@@ -199,6 +199,7 @@
     <Compile Include="Models\DTO\DTOActie.cs" />
     <Compile Include="Models\DTO\DTOGemeenteCategorie.cs" />
     <Compile Include="Models\DTO\DTOProject.cs" />
+    <Compile Include="Models\DTO\DTOGebruiker.cs" />
     <Compile Include="Models\ExternalLoginData.cs" />
     <Compile Include="Models\ExternalLoginModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

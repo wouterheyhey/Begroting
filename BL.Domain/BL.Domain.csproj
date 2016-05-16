@@ -93,14 +93,14 @@
     <Compile Include="Cluster.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="Desactivatie.cs" />
-    <Compile Include="DTOs\DTOIngelogdeGebruiker.cs" />
+    <Compile Include="InTeLoggenGebruiker.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
     <Compile Include="FinancieelOverzicht.cs" />
     <Compile Include="Gemeente.cs" />
     <Compile Include="HoofdGemeente.cs" />
     <Compile Include="GemeenteCategorie.cs" />
-    <Compile Include="IngelogdeGebruiker.cs" />
+    <Compile Include="Gebruiker.cs" />
     <Compile Include="InspraakItem.cs" />
     <Compile Include="CategoryType.cs" />
     <Compile Include="InspraakNiveau.cs" />
