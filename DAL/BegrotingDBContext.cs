@@ -13,7 +13,7 @@ namespace DAL
 {
         internal class BegrotingDBContext : DbContext 
         {
-            public BegrotingDBContext() : base("BegrotingDB_Azure")
+            public BegrotingDBContext() : base("BegrotingDB_EF")
             {
             }
 

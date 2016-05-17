@@ -18,6 +18,8 @@ namespace WebApi.Models.DTO
         public List<DTOGemeenteCategorie> cats { get; set; }
         public int? boekjaar { get; set; }
         public string gemeente { get; set; }
+        public bool isActief { get; set; }
+        public List<string> afbeeldingen { get; set; }
 
     }
 }

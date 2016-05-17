@@ -24,6 +24,101 @@ namespace WebApi.Controllers
             if (lijnen == null || lijnen.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
+            return Ok(convertInspraakItems(lijnen));
+           
+        }
+        [Route("postProject")]
+        [HttpPost]
+        public IHttpActionResult Post(DTOProject p)
+        {
+            //K= id + V= inspraakNiveau
+            IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
+
+            foreach (var item in p.cats)
+            {
+                inspraakItems.Add(new KeyValuePair<int, int>(item.ID, (int)item.inspraakNiveau));
+
+                if (item.acties != null)
+                {
+                    foreach (var actie in item.acties)
+                    {
+                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                    }
+                }
+
+            }
+
+           int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeeldingen);
+
+            if(id == 0)
+                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
+            return Ok(id);
+        }
+
+        [Route("projectGET")]
+        [HttpGet]
+        public IHttpActionResult GetProject(int jaar, string naam)
+        {
+
+            Project p = mgr.getProject(jaar, naam);
+            List<string> afb = new List<string>();
+            if (p.afbeeldingen != null)
+            {
+                
+                foreach (var item in p.afbeeldingen)
+                {
+                    char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
+                    System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
+                    afb.Add(new string(chars));
+                }
+            }
+
+            DTOProject dp = new DTOProject()
+            {
+                projectScenario = (int)p.projectScenario,
+                titel = p.titel,
+                vraag = p.vraag,
+                extraInfo = p.extraInfo,
+                bedrag = p.bedrag,
+                minBedrag = p.minBedrag,
+                maxBedrag = p.maxBedrag,
+                boekjaar = jaar,
+                gemeente = naam,
+                cats = convertInspraakItems(p.inspraakItems),
+                afbeeldingen = afb
+            };
+            return Ok(dp);
+        }
+        [HttpGet]
+        public IHttpActionResult GetProjects( string naam)
+        {
+            IEnumerable<Project> p = mgr.getProjects( naam);
+
+            if (p == null || p.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
+
+            List<DTOProject> dp = new List<DTOProject>();
+            foreach (var item in p)
+            {
+                dp.Add(new DTOProject()
+                {
+                    projectScenario = (int)item.projectScenario,
+                    titel = item.titel,
+                    vraag = item.vraag,
+                    extraInfo = item.extraInfo,
+                    bedrag = item.bedrag,
+                    minBedrag = item.minBedrag,
+                    maxBedrag = item.maxBedrag,
+                    boekjaar = (int?)item.begroting.boekJaar,
+                    gemeente = naam
+                });
+            }
+            return Ok(dp);
+        }
+
+        private List<DTOGemeenteCategorie> convertInspraakItems(IEnumerable<InspraakItem> lijnen)
+        {
             List<DTOGemeenteCategorie> gemcats = new List<DTOGemeenteCategorie>();
 
             foreach (var item in lijnen)
@@ -65,88 +160,8 @@ namespace WebApi.Controllers
                     });
                 }
             }
-
-
-            return Ok(gemcats);
+            return gemcats;
         }
-
-        [HttpPost]
-        internal IHttpActionResult Post(DTOProject p)
-        {
-            //K= id + V= inspraakNiveau
-            IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
-
-            foreach (var item in p.cats)
-            {
-                inspraakItems.Add(new KeyValuePair<int, int>(item.ID, (int)item.inspraakNiveau));
-
-                if (item.acties != null)
-                {
-                    foreach (var actie in item.acties)
-                    {
-                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
-                    }
-                }
-
-            }
-
-           int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
-              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente);
-
-            if(id == 0)
-                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
-            return Ok(id);
-        }
-
-        [Route("projectGET")]
-        [HttpGet]
-        public IHttpActionResult GetProject(int jaar, string naam)
-        {
-
-            Project p = mgr.getProject(jaar, naam);
-
-            DTOProject dp = new DTOProject()
-            {
-                projectScenario = (int)p.projectScenario,
-                titel = p.titel,
-                vraag = p.vraag,
-                extraInfo = p.extraInfo,
-                bedrag = p.bedrag,
-                minBedrag = p.minBedrag,
-                maxBedrag = p.maxBedrag,
-                boekjaar = (int?)jaar,
-                gemeente = naam
-            };
-            return Ok(dp);
-        }
-        [HttpGet]
-        public IHttpActionResult GetProjects( string naam)
-        {
-            IEnumerable<Project> p = mgr.getProjects( naam);
-
-            if (p == null || p.Count() == 0)
-                return StatusCode(HttpStatusCode.NoContent);
-
-            List<DTOProject> dp = new List<DTOProject>();
-            foreach (var item in p)
-            {
-                dp.Add(new DTOProject()
-                {
-                    projectScenario = (int)item.projectScenario,
-                    titel = item.titel,
-                    vraag = item.vraag,
-                    extraInfo = item.extraInfo,
-                    bedrag = item.bedrag,
-                    minBedrag = item.minBedrag,
-                    maxBedrag = item.maxBedrag,
-                    boekjaar = (int?)item.begroting.boekJaar,
-                    gemeente = naam
-                });
-            }
-            return Ok(dp);
-        }
-
-
 
     }
 }
