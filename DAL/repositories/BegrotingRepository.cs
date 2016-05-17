@@ -138,10 +138,8 @@ namespace DAL.repositories
             FinancieelOverzicht fo = fosSubList.Find(x => x.boekJaar.Equals(jaar) && x.gemeente.HoofdGemeenteID.Equals(gem.HoofdGemeenteID));
             if (fo == null)
             {
-                // logic to decide if begroting or rekening. naar manager/domain?
                 ctx.Entry(gem).State = EntityState.Unchanged;
-                bool check = jaar <= DateTime.Now.Year;
-                switch (check)
+                switch (CreateRekeningNotBegroting(jaar))
                 {
                     case true:
                         fo = CreateFinancieelOverzicht(new JaarRekening(jaar, gem));
@@ -150,10 +148,15 @@ namespace DAL.repositories
                         fo = CreateFinancieelOverzicht(new JaarBegroting(jaar, gem));
                         break;
                 }
-
             }
-
             return fo;
+        }
+
+        // logic to decide if begroting or rekening. naar manager/domain?
+        private bool CreateRekeningNotBegroting(int jaar)
+        {     
+            // als het jaar huidig of verleden is, gaat het om een rekening, geen begroting
+            return  jaar <= DateTime.Now.Year;
         }
 
        

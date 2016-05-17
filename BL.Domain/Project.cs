@@ -23,6 +23,7 @@ namespace BL.Domain
         public HashSet<ProjectAfbeelding> afbeeldingen { get; set; }
         public Gebruiker beheerder { get; set; }
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
+        public bool isActief { get; set; }
 
         public JaarBegroting begroting { get; set; }
 

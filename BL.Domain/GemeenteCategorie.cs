@@ -15,7 +15,7 @@ namespace BL.Domain
         public string categorieCode { get; set; }
         public string categorieNaam { get; set; }
         public string categorieType { get; set; }   // char do not get mapped in EF !!! -> keep string
-        public IEnumerable<InspraakItem> childInspraakItems { get; set; }
+        public ICollection<InspraakItem> childInspraakItems { get; set; }  
 
 
         public GemeenteCategorie(Categorie cat)

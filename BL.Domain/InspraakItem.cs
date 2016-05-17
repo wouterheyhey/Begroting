@@ -17,7 +17,7 @@ namespace BL.Domain
         public InspraakNiveau inspraakNiveau { get; set; }
         public FinancieelOverzicht financieelOverzicht { get; set; }
 
-        [ForeignKey("parentGemCat")]
+      //  [ForeignKey("parentGemCat")]  Via Fluent EF
         public int? parentGemCatId { get; set; }
         public GemeenteCategorie parentGemCat { get; set; }
 

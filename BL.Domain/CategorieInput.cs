@@ -12,6 +12,6 @@ namespace BL.Domain
         public string input { get; set; }
         public byte[] foto { get; set; }  
         public byte[] film { get; set; }
-        public Categorie categorie { get; set; }
+        public GemeenteCategorie gemCategorie { get; set; }
     }
 }

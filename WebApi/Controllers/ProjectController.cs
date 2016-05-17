@@ -71,7 +71,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult Post(DTOProject p)
+        internal IHttpActionResult Post(DTOProject p)
         {
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();

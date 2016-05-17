@@ -11,19 +11,17 @@ namespace BL
 {
     public class FinancieleLijnManager
     {
-        private readonly BegrotingManager begManager;
         private FinancieleLijnRepository  finRepo;
 
         public FinancieleLijnManager()
         {
             this.finRepo = new FinancieleLijnRepository();
-            this.begManager = new BegrotingManager();
         }
 
 
-        public void LoadFinancieleLijnen(int year)
+        public void LoadFinancieleLijnen(string categoryFile, int year)
         {
-            List<InspraakItem> lijnen = finRepo.ImportFinancieleLijnen(year); 
+            List<InspraakItem> lijnen = finRepo.ImportFinancieleLijnen(categoryFile, year); 
         }
 
 
