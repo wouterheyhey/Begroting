@@ -48,17 +48,12 @@ namespace DAL
         {
             List<HoofdGemeente> gemeenten = new List<HoofdGemeente>();
 
-            CheckIfFileExists(path);
 
+            CheckIfFileExists(postcodePath);
             var book = new LinqToExcel.ExcelQueryFactory(postcodePath);
             book.AddMapping<HoofdGemeente>(x => x.naam, "Hoofdgemeente");
             book.AddMapping<HoofdGemeente>(x => x.provincie, "Provincie");
             book.AddMapping<HoofdGemeente>(x => x.postCode, "PC Hoofdgemeente");
-
-            //var rows = from c in book.Worksheet<HoofdGemeente>("Postcodes").ToList()
-            //           group c by  c.naam  into c_grp
-            //           select c_grp
-            //    ;
 
             var rows = from c in book.Worksheet("Postcodes")
                        select c
@@ -225,6 +220,7 @@ namespace DAL
 
             foreach (var r in rows)
             {
+                // FinancieleLijnImport: overdrachtsobject om excel kolomnamen uit de repositories te houden 
                 fl =
                     new FinancieleLijnImport
                     (

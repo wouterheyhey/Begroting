@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BL.Domain;
+using DAL.exceptions;
 
 namespace DAL.repositories
 {
@@ -30,18 +31,19 @@ namespace DAL.repositories
             return Enum.GetValues(typeof(CategoryType)).Cast<CategoryType>().Max();
         }
 
-        public List<InspraakItem> ImportFinancieleLijnen(int year)
+        public List<InspraakItem> ImportFinancieleLijnen(string categoryFile, int year)
         {
             List<InspraakItem> inspraakItems = new List<InspraakItem>();
-            string categoryFile = "gemeente_categorie_acties_jaartal_uitgaven.xlsx";
             string importPath = (new FileLocator()).findExcelSourceDir();
             GemeenteCategorie gemCat;
             Actie actie;
             HoofdGemeente gem;
             BestuurType bt;
-            FinancieelOverzicht fo;
-            CategoryType ct;
+            FinancieelOverzicht fo = new JaarBegroting();
+            CategoryType ct = new CategoryType();
             Categorie cat;
+            string catCode;
+            string catName;
 
             // Single calls to the DB instead of repeating for each loop
             List<HoofdGemeente> gems = gemRepo.ReadGemeentes().ToList<HoofdGemeente>();
@@ -53,17 +55,50 @@ namespace DAL.repositories
             foreach (var r in ExcelImporter.ImportFinancieleLijnen(importPath + categoryFile, year))
             {
                 gem = gems.Find(x => x.naam.Equals(r.gemeente));
-                fo = begRepo.CreateIfNotExistsFinancieelOverzicht(year, gem, fos);
-                fos.Add(fo);
-                ct = FindLowestNonBlankCategoryType(r);
+
+                try
+                {
+                    fo = begRepo.CreateIfNotExistsFinancieelOverzicht(year, gem, fos);
+                    fos.Add(fo);
+                    ct = FindLowestNonBlankCategoryType(r);
+                }
+                catch(NullReferenceException e)
+                {
+                    System.Diagnostics.Debug.WriteLine(e.Message);
+                    // als de exception veroorzaakt wordt door een ontbrekende gemeentes
+                    if (gem == null)
+                    {
+                        HoofdGemeenteNotFoundException ne = new HoofdGemeenteNotFoundException("Null reference exception voor hoofdgemeente met de naam " + r.gemeente);
+                        throw ne;
+                    }
+                    else throw e;
+                }
+
 
                 foreach (CategoryType catType in Enum.GetValues(typeof(CategoryType)))
                 {
-                    cat = cats.Where(x => x.categorieType == catType.ToString()).Where(x => x.categorieCode.Equals(r.categorien[catType.ToString()].Split(new char[] { ' ' })[0])).SingleOrDefault();
+                    catName = r.categorien[catType.ToString()].Split(new char[] { ' ' })[1];
+                    catCode = r.categorien[catType.ToString()].Split(new char[] { ' ' })[0];
+                    cat = cats.Where(x => x.categorieType == catType.ToString()).Where(x => x.categorieCode.Equals(catCode)).SingleOrDefault();
 
-                    gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats);
-                    gemCats.Add(gemCat);
-                    catRepo.UpdateGemeenteCatCumulative(gemCat, r.inkomsten, r.uitgaven);
+                    try
+                    {
+                        gemCat = catRepo.CreateIfNotExistsGemeenteCategorie(cat.categorieId, fo.Id, gemCats, cats);
+                        gemCats.Add(gemCat);
+                        catRepo.UpdateGemeenteCatCumulative(gemCat, r.inkomsten, r.uitgaven);
+                    }
+                    catch (NullReferenceException e)
+                    {
+                        System.Diagnostics.Debug.WriteLine(e.Message);
+                        // als de exception veroorzaakt wordt door een ontbrekende category
+                        if (cat == null)
+                        {
+                            CategoryNotFoundException ne = new CategoryNotFoundException("Null reference exception voor category " + catType.ToString() + ", code: " + catCode + ", naam: " + catName);
+                            throw ne;
+                        }
+                        else throw e;
+                    }
+
 
                     if (catType == ct)
                     {
@@ -82,5 +117,6 @@ namespace DAL.repositories
             catRepo.SaveContext();
             return inspraakItems;
         }
+
     }
 }

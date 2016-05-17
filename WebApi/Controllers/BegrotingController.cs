@@ -87,7 +87,8 @@ namespace WebApi.Controllers
             {
                 //whe 11/5 niet meer nodig??
                 //catMgr.SetChildrenCategorien();
-                finMgr.LoadFinancieleLijnen(2020);
+                // 2020 omdat dit relatief weinig data bevat
+                finMgr.LoadFinancieleLijnen("gemeente_categorie_acties_jaartal_uitgaven.xlsx", 2020);
             }
             catch
             {
