@@ -14,6 +14,8 @@ namespace BL.Domain
         public string email { get; set; }
         public HoofdGemeente gemeente { get; set; }
         public RolType rolType { get; set; }
+        public bool isActief { get; set; }
+
         //public HashSet<Account> accounts { get; set; }
 
         public Gebruiker(string email, string naam, string accountID, RolType roltype, HoofdGemeente gemeente)
