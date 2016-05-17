@@ -96,6 +96,24 @@ namespace BL
             return repo.GetGebruiker(userName);
         }
 
+        public IEnumerable<Gebruiker> GetGebruikers()
+        {
+            return repo.GetGebruikers();
+        }
+        public bool DisableUser(string userName)
+        {
+            return repo.DisableUser(userName);
+        }
+        public bool EnableUser(string userName)
+        {
+            return repo.EnableUser(userName);
+
+        }
+        public bool SetRole(string userName, RolType rolType)
+        {
+            return repo.SetRole(userName, rolType);
+        }
+
         public void Dispose()
         {
             repo.Dispose();

@@ -65,8 +65,55 @@ namespace DAL.repositories
         }
         public Gebruiker GetGebruiker(string userName)
         {
-            return ctx.Gebruikers.Include(nameof(HoofdGemeente)).Include(nameof(RolType)).Where<Gebruiker>(x => x.userId == userName).SingleOrDefault();
+            return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente)).Where<Gebruiker>(x => x.userName == userName).SingleOrDefault();
         }
+        public IEnumerable<Gebruiker> GetGebruikers()
+        {
+            return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente));
+        }
+        public bool DisableUser(string userName)
+        {
+            try
+            {
+                _userManager.SetLockoutEnabledAsync(userName, true);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }            
+        }
+        public bool EnableUser(string userName)
+        {
+            try
+            {
+                _userManager.SetLockoutEnabledAsync(userName, false);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+        public bool SetRole(string userName, RolType rolType)
+        {
+            try
+            {
+                _userManager.AddToRole(userName, rolType.ToString());
+                Gebruiker g = GetGebruiker(userName);
+                g.rolType = rolType;
+                ctx.Entry(g.gemeente).State = System.Data.Entity.EntityState.Unchanged;
+                ctx.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
+
 
         //Gebruiker beheer - Social User
         public async Task<IdentityUser> FindAsync(UserLoginInfo loginInfo)
