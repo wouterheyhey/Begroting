@@ -11,6 +11,9 @@ namespace WebApi.Models.DTO
         public int ID { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string naamCat { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string catA { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]

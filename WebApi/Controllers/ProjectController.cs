@@ -131,7 +131,7 @@ namespace WebApi.Controllers
 
                         ID = gemCat.ID,
                         totaal = gemCat.totaal,
-                        catC = gemCat.categorieNaam,
+                        naamCat = gemCat.categorieNaam,
                         inspraakNiveau = (int?)gemCat.inspraakNiveau,
                         gemcatID = gemCat.parentGemCatId,
                     });
