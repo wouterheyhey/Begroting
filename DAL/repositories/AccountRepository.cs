@@ -49,7 +49,7 @@ namespace DAL.repositories
                     }
                 }
                 _userManager.AddToRole(user.Id, RolType.standaard.ToString());
-                Gebruiker gebruiker = new Gebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, RolType.standaard, gem);
+                Gebruiker gebruiker = new Gebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, gem);
                 ctx.Entry(gebruiker.gemeente).State = System.Data.Entity.EntityState.Unchanged;
                 ctx.Gebruikers.Add(gebruiker);
                 ctx.SaveChanges();
@@ -100,6 +100,7 @@ namespace DAL.repositories
         {
             try
             {
+                _userManager.RemoveFromRoles(userName, _userManager.GetRoles(userName).ToArray<string>());
                 _userManager.AddToRole(userName, rolType.ToString());
                 Gebruiker g = GetGebruiker(userName);
                 g.rolType = rolType;
@@ -112,6 +113,19 @@ namespace DAL.repositories
                 return false;
             }
 
+        }
+
+        public RolType GetRole(string userName)
+        {
+            try
+            {
+                Gebruiker g = GetGebruiker(userName);
+                return g.rolType;
+            }
+            catch (Exception ex)
+            {
+                return 0;
+            }
         }
 
 
