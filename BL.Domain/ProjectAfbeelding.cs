@@ -10,5 +10,14 @@ namespace BL.Domain
     {
         public int ID { get; set; }
         public byte[] Afbeelding { get; set; }
+
+        public ProjectAfbeelding()
+        {
+
+        }
+        public ProjectAfbeelding(byte [] afbeelding)
+        {
+            this.Afbeelding = afbeelding;
+        }
     }
 }

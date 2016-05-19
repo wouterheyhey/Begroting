@@ -19,37 +19,53 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public int createProject(Project p, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente)
+        public int createProject(Project p, IDictionary<int, int> inspraakItems, List<string> afbeeldingen, int? boekjaar, string gemeente)
         {
-            p.inspraakItems = new HashSet<InspraakItem>();
-
-            if (inspraakItems != null)
+            //momenteel mag er maar 1 project zijn per begroting
+            Project pp = readProject((int)boekjaar, gemeente);
+            //momenteel mag er maar 1 project zijn per begroting
+            if (pp == null)
             {
-                //ID = key  &&  value = InspraakNiveau
-                foreach (var item in inspraakItems)
-                {
-                    InspraakItem i = updateInspraakItem(item.Key, item.Value);
-                    if (i != null)
-                    {
+                p.inspraakItems = new HashSet<InspraakItem>();
 
-                        p.inspraakItems.Add(i);
+                if (inspraakItems != null)
+                {
+                    //ID = key  &&  value = InspraakNiveau
+                    foreach (var item in inspraakItems)
+                    {
+                        InspraakItem i = updateInspraakItem(item.Key, item.Value);
+                        if (i != null)
+                        {
+
+                            p.inspraakItems.Add(i);
+                        }
+
+                    }
+                }
+
+                if (afbeeldingen != null)
+                {
+                    p.afbeeldingen = new HashSet<ProjectAfbeelding>();
+                    foreach (var item in afbeeldingen)
+                    {
+                        byte[] bytes = new byte[item.Length * sizeof(char)];
+                        System.Buffer.BlockCopy(item.ToCharArray(), 0, bytes, 0, bytes.Length);
+                        ProjectAfbeelding a = new ProjectAfbeelding(bytes);
+                        p.afbeeldingen.Add(a);
                     }
 
                 }
-            }
 
-
-            //NOG EEN OPLOSSING ZOEKEN VOOR HET NIET BESTAAN VAN EEN BEGROTING EN ZORGEN DAT ER GEEN REKENING WORDT OPGEHAALD
-            if (boekjaar != 0 && gemeente != null)
-            {
                 FinancieelOverzicht fov = ctx.FinancieleOverzichten.Where(fo => fo.gemeente.naam == gemeente && fo.boekJaar == boekjaar).SingleOrDefault();
-                p.begroting = (JaarBegroting)fov;
+
+                    p.begroting = (JaarBegroting)fov;
+                    ctx.Projecten.Add(p);
+                    ctx.SaveChanges();
+                    return p.Id;     
+                
             }
-
-
-            ctx.Projecten.Add(p);
-            ctx.SaveChanges();
-            return p.Id;
+            else return 0;
+            
         }
 
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
@@ -79,10 +95,10 @@ namespace DAL.repositories
         public Project readProject(int jaar, string gemeente)
         {
             var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == gemeente)
-                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
-                .Select(c => c.Id).SingleOrDefault();
+               .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
+               .Select(c => c.Id).SingleOrDefault();
 
-            return ctx.Projecten.Where(p => p.Id == id).SingleOrDefault();
+            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Include(nameof(Project.afbeeldingen)).Where(p => p.begroting.Id == id).SingleOrDefault();
         }
 
         public IEnumerable<Project> readProjects(string gemeente)

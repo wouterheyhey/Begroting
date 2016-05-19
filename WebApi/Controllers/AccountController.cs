@@ -31,11 +31,44 @@ namespace WebApi.Controllers
             accMgr = new AccountManager();
         }
 
-        public DTOGebruiker Get(string userName)
+        public IHttpActionResult Get(string userName)
         {
             Gebruiker g = accMgr.GetGebruiker(userName);
-            return new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType.ToString());
+            if (g == null) return StatusCode(HttpStatusCode.NoContent);
+            return Ok(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
         } 
+        public IHttpActionResult Get()
+        {
+            var gebrs = accMgr.GetGebruikers();
+            if (gebrs == null)
+                return StatusCode(HttpStatusCode.NoContent);
+            else
+            {
+                List<DTOGebruiker> gebruikers = new List<DTOGebruiker>();
+                foreach (Gebruiker g in gebrs)
+                {
+                    gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
+                }
+                return Ok(gebrs);
+            }
+        }
+        public IHttpActionResult DisableUser(string userName)
+        {
+            if (accMgr.DisableUser(userName)) return Ok();
+            else return StatusCode(HttpStatusCode.NotModified);
+        }
+
+        public IHttpActionResult EnableUser(string userName)
+        {
+            if (accMgr.EnableUser(userName)) return Ok();
+            else return StatusCode(HttpStatusCode.NotModified);
+        }
+
+        public IHttpActionResult SetRole(string userName, RolType rolType)
+        {
+            if (accMgr.SetRole(userName, rolType)) return Ok();
+            else return StatusCode(HttpStatusCode.NotModified);
+        }
 
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]

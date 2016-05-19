@@ -9,7 +9,7 @@ namespace BL.Domain
     public class Gebruiker
     {
         public int Id { get; set; }
-        public string userId { get; set; }
+        public string userName { get; set; }
         public string naam { get; set; }
         public string email { get; set; }
         public HoofdGemeente gemeente { get; set; }
@@ -18,13 +18,18 @@ namespace BL.Domain
 
         //public HashSet<Account> accounts { get; set; }
 
-        public Gebruiker(string email, string naam, string accountID, RolType roltype, HoofdGemeente gemeente)
+        public Gebruiker()
         {
-            this.userId = email;
+
+        }
+
+        public Gebruiker(string email, string naam, string accountID, HoofdGemeente gemeente)
+        {
+            this.userName = email;
             this.naam = naam;
             this.email = email;
             this.gemeente = gemeente;
-            this.rolType = rolType;
+            this.rolType = RolType.standaard;
         }
     }
 }
