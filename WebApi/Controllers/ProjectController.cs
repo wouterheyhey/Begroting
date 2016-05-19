@@ -31,15 +31,15 @@ namespace WebApi.Controllers
                 var gemCat = item as GemeenteCategorie;
                 if (gemCat != null)
                 {
-                    gemcats.Add(new DTOGemeenteCategorie()
+                    DTOGemeenteCategorie d = new DTOGemeenteCategorie()
                     {
-
                         ID = gemCat.ID,
                         totaal = gemCat.totaal,
-                        catC = gemCat.categorieNaam,
                         inspraakNiveau = (int?)gemCat.inspraakNiveau,
-                        gemcatID = gemCat.parentGemCatId,
-                    });
+                        gemcatID = gemCat.parentGemCatId
+                    };
+                    d.catC = gemCat.categorieNaam;
+                    gemcats.Add(d);
 
                 }
             }

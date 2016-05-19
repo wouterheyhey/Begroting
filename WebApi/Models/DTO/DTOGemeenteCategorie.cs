@@ -12,6 +12,7 @@ namespace WebApi.Models.DTO
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string catA { get; set; }
+     //   public Dictionary<string, string> cats { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string catB { get; set; }

@@ -28,9 +28,41 @@ namespace BL
         //    repo.UpdateAllCategoriesChildren();
         }
 
+        public IEnumerable<InspraakItem> GetAllChildren(InspraakItem ii, List<InspraakItem> children)
+        {
+            List<InspraakItem> chldren = repo.GetChildrenInspraakItem(ii).ToList<InspraakItem>();
+            foreach (InspraakItem child in chldren)
+            {
+                children.Add(child);
+                if (chldren.Count() > 0)
+                {
+                    return GetAllChildren(child, children);  // recursie
+                }
+                // else { return children; }
+            }
+            return children;
+        }
 
-
+        public IEnumerable<InspraakItem> GetAllParents(InspraakItem ii, List<InspraakItem> parents)
+        {
+            List<InspraakItem> prnts = repo.GetParentsInspraakItem(ii).ToList<InspraakItem>();
+            foreach (InspraakItem child in prnts)
+            {
+                parents.Add(child);
+                if (prnts.Count() > 0)
+                {
+                    return GetAllParents(child, parents);  // recursie
+                }
+                // else { return children; }
+            }
+            return parents;
+        }
 
 
     }
+
+
+
+
 }
+

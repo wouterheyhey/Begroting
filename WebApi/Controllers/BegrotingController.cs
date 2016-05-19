@@ -15,47 +15,66 @@ namespace WebApi.Controllers
     {
         private BegrotingManager begMgr = new BegrotingManager();
         private FinancieleLijnManager finMgr = new FinancieleLijnManager();
+        private CategorieManager catMgr = new CategorieManager();
 
         public IHttpActionResult Get(int jaar, string naam)
         {
-            IEnumerable<GemeenteCategorie> lijnen = begMgr.readGemeenteCategories(jaar, naam);
+            IEnumerable<GemeenteCategorie> gemCats = begMgr.readGemeenteCategories(jaar, naam);
 
-            if (lijnen == null || lijnen.Count() == 0)
+            if (gemCats == null || gemCats.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
             List<DTOGemeenteCategorie> DTOgemcats = new List<DTOGemeenteCategorie>();
 
-            foreach (var item in lijnen)
+            List<InspraakItem> parents = new List<InspraakItem>();
+            foreach (var item in gemCats)
             {
-                DTOGemeenteCategorie d = new DTOGemeenteCategorie()
-                {
-                    ID = item.ID,
-                    totaal = item.totaal,
-                };
-                if(item.parentGemCat == null)
-                {
-                    d.catA = item.categorieNaam;
-                }
-                else
-                {
-                    if (item.parentGemCat.parentGemCat == null)
-                    {
-                        d.catA = item.parentGemCat.categorieNaam;
-                        d.catB = item.categorieNaam;
-                    }
-                    else
-                    {
-                        d.catA = item.parentGemCat.parentGemCat.categorieNaam;
-                        d.catB = item.parentGemCat.categorieNaam;
-                        d.catC = item.categorieNaam;
-                    }
-                }
-
-                DTOgemcats.Add(d);
-            }
+                catMgr.GetAllParents(item,parents);
+                DTOgemcats.Add(MapGemCatToDTOGemCatWithParents(item,parents));
+            }         
 
             return Ok(DTOgemcats);
+
         }
+   
+
+        private DTOGemeenteCategorie MapGemCatToDTOGemCatWithParents(GemeenteCategorie gemCat, List<InspraakItem> gemCats)
+        {
+            DTOGemeenteCategorie d = new DTOGemeenteCategorie();
+
+            foreach (InspraakItem item in gemCats.Where(x=>x is GemeenteCategorie))
+                {
+                // platmaken van de hierarchische structuur met het oog op de graphs
+                // elke categorieType komt maximaal 1x voor als je de parents meegeeft 
+                d = MapTypeToPropery(((GemeenteCategorie)item), d);
+                 //   d.cats[((GemeenteCategorie)item).categorieType.ToString()] = ((GemeenteCategorie)item).categorieNaam;
+                }
+            d.ID = gemCat.ID;
+            d.totaal = gemCat.totaal;
+            // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
+
+            d = MapTypeToPropery(gemCat, d);
+
+            return d;
+        }
+
+        private DTOGemeenteCategorie MapTypeToPropery(GemeenteCategorie item, DTOGemeenteCategorie d)
+        {
+            switch (item.categorieType.ToString())
+            {
+                case ("A"):
+                    d.catA = item.categorieNaam;
+                    break;
+                case ("B"):
+                    d.catB = item.categorieNaam;
+                    break;
+                case ("C"):
+                    d.catC = item.categorieNaam;
+                    break;
+            }
+            return d;
+        }
+    
 
         public IHttpActionResult Get(int id)
         {
@@ -124,4 +143,5 @@ namespace WebApi.Controllers
         }
 
     }
+
 }

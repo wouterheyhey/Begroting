@@ -11,7 +11,7 @@ namespace BL
 {
     public class FinancieleLijnManager
     {
-        private FinancieleLijnRepository  finRepo;
+        private FinancieleLijnRepository finRepo;
 
         public FinancieleLijnManager()
         {
@@ -21,7 +21,7 @@ namespace BL
 
         public void LoadFinancieleLijnen(string categoryFile, int year)
         {
-            List<InspraakItem> lijnen = finRepo.ImportFinancieleLijnen(categoryFile, year); 
+            List<InspraakItem> lijnen = finRepo.ImportFinancieleLijnen(categoryFile, year);
         }
 
 
@@ -30,4 +30,5 @@ namespace BL
             finRepo.ImportFinancieleLijnen();
         }
     }
+
 }

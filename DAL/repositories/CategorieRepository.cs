@@ -119,7 +119,15 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
+        public IEnumerable<InspraakItem> GetChildrenInspraakItem (InspraakItem ii)
+        {
+            return ctx.inspraakItems.Where<InspraakItem>(x => x.parentGemCatId == ii.ID);
+        }
 
+        public IEnumerable<InspraakItem> GetParentsInspraakItem(InspraakItem ii)
+        {
+            return ctx.inspraakItems.Where<InspraakItem>(x => x.ID == ii.parentGemCatId);
+        }
 
 
 
