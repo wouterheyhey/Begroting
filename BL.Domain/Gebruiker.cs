@@ -30,6 +30,7 @@ namespace BL.Domain
             this.email = email;
             this.gemeente = gemeente;
             this.rolType = RolType.standaard;
+            this.isActief = true;
         }
     }
 }

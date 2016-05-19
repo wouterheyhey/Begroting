@@ -76,6 +76,10 @@ namespace DAL.repositories
             try
             {
                 _userManager.SetLockoutEnabledAsync(userName, true);
+                _ctx.SaveChanges();
+                Gebruiker g = GetGebruiker(userName);
+                g.isActief = false;
+                ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -88,6 +92,7 @@ namespace DAL.repositories
             try
             {
                 _userManager.SetLockoutEnabledAsync(userName, false);
+                _ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -102,6 +107,7 @@ namespace DAL.repositories
             {
                 _userManager.RemoveFromRoles(userName, _userManager.GetRoles(userName).ToArray<string>());
                 _userManager.AddToRole(userName, rolType.ToString());
+                _ctx.SaveChanges();
                 Gebruiker g = GetGebruiker(userName);
                 g.rolType = rolType;
                 ctx.Entry(g.gemeente).State = System.Data.Entity.EntityState.Unchanged;
