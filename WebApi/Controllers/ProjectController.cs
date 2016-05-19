@@ -63,6 +63,9 @@ namespace WebApi.Controllers
 
             Project p = mgr.getProject(jaar, naam);
             List<string> afb = new List<string>();
+
+            if(p == null)
+                return StatusCode(HttpStatusCode.NoContent);
             if (p.afbeeldingen != null)
             {
                 
