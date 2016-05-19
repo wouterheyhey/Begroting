@@ -26,9 +26,10 @@ namespace WebApi.Controllers
 
             List<DTOGemeenteCategorie> DTOgemcats = new List<DTOGemeenteCategorie>();
 
-            List<InspraakItem> parents = new List<InspraakItem>();
+            List<InspraakItem> parents;
             foreach (var item in gemCats)
             {
+                parents = new List<InspraakItem>();
                 catMgr.GetAllParents(item,parents);
                 DTOgemcats.Add(MapGemCatToDTOGemCatWithParents(item,parents));
             }         
