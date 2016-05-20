@@ -10,6 +10,6 @@ namespace BL.Domain
     {
         public int ID { get; set; }
         DateTime registratieDatum { get; set; }
-         Account account { get; set; }
+        Gebruiker gebruiker { get; set; }
     }
 }
