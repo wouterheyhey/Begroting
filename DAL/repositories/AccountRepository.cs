@@ -93,6 +93,9 @@ namespace DAL.repositories
             {
                 _userManager.SetLockoutEnabledAsync(userName, false);
                 _ctx.SaveChanges();
+                Gebruiker g = GetGebruiker(userName);
+                g.isActief = true;
+                ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)

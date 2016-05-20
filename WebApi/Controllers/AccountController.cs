@@ -39,17 +39,25 @@ namespace WebApi.Controllers
         } 
         public IHttpActionResult Get()
         {
-            var gebrs = accMgr.GetGebruikers();
-            if (gebrs == null)
-                return StatusCode(HttpStatusCode.NoContent);
-            else
+            try
             {
-                List<DTOGebruiker> gebruikers = new List<DTOGebruiker>();
-                foreach (Gebruiker g in gebrs)
+                var gebrs = accMgr.GetGebruikers();
+                if (gebrs == null)
+                    return StatusCode(HttpStatusCode.NoContent);
+                else
                 {
-                    gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
+                    List<DTOGebruiker> gebruikers = new List<DTOGebruiker>();
+                    foreach (Gebruiker g in gebrs)
+                    {
+                        gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
+                    }
+                    return Ok(gebrs);
                 }
-                return Ok(gebrs);
+
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(HttpStatusCode.NoContent);
             }
         }
         public IHttpActionResult DisableUser(string userName)

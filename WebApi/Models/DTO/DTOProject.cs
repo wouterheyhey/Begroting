@@ -8,6 +8,7 @@ namespace WebApi.Models.DTO
 {
     public class DTOProject
     {
+        public int id { get; set; }
         public int projectScenario { get; set; }
         public string titel { get; set; }
         public string vraag { get; set; }
@@ -20,6 +21,7 @@ namespace WebApi.Models.DTO
         public string gemeente { get; set; }
         public bool isActief { get; set; }
         public List<string> afbeeldingen { get; set; }
+        public List<DTOBegrotingVoorstel> voorstellen { get; set; }
 
     }
 }

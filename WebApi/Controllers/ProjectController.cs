@@ -28,6 +28,8 @@ namespace WebApi.Controllers
             return Ok(convertInspraakItem(lijnen.First(), null)); // Moet aangepast worden
            
         }
+
+
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
@@ -57,17 +59,64 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
+
+
+
+
         [HttpGet]
-        public IHttpActionResult GetProjects(string naam)
+        public IHttpActionResult GetProjects( string naam)
         {
-            IEnumerable<Project> p = mgr.getProjects(naam);
+            List<Project> p = mgr.getProjects( naam).ToList();
 
             if (p == null || p.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
             List<DTOProject> dp = new List<DTOProject>();
+
+            //elk project
             foreach (var item in p)
             {
+                List<DTOBegrotingVoorstel> lbv = new List<DTOBegrotingVoorstel>();
+                if (item.voorstellen != null)
+                {
+                   
+                    //voor elke voorstellen in project
+                    foreach (var voorstel in item.voorstellen)
+                    {
+
+                        DTOBegrotingVoorstel bv = new DTOBegrotingVoorstel()
+                        {
+                            Id = voorstel.Id,
+                            beschrijving = voorstel.beschrijving,
+                            samenvatting = voorstel.samenvatting,
+                            verificatieStatus = (int)voorstel.verificatieStatus,
+                            budgetWijzigingen = new List<DTOBudgetWijziging>()
+                        };
+
+                        
+                        //voor elke wijziging in voorstel
+                        foreach (var wijziging in voorstel.budgetWijzigingen)
+                        {
+                            DTOBudgetWijziging dw = new DTOBudgetWijziging()
+                            {
+                                bedrag = wijziging.bedrag,
+                                beschrijving = wijziging.beschrijving,
+                            };
+                            var gemCat = wijziging.inspraakItem as GemeenteCategorie;
+                            var actie = wijziging.inspraakItem as Actie;
+                            if (gemCat != null)
+                                dw.InspraakItem = gemCat.categorieNaam;
+                            else
+                                dw.InspraakItem = actie.actieKort;
+
+                            bv.budgetWijzigingen.Add(dw); 
+                        }
+
+                        lbv.Add(bv);
+                    }
+
+                }
+
                 dp.Add(new DTOProject()
                 {
                     projectScenario = (int)item.projectScenario,
@@ -78,10 +127,49 @@ namespace WebApi.Controllers
                     minBedrag = item.minBedrag,
                     maxBedrag = item.maxBedrag,
                     boekjaar = (int?)item.begroting.boekJaar,
-                    gemeente = naam
+                    gemeente = naam,
+                    voorstellen = lbv
+             
                 });
+
             }
             return Ok(dp);
+        }
+
+        [Route("postVoorstel/{id}")]
+        [HttpPost]
+        public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
+        {
+            //bedrag, beschrijving, idInspraakItem
+            List<Tuple<float, string, int>> bugetwijzigingen = new List<Tuple<float, string, int>>();
+
+            if(p.budgetWijzigingen != null)
+            {
+                foreach (var item in p.budgetWijzigingen)
+                {
+                    bugetwijzigingen.Add(new Tuple<float, string, int>(item.bedrag,item.beschrijving, item.inspraakItemId));
+                }
+                
+            }
+            mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
+                p.totaal, bugetwijzigingen);
+            return Ok();
+        }
+
+        [Route("putReactieEnStem/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, string email)
+        {
+            int idStem = mgr.changeAantalStemmenVoorstel(id, email);
+           return Ok(idStem);
+        }
+
+        [Route("putVoorstel/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, [FromBody]int status)
+        {
+            mgr.changeVoorstel(id, status);
+            return Ok();
         }
 
 
@@ -93,11 +181,11 @@ namespace WebApi.Controllers
             Project p = mgr.getProject(jaar, naam);
             List<string> afb = new List<string>();
 
-            if(p == null)
+            if (p == null)
                 return StatusCode(HttpStatusCode.NoContent);
             if (p.afbeeldingen != null)
             {
-                
+
                 foreach (var item in p.afbeeldingen)
                 {
                     char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
@@ -108,6 +196,7 @@ namespace WebApi.Controllers
 
             DTOProject dp = new DTOProject()
             {
+                id = p.Id,
                 projectScenario = (int)p.projectScenario,
                 titel = p.titel,
                 vraag = p.vraag,
@@ -118,17 +207,17 @@ namespace WebApi.Controllers
                 boekjaar = jaar,
                 gemeente = naam,
                 cats = new List<DTOGemeenteCategorie>(),
-                //catMgr.GetHighestLevelCats()
                 afbeeldingen = afb
-                };
-                foreach (GemeenteCategorie gemCat in p.inspraakItems.Where<InspraakItem>(x => x.parentGemCat == null))
-                {
-                    dp.cats.Add(convertInspraakItem(gemCat, new List<DTOGemeenteCategorie>()));
-                }
+            };
+            foreach (GemeenteCategorie gemCat in p.inspraakItems.Where<InspraakItem>(x => x.parentGemCat == null))
+            {
+                dp.cats.Add(convertInspraakItem(gemCat, new List<DTOGemeenteCategorie>()));
+            }
             return Ok(dp);
         }
 
         private DTOGemeenteCategorie convertInspraakItem(InspraakItem item, List<DTOGemeenteCategorie> gemCats)
+
         {
             var gemCat = item as GemeenteCategorie;
 
