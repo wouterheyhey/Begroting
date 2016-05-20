@@ -8,6 +8,7 @@ namespace BL.Domain
 {
     public class FAQ
     {
+        public int id { get; set; }
         public string vraag { get; set; }
         public string antwoord { get; set; }
     }
