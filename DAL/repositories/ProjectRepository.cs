@@ -71,7 +71,7 @@ namespace DAL.repositories
         public int updateAantalStemmenEnReactiesVoorstel(int id, string email)
         {
             //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
-            BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).SingleOrDefault();
+            BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).Include(c => c.stemmen).SingleOrDefault();
             if (v != null)
             {
                 Stem s = new Stem()
