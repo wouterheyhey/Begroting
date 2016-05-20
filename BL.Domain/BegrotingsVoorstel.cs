@@ -12,7 +12,7 @@ namespace BL.Domain
     {
         public int Id { get; set; }
         public int aantalStemmen { get; set; }
-        public DateTime indiening { get; set; }
+        public DateTime? indiening { get; set; }
         public float totaal { get; set; }
         public string samenvatting { get; set; }
         [MaxLength(1000)]
@@ -20,8 +20,9 @@ namespace BL.Domain
         public HashSet<BudgetWijziging> budgetWijzigingen { get; set; }
         public HashSet<Stem> stemmen { get; set; }
         public VerificatieStatus verificatieStatus { get; set; }
-        public DateTime verificatieDatum { get; set; }
+        public DateTime? verificatieDatum { get; set; }
         public Gebruiker verificator { get; set; }
         public Gebruiker auteur { get; set; }
+
     }
 }

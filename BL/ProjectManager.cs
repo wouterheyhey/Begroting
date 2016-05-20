@@ -50,5 +50,22 @@ namespace BL
             return repo.readProjects( gemeente);
         }
 
+        public void addBegrotingsVoorstel(int id, string auteurEmail, string beschrijving, string samenvatting, 
+            int totaal, List<Tuple<float, string, int>> budgetwijzigingen)
+        {
+           
+            BegrotingsVoorstel b = new BegrotingsVoorstel()
+            {
+                beschrijving  = beschrijving,
+                samenvatting = samenvatting,
+                totaal = totaal,
+                indiening = DateTime.Now,
+                verificatieStatus = VerificatieStatus.teBehandelen
+            };
+            
+            
+            repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen);
+        }
+
     }
 }

@@ -21,6 +21,7 @@ namespace WebApi.Models.DTO
         public string gemeente { get; set; }
         public bool isActief { get; set; }
         public List<string> afbeeldingen { get; set; }
+        public List<DTOBegrotingVoorstel> voorstellen { get; set; }
 
     }
 }
