@@ -93,6 +93,7 @@
     <Compile Include="Cluster.cs" />
     <Compile Include="DateRange.cs" />
     <Compile Include="Desactivatie.cs" />
+    <Compile Include="FAQ.cs" />
     <Compile Include="InTeLoggenGebruiker.cs" />
     <Compile Include="FinancieleLijn.cs" />
     <Compile Include="Actie.cs" />
