@@ -79,7 +79,8 @@ namespace DAL
             public DbSet<Account> Accounts { get; set; }
             public DbSet<Stem> Stemmen { get; set; }
             public DbSet<AntwoordEmail> AntwoordEmails { get; set; }
-           // public DbSet<Cluster> Clusters { get; set; }
+            public DbSet<FAQ> FAQs { get; set; }
+        // public DbSet<Cluster> Clusters { get; set; }
 
     }
 }

@@ -24,6 +24,9 @@ namespace BL.Domain
         public float aanslagVoet { get; set; }
         public HashSet<Gemeente> deelGemeenten { get; set; }
         public Cluster cluster { get; set; }
+        public string hoofdKleur { get; set; }
+        public byte[] logo { get; set; }
+
 
         public HoofdGemeente(string naam)
         {

@@ -27,6 +27,8 @@ namespace WebApi.Controllers
             return Ok(convertInspraakItems(lijnen));
            
         }
+
+
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
@@ -79,6 +81,7 @@ namespace WebApi.Controllers
 
             DTOProject dp = new DTOProject()
             {
+                id= p.Id,
                 projectScenario = (int)p.projectScenario,
                 titel = p.titel,
                 vraag = p.vraag,
@@ -93,17 +96,60 @@ namespace WebApi.Controllers
             };
             return Ok(dp);
         }
+
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
         {
-            IEnumerable<Project> p = mgr.getProjects( naam);
+            List<Project> p = mgr.getProjects( naam).ToList();
 
             if (p == null || p.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
             List<DTOProject> dp = new List<DTOProject>();
+
+            //elk project
             foreach (var item in p)
             {
+                List<DTOBegrotingVoorstel> lbv = new List<DTOBegrotingVoorstel>();
+                if (item.voorstellen != null)
+                {
+                   
+                    //voor elke voorstellen in project
+                    foreach (var voorstel in item.voorstellen)
+                    {
+
+                        DTOBegrotingVoorstel bv = new DTOBegrotingVoorstel()
+                        {
+                            Id = voorstel.Id,
+                            beschrijving = voorstel.beschrijving,
+                            samenvatting = voorstel.samenvatting,
+                            budgetWijzigingen = new List<DTOBudgetWijziging>()
+                        };
+
+                        
+                        //voor elke wijziging in voorstel
+                        foreach (var wijziging in voorstel.budgetWijzigingen)
+                        {
+                            DTOBudgetWijziging dw = new DTOBudgetWijziging()
+                            {
+                                bedrag = wijziging.bedrag,
+                                beschrijving = wijziging.beschrijving,
+                            };
+                            var gemCat = wijziging.inspraakItem as GemeenteCategorie;
+                            var actie = wijziging.inspraakItem as Actie;
+                            if (gemCat != null)
+                                dw.InspraakItem = gemCat.categorieNaam;
+                            else
+                                dw.InspraakItem = actie.actieKort;
+
+                            bv.budgetWijzigingen.Add(dw); 
+                        }
+
+                        lbv.Add(bv);
+                    }
+
+                }
+
                 dp.Add(new DTOProject()
                 {
                     projectScenario = (int)item.projectScenario,
@@ -114,11 +160,43 @@ namespace WebApi.Controllers
                     minBedrag = item.minBedrag,
                     maxBedrag = item.maxBedrag,
                     boekjaar = (int?)item.begroting.boekJaar,
-                    gemeente = naam
+                    gemeente = naam,
+                    voorstellen = lbv
+             
                 });
+
             }
             return Ok(dp);
         }
+
+        [Route("postVoorstel/{id}")]
+        [HttpPost]
+        public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
+        {
+            //bedrag, beschrijving, idInspraakItem
+            List<Tuple<float, string, int>> bugetwijzigingen = new List<Tuple<float, string, int>>();
+
+            if(p.budgetWijzigingen != null)
+            {
+                foreach (var item in p.budgetWijzigingen)
+                {
+                    bugetwijzigingen.Add(new Tuple<float, string, int>(item.bedrag,item.beschrijving, item.inspraakItemId));
+                }
+                
+            }
+            mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
+                p.totaal, bugetwijzigingen);
+            return Ok();
+        }
+        [Route("putVoorstel/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, [FromBody]int status)
+        {
+            mgr.changeVoorstel(id, status);
+            return Ok();
+        }
+
+
 
         private List<DTOGemeenteCategorie> convertInspraakItems(IEnumerable<InspraakItem> lijnen)
         {

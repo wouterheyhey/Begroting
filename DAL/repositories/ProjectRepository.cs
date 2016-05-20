@@ -68,6 +68,49 @@ namespace DAL.repositories
             
         }
 
+        public void UpdateVoorstel(int id, int status)
+        {
+            BegrotingsVoorstel bv = ctx.Voorstellen.Find(id);
+            bv.verificatieStatus = (VerificatieStatus) status;
+            bv.verificatieDatum = DateTime.Now;
+            ctx.SaveChanges();
+        }
+
+        public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen)
+        {
+            //budgetWijzigingen aanmaken
+            if (budgetwijzigingen != null)
+            {
+                b.budgetWijzigingen = new HashSet<BudgetWijziging>();
+                foreach (var item in budgetwijzigingen)
+                {
+                    b.budgetWijzigingen.Add(createBudgetWijziging(item.Item1, item.Item2, item.Item3));
+                }
+            }
+            ctx.Voorstellen.Add(b);
+            ctx.SaveChanges();
+            //auteurEmail komt uit token dus kan niet null of fout zijn
+            //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
+
+            /* Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
+             b.auteur = g; */
+
+            //begrotingsvoorstel toevoegen aan project
+
+            Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id ==id).SingleOrDefault();
+
+
+            p.voorstellen.Add(b);
+            ctx.Entry(p).State = EntityState.Modified;
+            ctx.SaveChanges();
+
+        }
+
+        private void updateProject(Project p, BegrotingsVoorstel b)
+        {
+            
+        }
+
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
         {
             InspraakItem ii = ctx.inspraakItems.Find(id);
@@ -103,9 +146,23 @@ namespace DAL.repositories
 
         public IEnumerable<Project> readProjects(string gemeente)
         {
-            return ctx.Projecten.Include(nameof(Project.begroting)).Where(p => p.begroting.gemeente.naam == gemeente);
+             return ctx.Projecten.Include(nameof(Project.begroting)).Include(v => v.voorstellen.Select(w => w.budgetWijzigingen.Select(i => i.inspraakItem))).Where(p => p.begroting.gemeente.naam == gemeente);
+            //return  from g in ctx.Projecten where g.begroting.gemeente.naam == gemeente select g;
         }
 
+        public BudgetWijziging createBudgetWijziging(float bedrag, string beschrijving, int id)
+        {
+            InspraakItem i = ctx.inspraakItems.Find(id);
+            BudgetWijziging bw = new BudgetWijziging()
+            {
+                bedrag = bedrag,
+                beschrijving = beschrijving,
+                inspraakItem = i
+            };
+            return bw;
+        }
+
+         
 
         public void saveContext()
         {
