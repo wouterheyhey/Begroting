@@ -192,9 +192,9 @@ namespace WebApi.Controllers
 
         [Route("putReactieEnStem/{id}")]
         [HttpPut]
-        public IHttpActionResult put(int id, string email)
+        public IHttpActionResult put(int id, [FromBody]string email)
         {
-            int idStem = mgr.changeAantalStemmenVoorstel(id, email);
+            int idStem = mgr.changeAantalStemmenEnReactiesVoorstel(id, email);
            return Ok(idStem);
         }
 
