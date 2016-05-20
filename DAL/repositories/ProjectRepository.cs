@@ -68,6 +68,13 @@ namespace DAL.repositories
             
         }
 
+        public int updateAantalStemmenVoorstel(int id, string email)
+        {
+            return 0;
+        }
+
+
+
         public void UpdateVoorstel(int id, int status)
         {
             BegrotingsVoorstel bv = ctx.Voorstellen.Find(id);
@@ -146,8 +153,9 @@ namespace DAL.repositories
 
         public IEnumerable<Project> readProjects(string gemeente)
         {
-             return ctx.Projecten.Include(nameof(Project.begroting)).Include(v => v.voorstellen.Select(w => w.budgetWijzigingen.Select(i => i.inspraakItem))).Where(p => p.begroting.gemeente.naam == gemeente);
-            //return  from g in ctx.Projecten where g.begroting.gemeente.naam == gemeente select g;
+             return ctx.Projecten.Include(nameof(Project.begroting)).Include(v => v.voorstellen.Select(w => w.budgetWijzigingen.Select(i => i.inspraakItem)))
+                .Where(p => p.begroting.gemeente.naam == gemeente);
+            
         }
 
         public BudgetWijziging createBudgetWijziging(float bedrag, string beschrijving, int id)

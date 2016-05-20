@@ -123,6 +123,7 @@ namespace WebApi.Controllers
                             Id = voorstel.Id,
                             beschrijving = voorstel.beschrijving,
                             samenvatting = voorstel.samenvatting,
+                            verificatieStatus = (int)voorstel.verificatieStatus,
                             budgetWijzigingen = new List<DTOBudgetWijziging>()
                         };
 
@@ -188,6 +189,15 @@ namespace WebApi.Controllers
                 p.totaal, bugetwijzigingen);
             return Ok();
         }
+
+        [Route("putReactieEnStem/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, string email)
+        {
+            int idStem = mgr.changeAantalStemmenVoorstel(id, email);
+           return Ok(idStem);
+        }
+
         [Route("putVoorstel/{id}")]
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]int status)
