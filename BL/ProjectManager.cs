@@ -67,5 +67,9 @@ namespace BL
             repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen);
         }
 
+        public void changeVoorstel(int id, int status)
+        {
+            repo.UpdateVoorstel( id, status);
+        }
     }
 }

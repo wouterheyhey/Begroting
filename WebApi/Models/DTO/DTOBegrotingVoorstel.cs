@@ -7,6 +7,7 @@ namespace WebApi.Models.DTO
 {
     public class DTOBegrotingVoorstel
     {
+        public int Id { get; set; }
         public int aantalStemmen { get; set; }
         public int totaal { get; set; }
         public string samenvatting { get; set; }

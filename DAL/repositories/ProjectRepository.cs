@@ -68,6 +68,14 @@ namespace DAL.repositories
             
         }
 
+        public void UpdateVoorstel(int id, int status)
+        {
+            BegrotingsVoorstel bv = ctx.Voorstellen.Find(id);
+            bv.verificatieStatus = (VerificatieStatus) status;
+            bv.verificatieDatum = DateTime.Now;
+            ctx.SaveChanges();
+        }
+
         public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen)
         {
             //budgetWijzigingen aanmaken
@@ -153,6 +161,8 @@ namespace DAL.repositories
             };
             return bw;
         }
+
+         
 
         public void saveContext()
         {

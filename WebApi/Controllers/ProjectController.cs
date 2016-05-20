@@ -120,6 +120,7 @@ namespace WebApi.Controllers
 
                         DTOBegrotingVoorstel bv = new DTOBegrotingVoorstel()
                         {
+                            Id = voorstel.Id,
                             beschrijving = voorstel.beschrijving,
                             samenvatting = voorstel.samenvatting,
                             budgetWijzigingen = new List<DTOBudgetWijziging>()
@@ -185,6 +186,13 @@ namespace WebApi.Controllers
             }
             mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
                 p.totaal, bugetwijzigingen);
+            return Ok();
+        }
+        [Route("putVoorstel/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, [FromBody]int status)
+        {
+            mgr.changeVoorstel(id, status);
             return Ok();
         }
 
