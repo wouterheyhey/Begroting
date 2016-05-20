@@ -79,6 +79,7 @@ namespace WebApi.Controllers
 
             DTOProject dp = new DTOProject()
             {
+                id= p.Id,
                 projectScenario = (int)p.projectScenario,
                 titel = p.titel,
                 vraag = p.vraag,
@@ -118,6 +119,14 @@ namespace WebApi.Controllers
                 });
             }
             return Ok(dp);
+        }
+
+        [Route("postVoorstel/{id}")]
+        [HttpPost]
+        public IHttpActionResult Post(int id, DTOBudgetVoorstel p)
+        {
+            string x = p.beschrijving;
+            return Ok();
         }
 
         private List<DTOGemeenteCategorie> convertInspraakItems(IEnumerable<InspraakItem> lijnen)

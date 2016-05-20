@@ -8,6 +8,7 @@ namespace WebApi.Models.DTO
 {
     public class DTOProject
     {
+        public int id { get; set; }
         public int projectScenario { get; set; }
         public string titel { get; set; }
         public string vraag { get; set; }
