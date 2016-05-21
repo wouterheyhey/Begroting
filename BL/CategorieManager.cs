@@ -64,10 +64,6 @@ namespace BL
             return parents;
         }
 
-        public IEnumerable<GemeenteCategorie> GetHighestLevelCats()
-        {
-            return repo.GetHighestLevelCats().ToList<GemeenteCategorie>();
-        }
 
 
 

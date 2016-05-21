@@ -129,11 +129,6 @@ namespace DAL.repositories
             return ctx.inspraakItems.Where<InspraakItem>(x => x.ID == ii.parentGemCatId);
         }
 
-        public IEnumerable<GemeenteCategorie> GetHighestLevelCats()
-        {
-            //  return ctx.inspraakItems.Where<InspraakItem>(x=>x.parentGemCatId == null).Cast<GemeenteCategorie>() ;
-            return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.parentGemCatId == null);
-        }
 
 
 
