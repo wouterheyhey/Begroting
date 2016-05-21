@@ -20,16 +20,21 @@ namespace WebApi.Controllers
         [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
-            IEnumerable<InspraakItem> lijnen = mgr.getInspraakItems(jaar, naam);
+            List<DTOGemeenteCategorie> lijnen = new List<DTOGemeenteCategorie>();
+            IEnumerable<InspraakItem> parents = mgr.getInspraakItems(jaar, naam).Where<InspraakItem>(x => x.parentGemCat == null);
 
-            if (lijnen == null || lijnen.Count() == 0)
+            if (parents == null || parents.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
-            return Ok(convertInspraakItem(lijnen.First(), null)); // Moet aangepast worden
+            foreach(InspraakItem item in parents)
+            {
+                lijnen.Add(convertInspraakItem(item, new List<DTOGemeenteCategorie>())); // via hoogste niveau in hierachie de braches opbouwen
+            }
+            return Ok(lijnen); 
            
         }
 
-
+         
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
@@ -228,10 +233,10 @@ namespace WebApi.Controllers
 
                 foreach (InspraakItem ii in catMgr.GetChildrenInspraakItem(item))
                 {
-                    DTOGemeenteCategorie dtoGemCat = convertInspraakItem(ii, gemCats);
+                    DTOGemeenteCategorie dtoGemCat = convertInspraakItem(ii, gemCats);  // recursie om lagere niveaus op te halen
                     if (dtoGemCat.ID != 0)
                     {
-                        d.childCats.Add(dtoGemCat); // add whole list in once, recursie
+                        d.childCats.Add(dtoGemCat);
                     }
                 }
                 return d;
