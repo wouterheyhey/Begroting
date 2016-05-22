@@ -51,7 +51,7 @@ namespace BL
         }
 
         public void addBegrotingsVoorstel(int id, string auteurEmail, string beschrijving, string samenvatting, 
-            int totaal, List<Tuple<float, string, int>> budgetwijzigingen)
+            float totaal, List<Tuple<float, string, int>> budgetwijzigingen)
         {
            
             BegrotingsVoorstel b = new BegrotingsVoorstel()

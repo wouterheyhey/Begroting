@@ -53,7 +53,7 @@ namespace WebApi.Controllers
                     {
                         gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType, g.isActief));
                     }
-                    return Ok(gebrs);
+                    return Ok(gebruikers);
                 }
 
             }
@@ -65,13 +65,18 @@ namespace WebApi.Controllers
         public IHttpActionResult Put(List<DTOGebruiker> dtoGebruikers)
         {
             List<Gebruiker> gebruikers = new List<Gebruiker>();
-            foreach (DTOGebruiker g in  dtoGebruikers)
+            if(dtoGebruikers != null)
             {
-                gebruikers.Add(new Gebruiker() { userName = g.userId, rolType = g.rolType, isActief = g.isActief });
+                foreach (DTOGebruiker g in dtoGebruikers)
+                {
+                    gebruikers.Add(new Gebruiker() { userName = g.userId, rolType = g.rolType, isActief = g.isActief });
+                }
             }
-            return Ok(accMgr.ChangeGebruikers(gebruikers));
+          
+
+           return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
-        public IHttpActionResult DisableUser(string userName)
+      /*  public IHttpActionResult DisableUser(string userName)
         {
             if (accMgr.DisableUser(userName)) return Ok();
             else return StatusCode(HttpStatusCode.NotModified);
@@ -87,7 +92,8 @@ namespace WebApi.Controllers
         {
             if (accMgr.SetRole(userName, rolType)) return Ok();
             else return StatusCode(HttpStatusCode.NotModified);
-        }
+        } */
+
 
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]
