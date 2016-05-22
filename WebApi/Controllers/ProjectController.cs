@@ -189,14 +189,16 @@ namespace WebApi.Controllers
 
             if (p == null)
                 return StatusCode(HttpStatusCode.NoContent);
-            if (p.afbeeldingen != null)
+            if (p.afbeelding != null)
             {
 
-                foreach (var item in p.afbeeldingen)
+                foreach (var item in p.afbeelding)
                 {
-                    char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
-                    System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
-                    afb.Add(new string(chars));
+                    // Nadya aan te passen
+                    ///////////////////////
+                 //   char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
+                 //   System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
+                 //   afb.Add(new string(chars));
                 }
             }
             

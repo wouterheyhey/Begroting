@@ -110,7 +110,7 @@
     <Compile Include="Politicus.cs" />
     <Compile Include="PoliticusType.cs" />
     <Compile Include="Project.cs" />
-    <Compile Include="ProjectAfbeelding.cs" />
+    <Compile Include="VoorstelAfbeelding.cs" />
     <Compile Include="ProjectScenario.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefreshTokens.cs" />

@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace BL.Domain
 {
-    public class ProjectAfbeelding
+    public class VoorstelAfbeelding
     {
         public int ID { get; set; }
         public byte[] Afbeelding { get; set; }
 
-        public ProjectAfbeelding()
+        public VoorstelAfbeelding()
         {
 
         }
-        public ProjectAfbeelding(byte [] afbeelding)
+        public VoorstelAfbeelding(byte[] afbeelding)
         {
             this.Afbeelding = afbeelding;
         }

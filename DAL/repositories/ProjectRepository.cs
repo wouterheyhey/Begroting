@@ -45,13 +45,14 @@ namespace DAL.repositories
 
                 if (afbeeldingen != null)
                 {
-                    p.afbeeldingen = new HashSet<ProjectAfbeelding>();
+                    // Nadya aan te passen
+                  //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
                     foreach (var item in afbeeldingen)
                     {
                         byte[] bytes = new byte[item.Length * sizeof(char)];
                         System.Buffer.BlockCopy(item.ToCharArray(), 0, bytes, 0, bytes.Length);
-                        ProjectAfbeelding a = new ProjectAfbeelding(bytes);
-                        p.afbeeldingen.Add(a);
+                        VoorstelAfbeelding a = new VoorstelAfbeelding(bytes);
+                //        p.afbeelding.Add(a);
                     }
 
                 }
@@ -167,7 +168,7 @@ namespace DAL.repositories
                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                .Select(c => c.Id).SingleOrDefault();
 
-            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Include(nameof(Project.afbeeldingen)).Where(p => p.begroting.Id == id).SingleOrDefault();
+            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Include(nameof(Project.afbeelding)).Where(p => p.begroting.Id == id).SingleOrDefault();
         }
 
         public IEnumerable<Project> readProjects(string gemeente)

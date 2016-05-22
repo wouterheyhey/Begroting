@@ -48,13 +48,18 @@ namespace DAL
 
             modelBuilder.Entity<Cluster>().Property(x => x.name).IsRequired().HasMaxLength(120);
 
+            // 0..1 to 1 relationship
+            modelBuilder.Entity<CategorieInput>().HasRequired(x => x.gemCategorie).WithOptional(x => x.categorieInput);
+
             modelBuilder.Entity<BegrotingsVoorstel>().ToTable("BegrotingsVoorstellen");
             modelBuilder.Entity<BudgetWijziging>().ToTable("BudgetWijzigingen");
             modelBuilder.Entity<Categorie>().ToTable("Categorien");
             modelBuilder.Entity<Politicus>().ToTable("Politici");
             modelBuilder.Entity<Project>().ToTable("Projecten");
             modelBuilder.Entity<Stem>().ToTable("Stemmen");
-            modelBuilder.Entity<ProjectAfbeelding>().ToTable("ProjectAfbeeldingen");
+            modelBuilder.Entity<VoorstelAfbeelding>().ToTable("VoorstelAfbeeldingen");
+
+
 
 
             // Table per Type inheritance: 

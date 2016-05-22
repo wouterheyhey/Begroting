@@ -26,6 +26,7 @@ namespace BL.Domain
         public Cluster cluster { get; set; }
         public string hoofdKleur { get; set; }
         public byte[] logo { get; set; }
+        public HashSet<FAQ> FAQs { get; set; }
 
 
         public HoofdGemeente(string naam)

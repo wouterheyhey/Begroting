@@ -24,6 +24,7 @@ namespace BL.Domain
         public DateTime? verificatieDatum { get; set; }
         public Gebruiker verificator { get; set; }
         public Gebruiker auteur { get; set; }
+        public HashSet<VoorstelAfbeelding> afbeeldingen { get; set; }
 
     }
 }

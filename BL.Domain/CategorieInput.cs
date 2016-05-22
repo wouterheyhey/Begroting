@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BL.Domain
 {
-    class CategorieInput
+    public class CategorieInput
     {
         public string type { get; set; }
         public string input { get; set; }

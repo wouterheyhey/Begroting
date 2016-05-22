@@ -20,7 +20,7 @@ namespace BL.Domain
         public float maxBedrag { get; set; }
         public string[] toegestanePostcodes { get; set; }
         public HashSet<InspraakItem> inspraakItems { get; set; }
-        public HashSet<ProjectAfbeelding> afbeeldingen { get; set; }
+        public byte[] afbeelding { get; set; }
         public Gebruiker beheerder { get; set; }
         public HashSet<BegrotingsVoorstel> voorstellen { get; set; }
         public bool isActief { get; set; }
