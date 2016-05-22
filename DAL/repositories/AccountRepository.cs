@@ -67,19 +67,51 @@ namespace DAL.repositories
         {
             return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente)).Where<Gebruiker>(x => x.userName == userName).SingleOrDefault();
         }
-        public IEnumerable<Gebruiker> GetGebruikers()
+        public bool UpdateGebruikers(List<Gebruiker> gebruikers)
         {
-            return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente));
+            try
+            {
+                foreach(Gebruiker g in gebruikers)
+                {
+                    Gebruiker ge = GetGebruiker(g.userName);
+                    if (ge.isActief =! g.isActief)
+                    {
+                        if (g.isActief)
+                        {
+                            EnableUser(g.userName);
+                        }
+                        else
+                        {
+                            DisableUser(g.userName);
+                        }
+                    }
+                    if (!Enum.Equals(ge.rolType,g.rolType))
+                    {
+                        SetRole(g.userName, g.rolType);
+                    }
+                    ctx.Entry(g.gemeente).State = System.Data.Entity.EntityState.Unchanged;
+                }
+                _ctx.SaveChanges();
+                ctx.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+        }
+
+        public IEnumerable<Gebruiker> GetGebruikers(string gemeente)
+        {
+            return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente)).Where(g => g.gemeente.naam == gemeente);
         }
         public bool DisableUser(string userName)
         {
             try
             {
                 _userManager.SetLockoutEnabledAsync(userName, true);
-                _ctx.SaveChanges();
                 Gebruiker g = GetGebruiker(userName);
                 g.isActief = false;
-                ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -110,11 +142,8 @@ namespace DAL.repositories
             {
                 _userManager.RemoveFromRoles(userName, _userManager.GetRoles(userName).ToArray<string>());
                 _userManager.AddToRole(userName, rolType.ToString());
-                _ctx.SaveChanges();
                 Gebruiker g = GetGebruiker(userName);
                 g.rolType = rolType;
-                ctx.Entry(g.gemeente).State = System.Data.Entity.EntityState.Unchanged;
-                ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)

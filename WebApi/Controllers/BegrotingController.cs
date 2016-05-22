@@ -38,7 +38,6 @@ namespace WebApi.Controllers
 
         }
    
-
         private DTOGemeenteCategorie MapGemCatToDTOGemCatWithParents(GemeenteCategorie gemCat, List<InspraakItem> gemCats)
         {
             DTOGemeenteCategorie d = new DTOGemeenteCategorie();

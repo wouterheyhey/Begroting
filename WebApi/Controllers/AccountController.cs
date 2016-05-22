@@ -30,18 +30,20 @@ namespace WebApi.Controllers
         {
             accMgr = new AccountManager();
         }
-
         public IHttpActionResult Get(string userName)
         {
             Gebruiker g = accMgr.GetGebruiker(userName);
             if (g == null) return StatusCode(HttpStatusCode.NoContent);
-            return Ok(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
-        } 
-        public IHttpActionResult Get()
+            return Ok(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType, g.isActief));
+        }
+
+        [AllowAnonymous]
+        [Route("GetGebruikers")]
+        public IHttpActionResult GetGebruikers(string gemeente)
         {
             try
             {
-                var gebrs = accMgr.GetGebruikers();
+                var gebrs = accMgr.GetGebruikers(gemeente);
                 if (gebrs == null)
                     return StatusCode(HttpStatusCode.NoContent);
                 else
@@ -49,7 +51,7 @@ namespace WebApi.Controllers
                     List<DTOGebruiker> gebruikers = new List<DTOGebruiker>();
                     foreach (Gebruiker g in gebrs)
                     {
-                        gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType));
+                        gebruikers.Add(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType, g.isActief));
                     }
                     return Ok(gebrs);
                 }
@@ -59,6 +61,15 @@ namespace WebApi.Controllers
             {
                 return StatusCode(HttpStatusCode.NoContent);
             }
+        }
+        public IHttpActionResult Put(List<DTOGebruiker> dtoGebruikers)
+        {
+            List<Gebruiker> gebruikers = new List<Gebruiker>();
+            foreach (DTOGebruiker g in  dtoGebruikers)
+            {
+                gebruikers.Add(new Gebruiker() { userName = g.userId, rolType = g.rolType, isActief = g.isActief });
+            }
+            return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
         public IHttpActionResult DisableUser(string userName)
         {

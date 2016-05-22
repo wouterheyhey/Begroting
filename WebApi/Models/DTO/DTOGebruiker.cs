@@ -13,13 +13,15 @@ namespace WebApi.Models.DTO
         public string naam { get; set; }
         public string gemeente { get; set; }
         public RolType rolType { get; set; }
+        public bool isActief { get; set; }
 
-        public DTOGebruiker(string email, string naam, string gemeente, RolType rolType)
+        public DTOGebruiker(string email, string naam, string gemeente, RolType rolType, bool isActief)
         {
             this.userId = email;
             this.naam = naam;
             this.gemeente = gemeente;
             this.rolType = rolType;
+            this.isActief = isActief;
         }
     }
 }
