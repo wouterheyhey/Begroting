@@ -95,6 +95,7 @@ namespace WebApi.Controllers
                             beschrijving = voorstel.beschrijving,
                             samenvatting = voorstel.samenvatting,
                             verificatieStatus = (int)voorstel.verificatieStatus,
+                            aantalStemmen = voorstel.aantalStemmen,
                             budgetWijzigingen = new List<DTOBudgetWijziging>()
                         };
 
