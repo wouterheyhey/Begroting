@@ -15,20 +15,26 @@ namespace WebApi.Controllers
     {
         private ProjectManager mgr = new ProjectManager();
         private BegrotingManager begMgr = new BegrotingManager();
+        private CategorieManager catMgr = new CategorieManager();
         [Route("itemsGET")]
         [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
-            IEnumerable<InspraakItem> lijnen = mgr.getInspraakItems(jaar, naam);
+            List<DTOGemeenteCategorie> lijnen = new List<DTOGemeenteCategorie>();
+            IEnumerable<InspraakItem> parents = mgr.getInspraakItems(jaar, naam).Where<InspraakItem>(x => x.parentGemCat == null);
 
-            if (lijnen == null || lijnen.Count() == 0)
+            if (parents == null || parents.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
-            return Ok(convertInspraakItems(lijnen));
+            foreach(InspraakItem item in parents)
+            {
+                lijnen.Add(convertInspraakItem(item, new List<DTOGemeenteCategorie>())); // via hoogste niveau in hierachie de braches opbouwen
+            }
+            return Ok(lijnen); 
            
         }
 
-
+         
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
@@ -58,44 +64,9 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-        [Route("projectGET")]
-        [HttpGet]
-        public IHttpActionResult GetProject(int jaar, string naam)
-        {
 
-            Project p = mgr.getProject(jaar, naam);
-            List<string> afb = new List<string>();
 
-            if(p == null)
-                return StatusCode(HttpStatusCode.NoContent);
-            if (p.afbeeldingen != null)
-            {
-                
-                foreach (var item in p.afbeeldingen)
-                {
-                    char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
-                    System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
-                    afb.Add(new string(chars));
-                }
-            }
 
-            DTOProject dp = new DTOProject()
-            {
-                id= p.Id,
-                projectScenario = (int)p.projectScenario,
-                titel = p.titel,
-                vraag = p.vraag,
-                extraInfo = p.extraInfo,
-                bedrag = p.bedrag,
-                minBedrag = p.minBedrag,
-                maxBedrag = p.maxBedrag,
-                boekjaar = jaar,
-                gemeente = naam,
-                cats = convertInspraakItems(p.inspraakItems),
-                afbeeldingen = afb
-            };
-            return Ok(dp);
-        }
 
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
@@ -192,9 +163,9 @@ namespace WebApi.Controllers
 
         [Route("putReactieEnStem/{id}")]
         [HttpPut]
-        public IHttpActionResult put(int id, string email)
+        public IHttpActionResult put(int id, [FromBody]string email)
         {
-            int idStem = mgr.changeAantalStemmenVoorstel(id, email);
+            int idStem = mgr.changeAantalStemmenEnReactiesVoorstel(id, email);
            return Ok(idStem);
         }
 
@@ -207,51 +178,112 @@ namespace WebApi.Controllers
         }
 
 
-
-        private List<DTOGemeenteCategorie> convertInspraakItems(IEnumerable<InspraakItem> lijnen)
+        [Route("projectGET")]
+        [HttpGet]
+        public IHttpActionResult GetProject(int jaar, string naam)
         {
-            List<DTOGemeenteCategorie> gemcats = new List<DTOGemeenteCategorie>();
 
-            foreach (var item in lijnen)
+            Project p = mgr.getProject(jaar, naam);
+            List<string> afb = new List<string>();
+
+            if (p == null)
+                return StatusCode(HttpStatusCode.NoContent);
+            if (p.afbeeldingen != null)
             {
-                var gemCat = item as GemeenteCategorie;
-                if (gemCat != null)
+
+                foreach (var item in p.afbeeldingen)
                 {
-                    gemcats.Add(new DTOGemeenteCategorie()
-                    {
-
-                        ID = gemCat.ID,
-                        totaal = gemCat.totaal,
-                        naamCat = gemCat.categorieNaam,
-                        inspraakNiveau = (int?)gemCat.inspraakNiveau,
-                        gemcatID = gemCat.parentGemCatId,
-                    });
-
+                    char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
+                    System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
+                    afb.Add(new string(chars));
                 }
             }
-            foreach (var item in lijnen)
-            {
-                var actie = item as Actie;
-                if (actie != null)
-                {
-                    var gemcat = gemcats.Where(x => x.ID == item.parentGemCatId).SingleOrDefault();
 
-                    if (gemcat.acties == null)
+            DTOProject dp = new DTOProject()
+            {
+                id = p.Id,
+                projectScenario = (int)p.projectScenario,
+                titel = p.titel,
+                vraag = p.vraag,
+                extraInfo = p.extraInfo,
+                bedrag = p.bedrag,
+                minBedrag = p.minBedrag,
+                maxBedrag = p.maxBedrag,
+                boekjaar = jaar,
+                gemeente = naam,
+                cats = new List<DTOGemeenteCategorie>(),
+                afbeeldingen = afb
+            };
+            foreach (GemeenteCategorie gemCat in p.inspraakItems.Where<InspraakItem>(x => x.parentGemCat == null))
+            {
+                dp.cats.Add(convertInspraakItem(gemCat, new List<DTOGemeenteCategorie>()));
+            }
+            return Ok(dp);
+        }
+
+        private DTOGemeenteCategorie convertInspraakItem(InspraakItem item, List<DTOGemeenteCategorie> gemCats)
+
+        {
+            var gemCat = item as GemeenteCategorie;
+
+            if (gemCat != null)
+            {
+                DTOGemeenteCategorie d = MapGemCatToDTOGemCat(gemCat);
+                gemCats.Add(d);
+
+                foreach (InspraakItem ii in catMgr.GetChildrenInspraakItem(item))
+                {
+                    DTOGemeenteCategorie dtoGemCat = convertInspraakItem(ii, gemCats);  // recursie om lagere niveaus op te halen
+                    if (dtoGemCat.ID != 0)
                     {
-                        gemcat.acties = new List<DTOActie>();
+                        d.childCats.Add(dtoGemCat);
                     }
-                    gemcat.acties.Add(new DTOActie()
-                    {
-                        actieKort = actie.actieKort,
-                        actieLang = actie.actieLang,
-                        inspraakNiveau = (int)actie.inspraakNiveau,
-                        uitgaven = actie.uitgaven,
-                        ID = actie.ID,
-                        bestuurtype = (int)actie.bestuurType
-                    });
                 }
+                return d;
+
             }
-            return gemcats;
+
+            var actie = item as Actie;
+            if (actie != null)
+            {
+                var gemcat = gemCats.Where(x => x.ID == item.parentGemCatId).SingleOrDefault();
+
+                if (gemcat.acties == null)
+                {
+                    gemcat.acties = new List<DTOActie>();
+                }
+                gemcat.acties.Add(MapActieToDTOActie(actie));
+            }
+
+            return new DTOGemeenteCategorie(); // niets terug sturen. Correcte gemeenteCategorie werd hierboven teruggestuurd
+        }
+
+        private DTOActie MapActieToDTOActie(Actie actie)
+        {
+            return new DTOActie()
+            {
+                actieKort = actie.actieKort,
+                actieLang = actie.actieLang,
+                inspraakNiveau = (int)actie.inspraakNiveau,
+                uitgaven = actie.uitgaven,
+                ID = actie.ID,
+                bestuurtype = (int)actie.bestuurType
+            };
+        }
+
+        private DTOGemeenteCategorie MapGemCatToDTOGemCat(GemeenteCategorie gemCat)
+        {
+            DTOGemeenteCategorie d = new DTOGemeenteCategorie();
+            d.ID = gemCat.ID;
+            d.totaal = gemCat.totaal;
+            d.naamCat = gemCat.categorieNaam;
+            d.inspraakNiveau = (int?)gemCat.inspraakNiveau;
+            d.gemcatID = gemCat.parentGemCatId;
+            d.catCode = gemCat.categorieCode;
+            d.catType = gemCat.categorieType.ToString();
+            d.childCats = new List<DTOGemeenteCategorie>();
+
+            return d;
         }
 
     }

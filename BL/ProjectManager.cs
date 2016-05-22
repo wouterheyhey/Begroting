@@ -72,9 +72,10 @@ namespace BL
             repo.UpdateVoorstel( id, status);
         }
 
-        public int changeAantalStemmenVoorstel(int id, string email)
+        public int changeAantalStemmenEnReactiesVoorstel(int id, string email)
         {
-           return repo.updateAantalStemmenVoorstel(id, email);
+           
+           return repo.updateAantalStemmenEnReactiesVoorstel(id, email);
         }
     }
 }

@@ -43,6 +43,12 @@ namespace BL
             return children;
         }
 
+        public IEnumerable<InspraakItem> GetChildrenInspraakItem(InspraakItem ii)
+        {
+            List<InspraakItem> children = repo.GetChildrenInspraakItem(ii).ToList<InspraakItem>();
+            return children;
+        }
+
         public IEnumerable<InspraakItem> GetAllParents(InspraakItem ii, List<InspraakItem> parents)
         {
             List<InspraakItem> prnts = repo.GetParentsInspraakItem(ii).ToList<InspraakItem>();
@@ -57,6 +63,9 @@ namespace BL
             }
             return parents;
         }
+
+
+
 
 
     }

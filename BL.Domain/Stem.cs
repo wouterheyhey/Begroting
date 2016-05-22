@@ -9,7 +9,7 @@ namespace BL.Domain
     public class Stem
     {
         public int ID { get; set; }
-        DateTime registratieDatum { get; set; }
-        Gebruiker gebruiker { get; set; }
+       public  DateTime? registratieDatum { get; set; }
+        public Gebruiker gebruiker { get; set; }
     }
 }

@@ -15,7 +15,6 @@ namespace WebApi.Models.DTO
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string catA { get; set; }
-     //   public Dictionary<string, string> cats { get; set; }
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public string catB { get; set; }
@@ -33,6 +32,16 @@ namespace WebApi.Models.DTO
 
         [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
         public int? gemcatID { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public List<DTOGemeenteCategorie> childCats { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string catCode { get; set; }
+
+        [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+        public string catType { get; set; }
+
 
 
     }
