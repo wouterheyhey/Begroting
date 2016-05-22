@@ -23,6 +23,11 @@ namespace DAL.repositories
         {
             return ctx.Acties.Where(a => a.parentGemCatId == id).Distinct();
         }
+        public IEnumerable<FinancieelOverzicht> getBegrotingen()
+        {
+            return from g in  ctx.FinancieleOverzichten select g;
+            //.OfType<GemeenteCategorie>().Select(z=> z.categorieNaam)
+        }
 
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
         {

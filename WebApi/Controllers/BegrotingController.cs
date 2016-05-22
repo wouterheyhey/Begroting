@@ -11,6 +11,7 @@ using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
+    [RoutePrefix("api/begroting")]
     public class BegrotingController : ApiController
     {
         private BegrotingManager begMgr = new BegrotingManager();
@@ -97,6 +98,14 @@ namespace WebApi.Controllers
             }
 
             return Ok(DTOacties);
+        }
+
+        [Route("getBegrotingen")]
+        [HttpGet]
+        public IHttpActionResult getBegrotingen()
+        {
+            IEnumerable<FinancieelOverzicht> jbs = begMgr.readBegrotingen();
+            return Ok(jbs);
         }
 
         //Deze heb ik even aangepast omdat we nu 2 get hebben met zelfde paramaters

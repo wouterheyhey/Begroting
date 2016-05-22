@@ -20,7 +20,7 @@ namespace WebApi.Models.DTO
         public int? boekjaar { get; set; }
         public string gemeente { get; set; }
         public bool isActief { get; set; }
-        public List<string> afbeeldingen { get; set; }
+        public string afbeelding { get; set; }
         public List<DTOBegrotingVoorstel> voorstellen { get; set; }
 
     }

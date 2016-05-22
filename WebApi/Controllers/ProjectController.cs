@@ -57,7 +57,7 @@ namespace WebApi.Controllers
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
-              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeeldingen);
+              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
 
             if(id == 0)
                 return BadRequest("Er is iets misgelopen bij het registreren van het project!");
@@ -206,21 +206,16 @@ namespace WebApi.Controllers
         {
 
             Project p = mgr.getProject(jaar, naam);
-            List<string> afb = new List<string>();
+            string afb="";
 
             if (p == null)
                 return StatusCode(HttpStatusCode.NoContent);
             if (p.afbeelding != null)
             {
 
-                foreach (var item in p.afbeelding)
-                {
-                    // Nadya aan te passen
-                    ///////////////////////
-                 //   char[] chars = new char[item.Afbeelding.Length / sizeof(char)];
-                 //   System.Buffer.BlockCopy(item.Afbeelding, 0, chars, 0, item.Afbeelding.Length);
-                 //   afb.Add(new string(chars));
-                }
+                 char[] chars = new char[p.afbeelding.Length / sizeof(char)];
+                  afb = new string(chars);
+               
             }
             
 
@@ -237,7 +232,7 @@ namespace WebApi.Controllers
                 boekjaar = jaar,
                 gemeente = naam,
                 cats = new List<DTOGemeenteCategorie>(),
-                afbeeldingen = afb
+                afbeelding = afb
             };
             foreach (GemeenteCategorie gemCat in p.inspraakItems.Where<InspraakItem>(x => x.parentGemCat == null))
             {

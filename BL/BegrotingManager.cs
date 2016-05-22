@@ -21,6 +21,12 @@ namespace BL
         {
             return repo.getGemeenteCategories(jaar, naam);
         }
+
+        public IEnumerable<FinancieelOverzicht> readBegrotingen()
+        {
+            return repo.getBegrotingen();
+        }
+
         public IEnumerable<Actie> readActies(int id)
         {
             return repo.GetActies(id);

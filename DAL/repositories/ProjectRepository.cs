@@ -19,7 +19,7 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public int createProject(Project p, IDictionary<int, int> inspraakItems, List<string> afbeeldingen, int? boekjaar, string gemeente)
+        public int createProject(Project p, IDictionary<int, int> inspraakItems, string afbeelding, int? boekjaar, string gemeente)
         {
             //momenteel mag er maar 1 project zijn per begroting
             Project pp = readProject((int)boekjaar, gemeente);
@@ -43,17 +43,14 @@ namespace DAL.repositories
                     }
                 }
 
-                if (afbeeldingen != null)
+                if (afbeelding != null)
                 {
                     // Nadya aan te passen
                   //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
-                    foreach (var item in afbeeldingen)
-                    {
-                        byte[] bytes = new byte[item.Length * sizeof(char)];
-                        System.Buffer.BlockCopy(item.ToCharArray(), 0, bytes, 0, bytes.Length);
-                        VoorstelAfbeelding a = new VoorstelAfbeelding(bytes);
-                //        p.afbeelding.Add(a);
-                    }
+                  
+                        byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
+                        System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
+                    p.afbeelding = bytes;
 
                 }
 
