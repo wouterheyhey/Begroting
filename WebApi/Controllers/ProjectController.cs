@@ -117,6 +117,19 @@ namespace WebApi.Controllers
 
                             bv.budgetWijzigingen.Add(dw); 
                         }
+                        //voor elke reactie op een voorstel
+                        foreach (var reactie in voorstel.reacties)
+                        {
+                            DTOReactie re = new DTOReactie()
+                            {
+                                //@TODO veranderen naar reactie.auteur.email
+                                email = "test@test.be",
+                                beschrijving = reactie.beschrijving,
+                            };
+                            re.reactieDatum = ((DateTime)reactie.reactieDatum).ToString("d");
+
+                            bv.reacties.Add(re);
+                        }
 
                         lbv.Add(bv);
                     }
@@ -162,12 +175,20 @@ namespace WebApi.Controllers
             return Ok();
         }
 
-        [Route("putReactieEnStem/{id}")]
+        [Route("putStem/{id}")]
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]string email)
         {
-            int idStem = mgr.changeAantalStemmenEnReactiesVoorstel(id, email);
-           return Ok(idStem);
+            int idStem = mgr.changeAantalStemmenVoorstel(id, email);
+            return Ok(idStem);
+        }
+
+        [Route("postReactie/{id}")]
+        [HttpPost]
+        public IHttpActionResult postReactie(int id, DTOReactie r)
+        {
+            int idStem = mgr.addReactieVoorstel(id, r.email, r.beschrijving);
+            return Ok(idStem);
         }
 
         [Route("putVoorstel/{id}")]

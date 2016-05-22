@@ -15,7 +15,10 @@ namespace WebApi.Models.DTO
         public List<DTOBudgetWijziging> budgetWijzigingen { get; set; }
         public int verificatieStatus { get; set; }
         public string verificatorEmail { get; set; } 
-        public string auteurEmail { get; set; } 
+        public string auteurEmail { get; set; }
+        //dit veld nodig voor Angular 2 waybinding
+        public string reactie { get; set; }
+        public List<DTOReactie> reacties { get; set; }
 
     }
 }

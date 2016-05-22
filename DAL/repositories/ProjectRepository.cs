@@ -69,7 +69,7 @@ namespace DAL.repositories
             
         }
 
-        public int updateAantalStemmenEnReactiesVoorstel(int id, string email)
+        public int updateAantalStemmenVoorstel(int id, string email)
         {
             //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
             BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).Include(c => c.stemmen).SingleOrDefault();
@@ -80,11 +80,36 @@ namespace DAL.repositories
                     registratieDatum = DateTime.Now
                 };
                 v.aantalStemmen += 1;
-                if(v.stemmen == null)
+                if (v.stemmen == null)
                 {
                     v.stemmen = new HashSet<Stem>();
                 }
                 v.stemmen.Add(s);
+                ctx.Entry(v).State = EntityState.Modified;
+                ctx.SaveChanges();
+                return v.Id;
+            }
+            else
+                return 0;
+        }
+
+        public int createReactieVoorstel(int id, string email, string reactie)
+        {
+            //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
+            BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).Include(c => c.stemmen).SingleOrDefault();
+            if (v != null)
+            {
+                BegrotingsVoorstelReactie re = new BegrotingsVoorstelReactie()
+                {
+                    reactieDatum = DateTime.Now,
+                    beschrijving = reactie
+                };
+
+                if (v.reacties == null)
+                {
+                    v.reacties = new HashSet<BegrotingsVoorstelReactie>();
+                }
+                v.reacties.Add(re);
                 ctx.Entry(v).State = EntityState.Modified;
                 ctx.SaveChanges();
                 return v.Id;
