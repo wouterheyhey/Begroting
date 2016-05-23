@@ -19,6 +19,13 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
+        public BegrotingRepository(UnitOfWork uow)
+        {
+            ctx = uow.Context;
+            ctx.Database.Initialize(false);
+            ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
+        }
+
         public IEnumerable<Actie> GetActies(int id)
         {
             return ctx.Acties.Where(a => a.parentGemCatId == id).Distinct();

@@ -10,13 +10,12 @@ using System.Web.Http;
 namespace WebApi.Controllers
 {
     public class CategorieController : ApiController
-    {
-        private CategorieManager mgr = new CategorieManager();
-        
+    {        
 
         // GET: api/Category
          public IHttpActionResult Get()
         {
+            CategorieManager mgr = new CategorieManager();
             var categorien = mgr.GetCategorien();
 
             if (categorien == null || categorien.Count() == 0)

@@ -19,6 +19,14 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
+        // Constructor for Unit of Work
+        public ProjectRepository(UnitOfWork uow)
+        {
+            ctx = uow.Context;
+            ctx.Database.Initialize(false);
+            ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
+        }
+
         public int createProject(Project p, IDictionary<int, int> inspraakItems, string afbeelding, int? boekjaar, string gemeente)
         {
             //momenteel mag er maar 1 project zijn per begroting
@@ -137,20 +145,17 @@ namespace DAL.repositories
                 }
             }
             ctx.Voorstellen.Add(b);
-            ctx.SaveChanges();
+
+            //begrotingsvoorstel toevoegen aan project
+            Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id == id).SingleOrDefault();
+            p.voorstellen.Add(b);
+
             //auteurEmail komt uit token dus kan niet null of fout zijn
             //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
 
             /* Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
              b.auteur = g; */
 
-            //begrotingsvoorstel toevoegen aan project
-
-            Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id ==id).SingleOrDefault();
-
-
-            p.voorstellen.Add(b);
-            ctx.Entry(p).State = EntityState.Modified;
             ctx.SaveChanges();
 
         }
@@ -190,7 +195,7 @@ namespace DAL.repositories
                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                .Select(c => c.Id).SingleOrDefault();
 
-            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Include(nameof(Project.afbeelding)).Where(p => p.begroting.Id == id).SingleOrDefault();
+            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Where(p => p.begroting.Id == id).SingleOrDefault();
         }
 
         public IEnumerable<Project> readProjects(string gemeente)

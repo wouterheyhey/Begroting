@@ -10,9 +10,24 @@ namespace DAL.repositories
 {
     public class FinancieleLijnRepository
     {
-        private readonly BegrotingRepository begRepo = new BegrotingRepository();
-        private readonly CategorieRepository catRepo = new CategorieRepository();
-        private readonly GemeenteRepository gemRepo = new GemeenteRepository();
+
+        private BegrotingRepository begRepo;
+        private CategorieRepository catRepo;
+        private GemeenteRepository gemRepo;
+
+        public FinancieleLijnRepository()
+        {
+            begRepo = new BegrotingRepository();
+            catRepo = new CategorieRepository();
+            gemRepo = new GemeenteRepository();
+        }
+        public FinancieleLijnRepository(UnitOfWork uow)
+        {
+            begRepo = new BegrotingRepository(uow);
+            catRepo = new CategorieRepository(uow);
+            gemRepo = new GemeenteRepository(uow);
+        }
+
 
         public List<FinancieleLijn> ImportFinancieleLijnen() { return null; }  // Uit te werken
 
@@ -33,6 +48,8 @@ namespace DAL.repositories
 
         public List<InspraakItem> ImportFinancieleLijnen(string categoryFile, int year)
         {
+
+
             List<InspraakItem> inspraakItems = new List<InspraakItem>();
             string importPath = (new FileLocator()).findExcelSourceDir();
             GemeenteCategorie gemCat;
@@ -44,6 +61,7 @@ namespace DAL.repositories
             Categorie cat;
             string catCode;
             string catName;
+
 
             // Single calls to the DB instead of repeating for each loop
             List<HoofdGemeente> gems = gemRepo.ReadGemeentes().ToList<HoofdGemeente>();
@@ -114,7 +132,7 @@ namespace DAL.repositories
 
             }
 
-            catRepo.SaveContext();
+           // catRepo.SaveContext();
             return inspraakItems;
         }
 

@@ -13,13 +13,12 @@ namespace WebApi.Controllers
     [RoutePrefix("api/Project")]
     public class ProjectController : ApiController
     {
-        private ProjectManager mgr = new ProjectManager();
-        private BegrotingManager begMgr = new BegrotingManager();
-        private CategorieManager catMgr = new CategorieManager();
+
         [Route("itemsGET")]
         [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
+            ProjectManager mgr = new ProjectManager();
             List<DTOGemeenteCategorie> lijnen = new List<DTOGemeenteCategorie>();
             IEnumerable<InspraakItem> parents = mgr.getInspraakItems(jaar, naam).Where<InspraakItem>(x => x.parentGemCat == null);
 
@@ -39,6 +38,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
         {
+            ProjectManager mgr = new ProjectManager();
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
@@ -64,13 +64,11 @@ namespace WebApi.Controllers
             return Ok(id);
         }
 
-
-
-
-
+       
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
         {
+            ProjectManager mgr = new ProjectManager();
             List<Project> p = mgr.getProjects( naam).ToList();
 
             if (p == null || p.Count() == 0)
@@ -176,6 +174,9 @@ namespace WebApi.Controllers
             }
             mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
                 p.totaal, bugetwijzigingen);
+            // Commit UoW to the database
+            // Previous saves on the context were blocked because of the presence of the UnitOfWork
+            uowMgr.Save();
             return Ok();
         }
 
@@ -183,6 +184,7 @@ namespace WebApi.Controllers
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]string email)
         {
+            ProjectManager mgr = new ProjectManager();
             int idStem = mgr.changeAantalStemmenVoorstel(id, email);
             return Ok(idStem);
         }
@@ -191,6 +193,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult postReactie(int id, DTOReactie r)
         {
+            ProjectManager mgr = new ProjectManager();
             int idStem = mgr.addReactieVoorstel(id, r.email, r.beschrijving);
             return Ok(idStem);
         }
@@ -199,6 +202,7 @@ namespace WebApi.Controllers
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]int status)
         {
+            ProjectManager mgr = new ProjectManager();
             mgr.changeVoorstel(id, status);
             return Ok();
         }
@@ -208,7 +212,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetProject(int jaar, string naam)
         {
-
+            ProjectManager mgr = new ProjectManager();
             Project p = mgr.getProject(jaar, naam);
             string afb="";
 
@@ -248,6 +252,7 @@ namespace WebApi.Controllers
         private DTOGemeenteCategorie convertInspraakItem(InspraakItem item, List<DTOGemeenteCategorie> gemCats)
 
         {
+            CategorieManager catMgr = new CategorieManager();
             var gemCat = item as GemeenteCategorie;
 
             if (gemCat != null)

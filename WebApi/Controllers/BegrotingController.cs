@@ -14,12 +14,11 @@ namespace WebApi.Controllers
     [RoutePrefix("api/begroting")]
     public class BegrotingController : ApiController
     {
-        private BegrotingManager begMgr = new BegrotingManager();
-        private FinancieleLijnManager finMgr = new FinancieleLijnManager();
-        private CategorieManager catMgr = new CategorieManager();
 
         public IHttpActionResult Get(int jaar, string naam)
         {
+            CategorieManager catMgr = new CategorieManager();
+            BegrotingManager begMgr = new BegrotingManager();
             IEnumerable<GemeenteCategorie> gemCats = begMgr.readGemeenteCategories(jaar, naam);
 
             if (gemCats == null || gemCats.Count() == 0)
@@ -79,7 +78,9 @@ namespace WebApi.Controllers
 
         public IHttpActionResult Get(int id)
         {
+            BegrotingManager begMgr = new BegrotingManager();
             IEnumerable<Actie> acties = begMgr.readActies(id);
+
             if (acties == null || acties.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
 
@@ -104,6 +105,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IHttpActionResult getBegrotingen(string naam)
         {
+            BegrotingManager begMgr = new BegrotingManager();
             IEnumerable<JaarBegroting> jbs = begMgr.readBegrotingen(naam);
             if (jbs == null || jbs.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
@@ -140,13 +142,11 @@ namespace WebApi.Controllers
             return Ok(begrotingen);
         }
 
-        //Deze heb ik even aangepast omdat we nu 2 get hebben met zelfde paramaters
         public IHttpActionResult Get()
         {
+            FinancieleLijnManager finMgr = new FinancieleLijnManager();
             try
             {
-                //whe 11/5 niet meer nodig??
-                //catMgr.SetChildrenCategorien();
                 // 2020 omdat dit relatief weinig data bevat
                 finMgr.LoadFinancieleLijnen("gemeente_categorie_acties_jaartal_uitgaven.xlsx", 2020);
             }
