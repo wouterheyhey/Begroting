@@ -220,6 +220,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="packages.config" />
+    <Content Include="App_Data\gemeente_categorie_acties_jaartal_uitgaven.xlsx" />
+    <Content Include="App_Data\Config_Categorien.xls" />
+    <Content Include="App_Data\Config_Clusters.xls" />
+    <Content Include="App_Data\Config_Gemeenten.xls" />
+    <Content Include="App_Data\Config_postcodesHoofdgemeentes.xlsx" />
+    <Content Include="App_Data\gemeentes_postcodes.xlsx" />
     <None Include="Properties\PublishProfiles\begroting-webapi.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -228,9 +234,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BL.Domain\BL.Domain.csproj">
       <Project>{f74e1c27-d554-4716-bcc0-fed8d1041cf1}</Project>
