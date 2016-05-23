@@ -78,13 +78,14 @@ namespace WebApi.Controllers
             return Ok(id);
         }
         [Route("updateProject/{id}")]
-        [HttpPost]
+        [HttpPut]
         public IHttpActionResult put(int id, DTOProject p)
         {
             // Implementatie van de UoW pattern voor de post methodes
             // Voordelen: minder roundtrips, gebruik van transacties
             UnitOfWorkManager uowMgr = new UnitOfWorkManager();
-            ProjectManager mgr = new ProjectManager(uowMgr);
+            // ProjectManager mgr = new ProjectManager(uowMgr);
+            ProjectManager mgr = new ProjectManager();
 
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();

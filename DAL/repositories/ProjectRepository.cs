@@ -74,7 +74,7 @@ namespace DAL.repositories
 
         public int updateProject(int id, ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
         {
-            Project pp = ctx.Projecten.Find(id);
+            Project pp = ctx.Projecten.Include(i => i.inspraakItems).Where( p => p.Id ==id).SingleOrDefault();
             if (pp != null)
             {
                 if (afbeelding != null)
@@ -101,6 +101,7 @@ namespace DAL.repositories
                 pp.projectScenario = ps;
                 pp.titel = tit;
                 pp.vraag = vra;
+                pp.isActief = isActief;
 
                 ctx.Entry(pp).State = EntityState.Modified;
                 ctx.SaveChanges();  
@@ -196,10 +197,6 @@ namespace DAL.repositories
 
         }
 
-        private void updateProject(Project p, BegrotingsVoorstel b)
-        {
-            
-        }
 
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
         {
