@@ -33,6 +33,27 @@ namespace WebApi.Controllers
            
         }
 
+
+        // void return type: exploit the pass by ref of inspraakitems
+        private void AddInspraakItems(List<DTOGemeenteCategorie> cats, IDictionary<int, int> inspraakItems)
+        {
+            foreach(DTOGemeenteCategorie gemCat in cats)
+            {
+                inspraakItems.Add(new KeyValuePair<int, int>(gemCat.ID, (int)gemCat.inspraakNiveau));
+                if (gemCat.acties!= null)
+                {
+                    foreach(DTOActie actie in gemCat.acties)
+                    {
+                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                    }
+                }
+                if (gemCat.childCats != null)
+                {
+                    AddInspraakItems(gemCat.childCats, inspraakItems); // recursie
+                }
+            }
+        }
+
          
         [Route("postProject")]
         [HttpPost]
@@ -45,39 +66,9 @@ namespace WebApi.Controllers
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
-            //nivA
-            if(p.cats != null)
+            if (p.cats != null)
             {
-                foreach (var A in p.cats)
-                {
-                    inspraakItems.Add(new KeyValuePair<int, int>(A.ID, (int)A.inspraakNiveau));
-
-                    if (A.childCats != null)
-                    {
-                        //nivB
-                        foreach (var B in A.childCats)
-                        {
-                            inspraakItems.Add(new KeyValuePair<int, int>(B.ID, (int)B.inspraakNiveau));
-
-                            //nivC
-                            if (B.childCats != null)
-                            {
-                                foreach (var C in B.childCats)
-                                {
-                                    inspraakItems.Add(new KeyValuePair<int, int>(C.ID, (int)C.inspraakNiveau));
-                                    if (C.acties != null)
-                                    {
-                                        foreach (var actie in C.acties)
-                                        {
-                                            inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
+                AddInspraakItems(p.cats, inspraakItems);
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
@@ -86,7 +77,7 @@ namespace WebApi.Controllers
 
             return Ok(id);
         }
-        [Route("updateProject//{id}")]
+        [Route("updateProject/{id}")]
         [HttpPost]
         public IHttpActionResult put(int id, DTOProject p)
         {
@@ -98,39 +89,9 @@ namespace WebApi.Controllers
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
-            //nivA
             if (p.cats != null)
             {
-                foreach (var A in p.cats)
-                {
-                    inspraakItems.Add(new KeyValuePair<int, int>(A.ID, (int)A.inspraakNiveau));
-
-                    if (A.childCats != null)
-                    {
-                        //nivB
-                        foreach (var B in A.childCats)
-                        {
-                            inspraakItems.Add(new KeyValuePair<int, int>(B.ID, (int)B.inspraakNiveau));
-
-                            //nivC
-                            if (B.childCats != null)
-                            {
-                                foreach (var C in B.childCats)
-                                {
-                                    inspraakItems.Add(new KeyValuePair<int, int>(C.ID, (int)C.inspraakNiveau));
-                                    if (C.acties != null)
-                                    {
-                                        foreach (var actie in C.acties)
-                                        {
-                                            inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
+                AddInspraakItems(p.cats, inspraakItems);
             }
 
             int idP = mgr.changeProject(id, (ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
