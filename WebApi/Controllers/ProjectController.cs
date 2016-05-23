@@ -38,7 +38,10 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
         {
-            ProjectManager mgr = new ProjectManager();
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
@@ -79,6 +82,7 @@ namespace WebApi.Controllers
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+            uowMgr.Save();
 
             if(id == 0)
                 return BadRequest("Er is iets misgelopen bij het registreren van het project!");
@@ -179,6 +183,8 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
         {
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
             UnitOfWorkManager uowMgr = new UnitOfWorkManager();
             ProjectManager mgr = new ProjectManager(uowMgr);
 

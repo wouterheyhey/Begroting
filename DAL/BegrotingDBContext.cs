@@ -61,6 +61,8 @@ namespace DAL
 
             modelBuilder.Entity<Cluster>().Property(x => x.name).IsRequired().HasMaxLength(120);
 
+            modelBuilder.Entity<Project>().HasRequired(x=>x.begroting);
+
             // 0..1 to 1 relationship
             modelBuilder.Entity<CategorieInput>().HasRequired(x => x.gemCategorie).WithOptional(x => x.categorieInput);
 
