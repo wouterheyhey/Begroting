@@ -1,14 +1,15 @@
 ﻿using BL;
-using BL.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using WebApi.Models.DTO;
 
 namespace WebApi.Controllers
 {
+    [RoutePrefix("api/Gemeente")]
     public class GemeenteController : ApiController
     {
 
@@ -35,7 +36,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPut]
-        public IHttpActionResult Put(HoofdGemeente h)
+        public IHttpActionResult Put(DTOHoofdGemeente h)
         {
             GemeenteManager mgr = new GemeenteManager();
             mgr.ChangeGemeente(h.naam, h.aantalBewoners, h.oppervlakte, h.oppervlakteMaat, h.isMan, h.isVrouw,
@@ -44,11 +45,29 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public IHttpActionResult Put(int id,DTOHoofdGemeente h)
+        {
+            GemeenteManager mgr = new GemeenteManager();
+            int i = mgr.ChangeGemeenteInput(id, h.faqs, h.hoofdkleur, h.logo);
+
+            return Ok(i);
+        }
+
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
             GemeenteManager mgr = new GemeenteManager();
             mgr.deleteBestuurlid(id);
+            return Ok();
+        }
+
+        [Route("deleteFAQ/{id}")]
+        [HttpGet]
+        public IHttpActionResult DeleteFAQ(int id)
+        {
+            GemeenteManager mgr = new GemeenteManager();
+            mgr.deleteFAQ(id);
             return Ok();
         }
 

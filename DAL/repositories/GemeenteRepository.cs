@@ -35,7 +35,7 @@ namespace DAL.repositories
 
         public HoofdGemeente ReadGemeente(string gemeenteNaam)
         {
-            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.bestuur)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.FAQs)).Include(nameof(HoofdGemeente.bestuur)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
         // SPRINT2: wordt niet gebruikt
@@ -55,7 +55,7 @@ namespace DAL.repositories
 
             HoofdGemeente g = ctx.Gemeenten.Include(nameof(HoofdGemeente.bestuur)).Where(x => x.naam == naam).SingleOrDefault();
 
-            if (g.bestuur != null)
+            if (bestuur != null)
             {
                 foreach (var item in bestuur)
                 {
@@ -83,6 +83,46 @@ namespace DAL.repositories
             Politicus p = ctx.Politici.Find(id);
             ctx.Politici.Remove(p);
             ctx.SaveChanges();
+        }
+
+        public void deleteFAQ(int id)
+        {
+            FAQ f = ctx.FAQs.Find(id);
+            ctx.FAQs.Remove(f);
+            ctx.SaveChanges();
+        }
+
+        public int updateGemeenteInput(int id, HashSet<FAQ> faqs, string hoofdkleur, string logo)
+        {
+           HoofdGemeente g =  ctx.Gemeenten.OfType<HoofdGemeente>().Include(f => f.FAQs).Where(i => i.HoofdGemeenteID == id).SingleOrDefault();
+
+            if(g != null)
+            {
+                g.hoofdKleur = hoofdkleur;
+
+                byte[] bytes = new byte[logo.Length * sizeof(char)];
+                System.Buffer.BlockCopy(logo.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+                g.logo = bytes;
+
+                if (faqs != null)
+                {
+                    foreach (var item in faqs)
+                    {
+                        if (item.id == 0)
+                        {
+                            g.FAQs.Add(item);
+
+                        }
+                    }
+                }
+
+                ctx.SaveChanges();
+                return g.HoofdGemeenteID;
+            }
+
+            return 0;
+
         }
 
 
