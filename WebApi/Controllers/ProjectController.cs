@@ -81,13 +81,62 @@ namespace WebApi.Controllers
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
-              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+              p.minBedrag, p.maxBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
             uowMgr.Save();
 
             return Ok(id);
         }
+        [Route("updateProject//{id}")]
+        [HttpPost]
+        public IHttpActionResult put(int id, DTOProject p)
+        {
+            //K= id + V= inspraakNiveau
+            IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
-       
+            //nivA
+            if (p.cats != null)
+            {
+                foreach (var A in p.cats)
+                {
+                    inspraakItems.Add(new KeyValuePair<int, int>(A.ID, (int)A.inspraakNiveau));
+
+                    if (A.childCats != null)
+                    {
+                        //nivB
+                        foreach (var B in A.childCats)
+                        {
+                            inspraakItems.Add(new KeyValuePair<int, int>(B.ID, (int)B.inspraakNiveau));
+
+                            //nivC
+                            if (B.childCats != null)
+                            {
+                                foreach (var C in B.childCats)
+                                {
+                                    inspraakItems.Add(new KeyValuePair<int, int>(C.ID, (int)C.inspraakNiveau));
+                                    if (C.acties != null)
+                                    {
+                                        foreach (var actie in C.acties)
+                                        {
+                                            inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            int idP = mgr.changeProject(id, (ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+
+            if (idP == 0)
+                return BadRequest("Er is iets misgelopen bij het updaten van het project!");
+            return Ok(idP);
+        }
+
+
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
         {

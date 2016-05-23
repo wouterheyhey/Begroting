@@ -74,6 +74,46 @@ namespace DAL.repositories
             
         }
 
+        public int updateProject(int id, ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
+        {
+            Project pp = ctx.Projecten.Find(id);
+            if (pp != null)
+            {
+                if (afbeelding != null)
+                {
+                    // Nadya aan te passen
+                    //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
+
+                    byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
+                    System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
+                    pp.afbeelding = bytes;
+
+                }
+                if (inspraakItems != null)
+                {
+                    //ID = key  &&  value = InspraakNiveau
+                    foreach (var item in inspraakItems)
+                    {
+                        InspraakItem i = updateInspraakItem(item.Key, item.Value);
+                    }
+
+                }
+
+                pp.bedrag = bedrag;
+                pp.maxBedrag = max;
+                pp.minBedrag = min;
+                pp.projectScenario = ps;
+                pp.titel = tit;
+                pp.vraag = vra;
+
+                ctx.Entry(pp).State = EntityState.Modified;
+                ctx.SaveChanges();
+                return pp.Id;
+            }
+            else
+                return 0;
+        }
+
         public int updateAantalStemmenVoorstel(int id, string email)
         {
             //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();

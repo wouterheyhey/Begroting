@@ -45,6 +45,11 @@ namespace BL
            return  repo.createProject(p, inspraakItems, afbeelding ,boekjaar, gemeente);
         }
 
+        public int changeProject(int id, ProjectScenario projectScenario, string titel, string vraag, string extraInfo, float bedrag, float minBedrag, float maxBedrag, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
+        {
+            return repo.updateProject(id, projectScenario, titel, vraag, extraInfo, bedrag, minBedrag, maxBedrag, inspraakItems, boekjaar, gemeente, isActief, afbeelding);
+        }
+
         public Project getProject(int jaar, string gemeente)
         {
             return repo.readProject(jaar, gemeente);
