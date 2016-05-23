@@ -100,10 +100,13 @@ namespace DAL.repositories
             {
                 g.hoofdKleur = hoofdkleur;
 
-                byte[] bytes = new byte[logo.Length * sizeof(char)];
-                System.Buffer.BlockCopy(logo.ToCharArray(), 0, bytes, 0, bytes.Length);
-
-                g.logo = bytes;
+                if(logo != null)
+                {
+                    byte[] bytes = new byte[logo.Length * sizeof(char)];
+                    System.Buffer.BlockCopy(logo.ToCharArray(), 0, bytes, 0, bytes.Length);
+                    g.logo = bytes;
+                }
+                
 
                 if (faqs != null)
                 {

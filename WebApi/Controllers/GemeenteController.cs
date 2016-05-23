@@ -31,7 +31,6 @@ namespace WebApi.Controllers
             var gemeente = mgr.GetGemeente(naam);
             if (gemeente == null)
                 return StatusCode(HttpStatusCode.NoContent);
-
             return Ok(gemeente);
         }
 
@@ -49,7 +48,7 @@ namespace WebApi.Controllers
         public IHttpActionResult Put(int id,DTOHoofdGemeente h)
         {
             GemeenteManager mgr = new GemeenteManager();
-            int i = mgr.ChangeGemeenteInput(id, h.faqs, h.hoofdkleur, h.logo);
+            int i = mgr.ChangeGemeenteInput(id, h.FAQs, h.hoofdkleur, h.logo);
 
             return Ok(i);
         }
@@ -63,7 +62,7 @@ namespace WebApi.Controllers
         }
 
         [Route("deleteFAQ/{id}")]
-        [HttpGet]
+        [HttpDelete]
         public IHttpActionResult DeleteFAQ(int id)
         {
             GemeenteManager mgr = new GemeenteManager();

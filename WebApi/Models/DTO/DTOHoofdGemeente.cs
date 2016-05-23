@@ -8,7 +8,7 @@ namespace WebApi.Models.DTO
 {
     public class DTOHoofdGemeente
     {
-        public int GemeenteID { get; set; }
+        public int HoofdGemeenteID { get; set; }
         public string naam { get; set; }
         public int postCode { get; set; }
         public string provincie { get; set; }
@@ -22,7 +22,7 @@ namespace WebApi.Models.DTO
         public float aanslagVoet { get; set; }
         public HashSet<Gemeente> deelGemeenten { get; set; }
         public Cluster cluster { get; set; }
-        public HashSet<FAQ> faqs { get; set; }
+        public HashSet<FAQ> FAQs { get; set; }
         public string hoofdkleur { get; set; }
         public string logo { get; set; }
     }
