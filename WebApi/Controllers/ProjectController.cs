@@ -90,6 +90,11 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult put(int id, DTOProject p)
         {
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
+
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
@@ -131,8 +136,6 @@ namespace WebApi.Controllers
             int idP = mgr.changeProject(id, (ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
                p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
 
-            if (idP == 0)
-                return BadRequest("Er is iets misgelopen bij het updaten van het project!");
             return Ok(idP);
         }
 

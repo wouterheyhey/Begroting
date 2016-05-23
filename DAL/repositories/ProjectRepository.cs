@@ -53,8 +53,6 @@ namespace DAL.repositories
 
                 if (afbeelding != null)
                 {
-                    // Nadya aan te passen
-                  //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
                   
                         byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
                         System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
@@ -81,8 +79,6 @@ namespace DAL.repositories
             {
                 if (afbeelding != null)
                 {
-                    // Nadya aan te passen
-                    //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
 
                     byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
                     System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
@@ -107,8 +103,8 @@ namespace DAL.repositories
                 pp.vraag = vra;
 
                 ctx.Entry(pp).State = EntityState.Modified;
-                ctx.SaveChanges();
-                return pp.Id;
+                ctx.SaveChanges();  
+                return pp.Id;  // zal 0 zijn wanneer unit of work gebruikt wordt
             }
             else
                 return 0;
