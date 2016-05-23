@@ -67,7 +67,7 @@ namespace DAL.repositories
                     p.begroting = (JaarBegroting)fov;
                     ctx.Projecten.Add(p);
                     ctx.SaveChanges();
-                    return p.Id;     
+                    return p.Id;     // wordt 0 met unit of work aangezien de save wordt uitgesteld
                 
             }
             else return 0;

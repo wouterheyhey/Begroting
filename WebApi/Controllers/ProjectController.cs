@@ -84,8 +84,6 @@ namespace WebApi.Controllers
               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
             uowMgr.Save();
 
-            if(id == 0)
-                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
             return Ok(id);
         }
 
