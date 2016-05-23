@@ -11,11 +11,24 @@ using BL.Domain;
 
 namespace DAL
 {
-        internal class BegrotingDBContext : DbContext 
+     internal class BegrotingDBContext : DbContext 
         {
-            public BegrotingDBContext() : base("BegrotingDB_EF")
-            {
-            }
+        private readonly bool delaySave;
+        public BegrotingDBContext(bool unitOfWorkPresent = false) : base("BegrotingDB_EF")
+        {
+            delaySave = unitOfWorkPresent;
+        }
+
+        public override int SaveChanges()
+        {
+            if (delaySave) return -1;
+            return base.SaveChanges();
+        }
+        internal int CommitChanges()
+        {
+            if (delaySave) return base.SaveChanges();
+            throw new InvalidOperationException("No UnitOfWork present, use SaveChanges instead");
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {

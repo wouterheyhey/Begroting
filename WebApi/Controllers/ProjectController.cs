@@ -155,10 +155,14 @@ namespace WebApi.Controllers
             return Ok(dp);
         }
 
+        // id: projectID
         [Route("postVoorstel/{id}")]
         [HttpPost]
         public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
         {
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
+
             //bedrag, beschrijving, idInspraakItem
             List<Tuple<float, string, int>> bugetwijzigingen = new List<Tuple<float, string, int>>();
 

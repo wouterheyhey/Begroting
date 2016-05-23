@@ -10,11 +10,16 @@ namespace BL
 {
    public class ProjectManager
     {
-        ProjectRepository repo;
+        private ProjectRepository repo;
 
         public ProjectManager()
         {
             repo = new ProjectRepository();
+        }
+
+        public ProjectManager(UnitOfWorkManager uofMgr)
+        {
+            repo = new ProjectRepository(uofMgr.UnitOfWork);
         }
 
         public IEnumerable<InspraakItem> getInspraakItems(int jaar, string gemeente)
