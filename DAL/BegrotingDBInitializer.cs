@@ -12,7 +12,7 @@ using System.Reflection;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
     {
 
 

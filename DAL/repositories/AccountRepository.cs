@@ -60,8 +60,8 @@ namespace DAL.repositories
         public async Task<IdentityUser> FindUser(string userName, string password)
         {
             IdentityUser user = await _userManager.FindAsync(userName, password);
-
-            return user;
+            if (!_userManager.IsLockedOut(GetAspUserId(userName))) return user;
+            else return default(IdentityUser);
         }
         public Gebruiker GetGebruiker(string userName)
         {
@@ -71,25 +71,25 @@ namespace DAL.repositories
         {
             try
             {
-                foreach(Gebruiker g in gebruikers)
+                foreach (Gebruiker g in gebruikers)
                 {
-                    Gebruiker ge = GetGebruiker(g.userName);
-                    if (ge.isActief =! g.isActief)
+                    string aspUserId = GetAspUserId(g.userName);
+                    Gebruiker gebruikerInContext = GetGebruiker(g.userName);
+                    if (!bool.Equals(gebruikerInContext.isActief,g.isActief))
                     {
                         if (g.isActief)
                         {
-                            EnableUser(g.userName);
+                            EnableUser(gebruikerInContext, aspUserId);
                         }
                         else
                         {
-                            DisableUser(g.userName);
+                            DisableUser(gebruikerInContext, aspUserId);
                         }
                     }
-                    if (!Enum.Equals(ge.rolType,g.rolType))
+                    if (!Enum.Equals(gebruikerInContext.rolType,g.rolType))
                     {
-                        SetRole(g.userName, g.rolType);
+                        SetRole(g.rolType, gebruikerInContext, aspUserId);
                     }
-                    ctx.Entry(g.gemeente).State = System.Data.Entity.EntityState.Unchanged;
                 }
                 _ctx.SaveChanges();
                 ctx.SaveChanges();
@@ -105,12 +105,12 @@ namespace DAL.repositories
         {
             return ctx.Gebruikers.Include(nameof(Gebruiker.gemeente)).Where(g => g.gemeente.naam == gemeente);
         }
-        public bool DisableUser(string userName)
+        public bool DisableUser(Gebruiker g, string aspUserId)
         {
             try
             {
-                _userManager.SetLockoutEnabledAsync(userName, true);
-                Gebruiker g = GetGebruiker(userName);
+                _userManager.SetLockoutEnabled(aspUserId, true);
+                _userManager.SetLockoutEndDate(aspUserId, DateTime.MaxValue);
                 g.isActief = false;
                 return true;
             }
@@ -119,15 +119,13 @@ namespace DAL.repositories
                 return false;
             }            
         }
-        public bool EnableUser(string userName)
+        public bool EnableUser(Gebruiker g, string aspUserId)
         {
             try
             {
-                _userManager.SetLockoutEnabledAsync(userName, false);
-                _ctx.SaveChanges();
-                Gebruiker g = GetGebruiker(userName);
+                _userManager.SetLockoutEnabled(aspUserId, false);
+                _userManager.SetLockoutEndDate(aspUserId, DateTime.Now);
                 g.isActief = true;
-                ctx.SaveChanges();
                 return true;
             }
             catch (Exception ex)
@@ -136,13 +134,12 @@ namespace DAL.repositories
             }
 
         }
-        public bool SetRole(string userName, RolType rolType)
+        public bool SetRole(RolType rolType, Gebruiker g, string aspUserId)
         {
             try
             {
-                _userManager.RemoveFromRoles(userName, _userManager.GetRoles(userName).ToArray<string>());
-                _userManager.AddToRole(userName, rolType.ToString());
-                Gebruiker g = GetGebruiker(userName);
+                _userManager.RemoveFromRoles(aspUserId, _userManager.GetRoles(aspUserId).ToArray<string>());
+                _userManager.AddToRole(aspUserId, rolType.ToString());
                 g.rolType = rolType;
                 return true;
             }
@@ -166,6 +163,10 @@ namespace DAL.repositories
             }
         }
 
+        public string GetAspUserId(string username)
+        {
+            return _ctx.Users.Where(x => x.UserName == username).First().Id;
+        }
 
         //Gebruiker beheer - Social User
         public async Task<IdentityUser> FindAsync(UserLoginInfo loginInfo)

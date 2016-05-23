@@ -5,12 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace DAL
 {
     internal class FileLocator
     {
-        private const string libRelDir = @"C:\lib\";
+        //private const string libRelDir = @"C:\lib\";
+        string libRelDir = HttpContext.Current.Server.MapPath("~/App_Data/");
 
         internal string findExcelSourceDir()
         {

@@ -162,6 +162,7 @@ namespace WebApi.Controllers
         {
             HttpResponseMessage result = null;
             var httpRequest = HttpContext.Current.Request;
+            string fileName = default(string);
             
             if (httpRequest.Files.Count > 0)
             {
@@ -170,6 +171,7 @@ namespace WebApi.Controllers
                 {
                     var postedFile = httpRequest.Files[file];
                     var filePath = HttpContext.Current.Server.MapPath("~/App_Data/" + postedFile.FileName);
+                    fileName = postedFile.FileName;
                     postedFile.SaveAs(filePath);
 
                     docfiles.Add(filePath);
@@ -180,6 +182,8 @@ namespace WebApi.Controllers
             {
                 result = Request.CreateResponse(HttpStatusCode.BadRequest);
             }
+            if (result.StatusCode == HttpStatusCode.Created)
+                result = Request.CreateResponse(Get(2020, fileName));
             return result;
         }
 
