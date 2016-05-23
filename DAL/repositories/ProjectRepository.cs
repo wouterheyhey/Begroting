@@ -170,7 +170,7 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
-        public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen)
+        public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen, List<string> afbeeldingen)
         {
             //budgetWijzigingen aanmaken
             if (budgetwijzigingen != null)
@@ -181,6 +181,22 @@ namespace DAL.repositories
                     b.budgetWijzigingen.Add(createBudgetWijziging(item.Item1, item.Item2, item.Item3));
                 }
             }
+
+           
+
+            if(afbeeldingen != null)
+            {
+                HashSet<VoorstelAfbeelding> vafbeeldingen = new HashSet<VoorstelAfbeelding>();
+
+                foreach (var afb in afbeeldingen)
+                {
+                    byte[] bytes = new byte[afb.Length * sizeof(char)];
+                    System.Buffer.BlockCopy(afb.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+                    vafbeeldingen.Add(new VoorstelAfbeelding(bytes));
+                }
+                b.afbeeldingen = vafbeeldingen;
+            }
             ctx.Voorstellen.Add(b);
 
             //begrotingsvoorstel toevoegen aan project
@@ -190,9 +206,17 @@ namespace DAL.repositories
             //auteurEmail komt uit token dus kan niet null of fout zijn
             //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
 
-            /* Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
-             b.auteur = g; */
-
+            if(auteurEmail != null)
+            {
+                Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
+                //if verwijderen kan niet dat deze niet bestaat
+                if(g != null)
+                {
+                    b.auteur = g;
+                }
+                
+            }
+             
             ctx.SaveChanges();
 
         }

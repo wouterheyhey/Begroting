@@ -214,7 +214,7 @@ namespace WebApi.Controllers
                 
             }
             mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
-                p.totaal, bugetwijzigingen);
+                p.totaal, bugetwijzigingen, p.afbeeldingen);
             // Commit UoW to the database
             // Previous saves on the context were blocked because of the presence of the UnitOfWork
             uowMgr.Save();

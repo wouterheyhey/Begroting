@@ -61,7 +61,7 @@ namespace BL
         }
 
         public void addBegrotingsVoorstel(int id, string auteurEmail, string beschrijving, string samenvatting, 
-            float totaal, List<Tuple<float, string, int>> budgetwijzigingen)
+            float totaal, List<Tuple<float, string, int>> budgetwijzigingen, List<string> afbeeldingen)
         {
            
             BegrotingsVoorstel b = new BegrotingsVoorstel()
@@ -74,7 +74,7 @@ namespace BL
             };
             
             
-            repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen);
+            repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen, afbeeldingen);
         }
 
         public void changeVoorstel(int id, int status)
