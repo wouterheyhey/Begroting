@@ -22,9 +22,9 @@ namespace BL
             return repo.getGemeenteCategories(jaar, naam);
         }
 
-        public IEnumerable<FinancieelOverzicht> readBegrotingen()
+        public IEnumerable<JaarBegroting> readBegrotingen(string naam)
         {
-            return repo.getBegrotingen();
+            return repo.getBegrotingen(naam);
         }
 
         public IEnumerable<Actie> readActies(int id)

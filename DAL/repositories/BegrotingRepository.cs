@@ -23,10 +23,9 @@ namespace DAL.repositories
         {
             return ctx.Acties.Where(a => a.parentGemCatId == id).Distinct();
         }
-        public IEnumerable<FinancieelOverzicht> getBegrotingen()
+        public IEnumerable<JaarBegroting> getBegrotingen(string naam)
         {
-            return from g in  ctx.FinancieleOverzichten select g;
-            //.OfType<GemeenteCategorie>().Select(z=> z.categorieNaam)
+            return ctx.FinancieleOverzichten.Include(nameof(FinancieelOverzicht.gemeente)).Include(nameof(FinancieelOverzicht.lijnen)).Where(e => e.lijnen.Any(p => p is GemeenteCategorie)).Where(y => y.gemeente.naam == naam).OfType<JaarBegroting>();
         }
 
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
