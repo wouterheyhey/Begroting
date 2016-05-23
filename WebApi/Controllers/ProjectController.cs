@@ -42,18 +42,39 @@ namespace WebApi.Controllers
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
-            foreach (var item in p.cats)
+            //nivA
+            if(p.cats != null)
             {
-                inspraakItems.Add(new KeyValuePair<int, int>(item.ID, (int)item.inspraakNiveau));
-
-                if (item.acties != null)
+                foreach (var A in p.cats)
                 {
-                    foreach (var actie in item.acties)
+                    inspraakItems.Add(new KeyValuePair<int, int>(A.ID, (int)A.inspraakNiveau));
+
+                    if (A.childCats != null)
                     {
-                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                        //nivB
+                        foreach (var B in A.childCats)
+                        {
+                            inspraakItems.Add(new KeyValuePair<int, int>(B.ID, (int)B.inspraakNiveau));
+
+                            //nivC
+                            if (B.childCats != null)
+                            {
+                                foreach (var C in B.childCats)
+                                {
+                                    inspraakItems.Add(new KeyValuePair<int, int>(C.ID, (int)C.inspraakNiveau));
+                                    if (C.acties != null)
+                                    {
+                                        foreach (var actie in C.acties)
+                                        {
+                                            inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                                        }
+                                    }
+                                }
+                            }
+
+                        }
                     }
                 }
-
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,

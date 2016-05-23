@@ -102,10 +102,42 @@ namespace WebApi.Controllers
 
         [Route("getBegrotingen")]
         [HttpGet]
-        public IHttpActionResult getBegrotingen()
+        public IHttpActionResult getBegrotingen(string naam)
         {
-            IEnumerable<FinancieelOverzicht> jbs = begMgr.readBegrotingen();
-            return Ok(jbs);
+            IEnumerable<JaarBegroting> jbs = begMgr.readBegrotingen(naam);
+            if (jbs == null || jbs.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
+            List<DTOBegroting> begrotingen = new List<DTOBegroting>();
+            foreach (var item in jbs)
+            {
+                DTOBegroting b = new DTOBegroting()
+                {
+                    boekjaar = item.boekJaar,
+                    childCats = new List<DTOGemeenteCategorie>()
+                    
+                };
+                if(item.lijnen != null)
+                {
+                    foreach (var lijn in item.lijnen)
+                    {
+                        var gem = lijn as GemeenteCategorie;
+                        if(gem != null && gem.categorieType=="A")
+                        {
+                            DTOGemeenteCategorie gemcat = new DTOGemeenteCategorie()
+                            {
+                                naamCat = gem.categorieNaam,
+                                totaal = gem.totaal
+                            };
+                            b.childCats.Add(gemcat);
+                        }
+                        
+                    }
+
+                }
+                
+                begrotingen.Add(b); 
+            }
+            return Ok(begrotingen);
         }
 
         //Deze heb ik even aangepast omdat we nu 2 get hebben met zelfde paramaters
