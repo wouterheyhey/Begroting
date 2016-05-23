@@ -168,10 +168,7 @@ namespace DAL.repositories
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
         {
             InspraakItem ii = ctx.inspraakItems.Find(id);
-
-
             ii.inspraakNiveau = (InspraakNiveau)inspraakNiveau;
-
             return ii;
 
         }
