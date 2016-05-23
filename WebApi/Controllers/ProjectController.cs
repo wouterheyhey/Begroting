@@ -84,8 +84,8 @@ namespace WebApi.Controllers
             // Implementatie van de UoW pattern voor de post methodes
             // Voordelen: minder roundtrips, gebruik van transacties
             UnitOfWorkManager uowMgr = new UnitOfWorkManager();
-            // ProjectManager mgr = new ProjectManager(uowMgr);
-            ProjectManager mgr = new ProjectManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
+            // ProjectManager mgr = new ProjectManager();
 
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
@@ -97,6 +97,8 @@ namespace WebApi.Controllers
 
             int idP = mgr.changeProject(id, (ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
                p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+
+            uowMgr.Save();
 
             return Ok(idP);
         }
