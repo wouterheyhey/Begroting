@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.Entity;
+using System.Data.Entity.Validation;
 
 namespace DAL.repositories
 {
@@ -76,9 +77,7 @@ namespace DAL.repositories
         {
 
             //nakijken of het om dezelfde actie gaat zoja optellen van inkomsten en uitgaven anders nieuwe actie maken
-            
             GemeenteCategorie gemC = ctx.GemeenteCategorien.Find(gemCatID);
-
 
             Actie actie = acties.Find(x => x.financieelOverzicht.Id == fo.Id && x.actieKort == actieKort && x.actieLang == actieLang
               && x.bestuurType == bt && x.parentGemCat.ID == gemCatID);
@@ -86,10 +85,9 @@ namespace DAL.repositories
             {
                 ctx.Entry(fo).State = EntityState.Unchanged;
                 // Actie creeeren zonder inkomsten en uitgaven aangezien deze later aangevuld worden
-                return CreateActie(new Actie(actieKort, actieLang, bt, fo, gemC));
+                actie = CreateActie(new Actie(actieKort, actieLang, bt, fo, gemC));
             }
-
-            return actie;
+            return actie ;
 
         }
 
@@ -167,6 +165,8 @@ namespace DAL.repositories
             // als het jaar huidig of verleden is, gaat het om een rekening, geen begroting
             return  jaar <= DateTime.Now.Year;
         }
+
+
 
        
 

@@ -64,6 +64,36 @@ namespace BL
             return parents;
         }
 
+        public IEnumerable<Categorie> GetAllParentsCategorien(Categorie cat, List<Categorie> parents)
+        {
+            List<Categorie> prnts = new List<Categorie>();
+            if (cat.categorieParent != null)
+            {
+                prnts = repo.GetParentsCategorie(cat).ToList<Categorie>();
+            }
+            foreach (Categorie child in prnts)
+            {
+                parents.Add(child);
+                if (prnts.Count() > 0)
+                {
+                    return GetAllParentsCategorien(child, parents);  // recursie
+                }
+                // else { return children; }
+            }
+            return parents;
+        }
+
+        public Categorie ReadClosestParent(string code, string type)
+        {
+            return repo.GetClosestParent(code, type);
+        }
+
+        public IEnumerable<Categorie> ReadClusterAverage(Cluster cluster, int jaar)
+        {
+            return repo.GetClusterAverage(cluster, jaar);
+        }
+
+
 
 
 

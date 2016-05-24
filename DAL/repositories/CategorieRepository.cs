@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity.Validation;
 
 namespace DAL.repositories
 {
@@ -53,19 +54,18 @@ namespace DAL.repositories
 
             if (gemCat == null)
             {
-                Categorie c = cats.Find(x => x.categorieId == catId); // Exception for cat not found? 
+                Categorie c = cats.Find(x => x.categorieId == catId); 
                 FinancieelOverzicht f = ctx.FinancieleOverzichten.Find(foId);
 
                 // get parent id
                 int? parentId = null;
                  if (c.categorieParent != null)
                 {
-                    parentId = (ReadGemeenteCategorie(c.categorieParent.categorieId, foId)).ID;
+                      parentId = (ReadGemeenteCategorie(c.categorieParent.categorieId, foId)).ID;
                 }
 
                 ctx.Entry(c).State = EntityState.Unchanged;
                 gemCat = new GemeenteCategorie(c, f, parentId);
-
                 return CreateGemeenteCategorie(gemCat);
             }
             
@@ -73,7 +73,6 @@ namespace DAL.repositories
         }
 
 
-        // Geeft geen unieke gemeentecategorien terug!
         public GemeenteCategorie ReadGemeenteCategorie(string categorieCode, int foId)
         {
             return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.categorieCode == categorieCode).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
@@ -84,11 +83,14 @@ namespace DAL.repositories
             return ctx.GemeenteCategorien.Where<GemeenteCategorie>(x => x.categorieId == categorieId).Where<GemeenteCategorie>(x => x.financieelOverzicht.Id == foId).SingleOrDefault();
         }
 
-      
-
         public IEnumerable<GemeenteCategorie> ReadGemeenteCategories()
         {
             return ctx.GemeenteCategorien;
+        }
+
+        public IEnumerable<GemeenteCategorie> ReadGemeenteCategoriesWithFinOverzichten()
+        {
+            return ctx.GemeenteCategorien.Include(x=>x.financieelOverzicht);
         }
 
 
@@ -134,6 +136,48 @@ namespace DAL.repositories
         public IEnumerable<InspraakItem> GetParentsInspraakItem(InspraakItem ii)
         {
             return ctx.inspraakItems.Where<InspraakItem>(x => x.ID == ii.parentGemCatId);
+        }
+
+        public IEnumerable<Categorie> GetParentsCategorie(Categorie cat)
+        {
+            return ctx.Categorien.Where<Categorie>(x => x.categorieId == cat.categorieParent.categorieId );
+        }
+
+        public IEnumerable<Categorie> GetClusterAverage(Cluster cluster, int jaar)
+        {
+
+            // Linq group by om de gemiddeldes snel te berekenen
+            // Creatie van een GemeenteCategorie object om properties door te geven, mag zeker niet gepersisteerd worden
+            var averages = from t in ctx.GemeenteCategorien.ToList()
+                           join t2 in ctx.FinancieleOverzichten on t.financieelOverzicht.Id equals t2.Id
+                           join t3 in ctx.Gemeenten.Include(x=>x.cluster) on t2.gemeente.HoofdGemeenteID equals t3.HoofdGemeenteID
+                           where t3.cluster.clusterId == cluster.clusterId && t2.boekJaar == jaar
+                           group t by new
+                           {
+                               t.categorieCode,t.categorieType, t.categorieNaam
+                           }
+                           into grp
+                           select new Categorie()
+                           {
+                               totaal = grp.Average(p => p.totaal),
+                               categorieCode = grp.Key.categorieCode,
+                               categorieType = grp.Key.categorieType,
+                               categorieNaam = grp.Key.categorieNaam
+                           }
+                       ;
+
+            return averages;
+        }
+
+        public Categorie GetClosestParent(string code, string type)
+        {
+            // Eerst volledige categorie met parent opvissen aan de hand van code en type
+            Categorie child = ctx.Categorien.Where<Categorie>(x => x.categorieType == type && x.categorieCode == code).Single();
+            if (child.categorieParent != null)
+            {
+                return ctx.Categorien.Where<Categorie>(x => x.categorieId == child.categorieParent.categorieId).SingleOrDefault();
+            }
+            return default(Categorie);
         }
 
 

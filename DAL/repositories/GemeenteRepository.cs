@@ -78,21 +78,21 @@ namespace DAL.repositories
         }
 
 
-        public void deleteBestuurlid(int id)
+        public void DeleteBestuurlid(int id)
         {
             Politicus p = ctx.Politici.Find(id);
             ctx.Politici.Remove(p);
             ctx.SaveChanges();
         }
 
-        public void deleteFAQ(int id)
+        public void DeleteFAQ(int id)
         {
             FAQ f = ctx.FAQs.Find(id);
             ctx.FAQs.Remove(f);
             ctx.SaveChanges();
         }
 
-        public int updateGemeenteInput(int id, HashSet<FAQ> faqs, string hoofdkleur, string logo)
+        public int UpdateGemeenteInput(int id, HashSet<FAQ> faqs, string hoofdkleur, string logo)
         {
            HoofdGemeente g =  ctx.Gemeenten.OfType<HoofdGemeente>().Include(f => f.FAQs).Where(i => i.HoofdGemeenteID == id).SingleOrDefault();
 
@@ -129,9 +129,14 @@ namespace DAL.repositories
         }
 
 
-        public void saveContext()
+        public void SaveContext()
         {
             ctx.SaveChanges();
+        }
+
+        public Cluster GetCluster(int id)
+        {
+            return ctx.Clusters.Find(id);
         }
     }
 }

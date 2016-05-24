@@ -32,19 +32,24 @@ namespace BL
             repo.UpdateGemeente(naam, aantalBewoners, opp, maat, man, vrouw, kind, bestuur, aanslagvoet);
         }
 
-        public void deleteBestuurlid(int id)
+        public void DeleteBestuurlid(int id)
         {
-            repo.deleteBestuurlid(id);
+            repo.DeleteBestuurlid(id);
         }
 
-        public void deleteFAQ(int id)
+        public void DeleteFAQ(int id)
         {
-            repo.deleteFAQ(id);
+            repo.DeleteFAQ(id);
         }
 
         public int ChangeGemeenteInput(int id, HashSet<FAQ> faqs, string hoofdkleur, string logo)
         {
-            return repo.updateGemeenteInput(id, faqs, hoofdkleur, logo);
+            return repo.UpdateGemeenteInput(id, faqs, hoofdkleur, logo);
+        }
+
+        public Cluster ReadCluster(int id)
+        {
+            return repo.GetCluster(id);
         }
     }
 }

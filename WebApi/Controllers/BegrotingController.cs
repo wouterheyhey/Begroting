@@ -15,6 +15,40 @@ namespace WebApi.Controllers
     public class BegrotingController : ApiController
     {
 
+        [Route("getClusterAverages")]
+        [HttpGet]
+        public IHttpActionResult getClusterAverages( int clusterId=5, int jaar=2020)
+        {
+            GemeenteManager gemMgr = new GemeenteManager();
+            CategorieManager catMgr = new CategorieManager();
+
+            List<Categorie> cats = catMgr.ReadClusterAverage(gemMgr.ReadCluster(clusterId), jaar).ToList();
+            // adding parents to the newly created categories
+            foreach (Categorie cat in cats)
+            {
+                // parent always null
+                cat.categorieParent = catMgr.ReadClosestParent(cat.categorieCode,cat.categorieType);
+            }
+                
+            if (cats == null || cats.Count() == 0)
+                return StatusCode(HttpStatusCode.NoContent);
+
+            List<DTOCategorie> DTOCats = new List<DTOCategorie>();
+
+            List<Categorie> parents;
+            foreach (Categorie cat in cats)
+            {
+                parents = new List<Categorie>();
+                catMgr.GetAllParentsCategorien(cat, parents);
+                DTOCats.Add(MapCatToDTOCatWithParents(cat, parents));
+            }
+
+            return Ok(DTOCats);
+        }
+
+
+
+
         public IHttpActionResult Get(int jaar, string naam)
         {
             CategorieManager catMgr = new CategorieManager();
@@ -32,28 +66,102 @@ namespace WebApi.Controllers
                 parents = new List<InspraakItem>();
                 catMgr.GetAllParents(item,parents);
                 DTOgemcats.Add(MapGemCatToDTOGemCatWithParents(item,parents));
-            }         
+            }
+
+
 
             return Ok(DTOgemcats);
 
         }
-   
+
+ 
+
+        private DTOCategorie MapCatToDTOCatWithParents(Categorie cat, List<Categorie> cats)
+        {
+            DTOCategorie d = new DTOCategorie();
+
+            foreach (Categorie item in cats)
+                {
+                // platmaken van de hierarchische structuur met het oog op de graphs
+                // elke categorieType komt maximaal 1x voor als je de parents meegeeft 
+                d = MapTypeToProperyCategorie(item, d);
+                 //   d.cats[((GemeenteCategorie)item).categorieType.ToString()] = ((GemeenteCategorie)item).categorieNaam;
+                }
+            d.ID = cat.ToString().GetHashCode(); 
+            d.totaal = cat.totaal;
+            d.catCode = cat.categorieCode;
+            // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
+
+            d = MapTypeToProperyCategorie(cat, d);
+
+            return d;
+        }
+
+        private DTOCategorie MapTypeToProperyCategorie(Categorie item, DTOCategorie d)
+        {
+            switch (item.categorieType.ToString())
+            {
+                case ("A"):
+                    d.catA = item.categorieNaam;
+                    break;
+                case ("B"):
+                    d.catB = item.categorieNaam;
+                    break;
+                case ("C"):
+                    d.catC = item.categorieNaam;
+                    break;
+            }
+            return d;
+        }
+
         private DTOGemeenteCategorie MapGemCatToDTOGemCatWithParents(GemeenteCategorie gemCat, List<InspraakItem> gemCats)
         {
             DTOGemeenteCategorie d = new DTOGemeenteCategorie();
 
-            foreach (InspraakItem item in gemCats.Where(x=>x is GemeenteCategorie))
-                {
+            foreach (InspraakItem item in gemCats.Where(x => x is GemeenteCategorie))
+            {
                 // platmaken van de hierarchische structuur met het oog op de graphs
                 // elke categorieType komt maximaal 1x voor als je de parents meegeeft 
                 d = MapTypeToPropery(((GemeenteCategorie)item), d);
-                 //   d.cats[((GemeenteCategorie)item).categorieType.ToString()] = ((GemeenteCategorie)item).categorieNaam;
-                }
+                //   d.cats[((GemeenteCategorie)item).categorieType.ToString()] = ((GemeenteCategorie)item).categorieNaam;
+            }
             d.ID = gemCat.ID;
             d.totaal = gemCat.totaal;
+
+            char[] chars = new char[gemCat.categorieInput.foto.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.foto, 0, chars, 0, gemCat.categorieInput.foto.Length);
+            d.foto = new string(chars);
+
+            char[] chars2 = new char[gemCat.categorieInput.film.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars2, 0, gemCat.categorieInput.film.Length);
+            d.film = new string(chars2);
+
+            char[] chars3 = new char[gemCat.categorieInput.icoon.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars3, 0, gemCat.categorieInput.icoon.Length);
+            d.icoon = new string(chars3);
+            d.inputID = gemCat.categorieInput.Id;
+            d.input = gemCat.categorieInput.input;
+            d.kleur = gemCat.categorieInput.kleur;
+
+
             // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
 
             d = MapTypeToPropery(gemCat, d);
+
+            return d;
+        }
+
+        private DTOGemeenteCategorie MapGemCatToDTOGemCat(GemeenteCategorie gemCat)
+        {
+            DTOGemeenteCategorie d = new DTOGemeenteCategorie();
+            d.ID = gemCat.ID;
+            d.totaal = gemCat.totaal;
+            d.naamCat = gemCat.categorieNaam;
+            d.inspraakNiveau = (int?)gemCat.inspraakNiveau;
+            d.gemcatID = gemCat.parentGemCatId;
+            d.catCode = gemCat.categorieCode;
+            d.catType = gemCat.categorieType.ToString();
+            d.childCats = new List<DTOGemeenteCategorie>();
 
             return d;
         }
@@ -74,7 +182,7 @@ namespace WebApi.Controllers
             }
             return d;
         }
-    
+
 
         public IHttpActionResult Get(int id)
         {
@@ -139,6 +247,7 @@ namespace WebApi.Controllers
                 
                 begrotingen.Add(b); 
             }
+
             return Ok(begrotingen);
         }
 
@@ -157,6 +266,24 @@ namespace WebApi.Controllers
             return StatusCode(HttpStatusCode.OK);
 
         }
+
+        [Route("loadFinOverzicht")]
+        [HttpGet]
+        public IHttpActionResult getLoadFinOverzicht(int jaar = 2020)
+        {
+            FinancieleLijnManager finMgr = new FinancieleLijnManager();
+            try
+            {
+                // 2020 omdat dit relatief weinig data bevat
+                finMgr.LoadFinancieleLijnen("gemeente_categorie_acties_jaartal_uitgaven.xlsx", jaar);
+            }
+            catch
+            {
+                return StatusCode(HttpStatusCode.BadRequest);
+            }
+            return StatusCode(HttpStatusCode.OK);
+        }
+
 
         public HttpResponseMessage Post()
         {
