@@ -51,6 +51,23 @@ namespace WebApi.Controllers
                 }
             d.ID = gemCat.ID;
             d.totaal = gemCat.totaal;
+
+            char[] chars = new char[gemCat.categorieInput.foto.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.foto, 0, chars, 0, gemCat.categorieInput.foto.Length);
+            d.foto =  new string(chars);
+
+            char[] chars2 = new char[gemCat.categorieInput.film.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars2, 0, gemCat.categorieInput.film.Length);
+            d.film = new string(chars2);
+
+            char[] chars3 = new char[gemCat.categorieInput.icoon.Length / sizeof(char)];
+            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars3, 0, gemCat.categorieInput.icoon.Length);
+            d.icoon = new string(chars3);
+            d.inputID = gemCat.categorieInput.Id;
+            d.input = gemCat.categorieInput.input;
+            d.kleur = gemCat.categorieInput.kleur;
+
+
             // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
 
             d = MapTypeToPropery(gemCat, d);
