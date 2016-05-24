@@ -27,7 +27,7 @@ namespace DAL.repositories
         }
         
         //Gebruiker beheer - Identity User
-        public async Task<IdentityResult> RegisterUser(InTeLoggenGebruiker aspGebruiker, HoofdGemeente gem)
+        public async Task<IdentityResult> RegisterUser(InTeLoggenGebruiker aspGebruiker, HoofdGemeente gem,  RolType rolType=RolType.standaard)
         {
             IdentityUser user = new IdentityUser
             {
@@ -48,8 +48,8 @@ namespace DAL.repositories
                         if (!RoleExists(str.ToString())) CreateRole(str.ToString());
                     }
                 }
-                _userManager.AddToRole(user.Id, RolType.standaard.ToString());
-                Gebruiker gebruiker = new Gebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, gem);
+                _userManager.AddToRole(user.Id, rolType.ToString());
+                Gebruiker gebruiker = new Gebruiker(aspGebruiker.email, aspGebruiker.Naam, aspGebruiker.email, gem, rolType);
                 ctx.Entry(gebruiker.gemeente).State = System.Data.Entity.EntityState.Unchanged;
                 ctx.Gebruikers.Add(gebruiker);
                 ctx.SaveChanges();
@@ -134,21 +134,7 @@ namespace DAL.repositories
             }
 
         }
-        public bool SetRole(RolType rolType, Gebruiker g, string aspUserId)
-        {
-            try
-            {
-                _userManager.RemoveFromRoles(aspUserId, _userManager.GetRoles(aspUserId).ToArray<string>());
-                _userManager.AddToRole(aspUserId, rolType.ToString());
-                g.rolType = rolType;
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
 
-        }
 
         public RolType GetRole(string userName)
         {
@@ -194,6 +180,21 @@ namespace DAL.repositories
         {
             var idResult = _roleManager.Create(new IdentityRole(name));
             return idResult.Succeeded;
+        }
+        public bool SetRole(RolType rolType, Gebruiker g, string aspUserId)
+        {
+            try
+            {
+                _userManager.RemoveFromRoles(aspUserId, _userManager.GetRoles(aspUserId).ToArray<string>());
+                _userManager.AddToRole(aspUserId, rolType.ToString());
+                g.rolType = rolType;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
         }
 
         //Client & refreshtoken beheer

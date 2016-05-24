@@ -4,11 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BL;
 using BL.Domain;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Entity.Infrastructure.Annotations;
 using System.Reflection;
+using DAL.repositories;
+using Microsoft.AspNet.Identity;
 
 namespace DAL
 {
@@ -24,9 +27,7 @@ namespace DAL
             string categoryFileClu = "Config_Clusters.xls";
             string categoryFilePos = "Config_postcodesHoofdgemeentes.xlsx";
 
-
             base.Seed(ctx);
-
 
             foreach (HoofdGemeente s in ExcelImporter.ImportHoofdGemeenten(importPath + categoryFileGem, importPath + categoryFileClu, importPath + categoryFilePos))
             {
@@ -40,9 +41,25 @@ namespace DAL
                 System.Diagnostics.Debug.WriteLine(s.ToString());
                 ctx.Categorien.Add(s);
             }
-            ctx.SaveChanges(); 
+            ctx.SaveChanges();
 
+            CreateSystemUser();
 
+        }
+
+        private async void CreateSystemUser()
+        {
+            AccountRepository accRepo = new AccountRepository();
+            GemeenteRepository gemRepo = new GemeenteRepository();
+            InTeLoggenGebruiker gebruiker = new InTeLoggenGebruiker()
+            {
+                email = "system@begroting.be",
+                Password = "blended01",
+                bevestigPaswoord = "blended01",
+                Naam = "SysteemGebruiker",
+                gemeente = "Antwerpen"
+            };
+            IdentityResult result = await accRepo.RegisterUser(gebruiker, gemRepo.ReadGemeente(gebruiker.gemeente), RolType.superadmin);
         }
 
     }

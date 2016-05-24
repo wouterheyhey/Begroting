@@ -23,13 +23,13 @@ namespace BL.Domain
 
         }
 
-        public Gebruiker(string email, string naam, string accountID, HoofdGemeente gemeente)
+        public Gebruiker(string email, string naam, string accountID, HoofdGemeente gemeente, RolType rolType = RolType.standaard)
         {
             this.userName = email;
             this.naam = naam;
             this.email = email;
             this.gemeente = gemeente;
-            this.rolType = RolType.standaard;
+            this.rolType = rolType;
             this.isActief = true;
         }
     }
