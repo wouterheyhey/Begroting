@@ -13,13 +13,12 @@ namespace WebApi.Controllers
     [RoutePrefix("api/Project")]
     public class ProjectController : ApiController
     {
-        private ProjectManager mgr = new ProjectManager();
-        private BegrotingManager begMgr = new BegrotingManager();
-        private CategorieManager catMgr = new CategorieManager();
+
         [Route("itemsGET")]
         [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
         {
+            ProjectManager mgr = new ProjectManager();
             List<DTOGemeenteCategorie> lijnen = new List<DTOGemeenteCategorie>();
             IEnumerable<InspraakItem> parents = mgr.getInspraakItems(jaar, naam).Where<InspraakItem>(x => x.parentGemCat == null);
 
@@ -34,64 +33,81 @@ namespace WebApi.Controllers
            
         }
 
+
+        // void return type: exploit the pass by ref of inspraakitems
+        private void AddInspraakItems(List<DTOGemeenteCategorie> cats, IDictionary<int, int> inspraakItems)
+        {
+            foreach(DTOGemeenteCategorie gemCat in cats)
+            {
+                inspraakItems.Add(new KeyValuePair<int, int>(gemCat.ID, (int)gemCat.inspraakNiveau));
+                if (gemCat.acties!= null)
+                {
+                    foreach(DTOActie actie in gemCat.acties)
+                    {
+                        inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
+                    }
+                }
+                if (gemCat.childCats != null)
+                {
+                    AddInspraakItems(gemCat.childCats, inspraakItems); // recursie
+                }
+            }
+        }
+
          
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
         {
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
             //K= id + V= inspraakNiveau
             IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
-            //nivA
-            if(p.cats != null)
+            if (p.cats != null)
             {
-                foreach (var A in p.cats)
-                {
-                    inspraakItems.Add(new KeyValuePair<int, int>(A.ID, (int)A.inspraakNiveau));
-
-                    if (A.childCats != null)
-                    {
-                        //nivB
-                        foreach (var B in A.childCats)
-                        {
-                            inspraakItems.Add(new KeyValuePair<int, int>(B.ID, (int)B.inspraakNiveau));
-
-                            //nivC
-                            if (B.childCats != null)
-                            {
-                                foreach (var C in B.childCats)
-                                {
-                                    inspraakItems.Add(new KeyValuePair<int, int>(C.ID, (int)C.inspraakNiveau));
-                                    if (C.acties != null)
-                                    {
-                                        foreach (var actie in C.acties)
-                                        {
-                                            inspraakItems.Add(new KeyValuePair<int, int>(actie.ID, actie.inspraakNiveau));
-                                        }
-                                    }
-                                }
-                            }
-
-                        }
-                    }
-                }
+                AddInspraakItems(p.cats, inspraakItems);
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
-              p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+              p.minBedrag, p.maxBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+            uowMgr.Save();
 
-            if(id == 0)
-                return BadRequest("Er is iets misgelopen bij het registreren van het project!");
             return Ok(id);
         }
+        [Route("updateProject/{id}")]
+        [HttpPut]
+        public IHttpActionResult put(int id, DTOProject p)
+        {
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
+            // ProjectManager mgr = new ProjectManager();
 
+            //K= id + V= inspraakNiveau
+            IDictionary<int, int> inspraakItems = new Dictionary<int, int>();
 
+            if (p.cats != null)
+            {
+                AddInspraakItems(p.cats, inspraakItems);
+            }
 
+            int idP = mgr.changeProject(id, (ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
+               p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+
+            uowMgr.Save();
+
+            return Ok(idP);
+        }
 
 
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
         {
+            ProjectManager mgr = new ProjectManager();
             List<Project> p = mgr.getProjects( naam).ToList();
 
             if (p == null || p.Count() == 0)
@@ -176,10 +192,16 @@ namespace WebApi.Controllers
             return Ok(dp);
         }
 
+        // id: projectID
         [Route("postVoorstel/{id}")]
         [HttpPost]
         public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
         {
+            // Implementatie van de UoW pattern voor de post methodes
+            // Voordelen: minder roundtrips, gebruik van transacties
+            UnitOfWorkManager uowMgr = new UnitOfWorkManager();
+            ProjectManager mgr = new ProjectManager(uowMgr);
+
             //bedrag, beschrijving, idInspraakItem
             List<Tuple<float, string, int>> bugetwijzigingen = new List<Tuple<float, string, int>>();
 
@@ -192,7 +214,10 @@ namespace WebApi.Controllers
                 
             }
             mgr.addBegrotingsVoorstel(id, p.auteurEmail, p.beschrijving, p.samenvatting,
-                p.totaal, bugetwijzigingen);
+                p.totaal, bugetwijzigingen, p.afbeeldingen);
+            // Commit UoW to the database
+            // Previous saves on the context were blocked because of the presence of the UnitOfWork
+            uowMgr.Save();
             return Ok();
         }
 
@@ -200,6 +225,7 @@ namespace WebApi.Controllers
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]string email)
         {
+            ProjectManager mgr = new ProjectManager();
             int idStem = mgr.changeAantalStemmenVoorstel(id, email);
             return Ok(idStem);
         }
@@ -208,6 +234,7 @@ namespace WebApi.Controllers
         [HttpPost]
         public IHttpActionResult postReactie(int id, DTOReactie r)
         {
+            ProjectManager mgr = new ProjectManager();
             int idStem = mgr.addReactieVoorstel(id, r.email, r.beschrijving);
             return Ok(idStem);
         }
@@ -216,6 +243,7 @@ namespace WebApi.Controllers
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]int status)
         {
+            ProjectManager mgr = new ProjectManager();
             mgr.changeVoorstel(id, status);
             return Ok();
         }
@@ -225,7 +253,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public IHttpActionResult GetProject(int jaar, string naam)
         {
-
+            ProjectManager mgr = new ProjectManager();
             Project p = mgr.getProject(jaar, naam);
             string afb="";
 
@@ -265,6 +293,7 @@ namespace WebApi.Controllers
         private DTOGemeenteCategorie convertInspraakItem(InspraakItem item, List<DTOGemeenteCategorie> gemCats)
 
         {
+            CategorieManager catMgr = new CategorieManager();
             var gemCat = item as GemeenteCategorie;
 
             if (gemCat != null)

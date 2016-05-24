@@ -10,11 +10,16 @@ namespace BL
 {
    public class ProjectManager
     {
-        ProjectRepository repo;
+        private ProjectRepository repo;
 
         public ProjectManager()
         {
             repo = new ProjectRepository();
+        }
+
+        public ProjectManager(UnitOfWorkManager uofMgr)
+        {
+            repo = new ProjectRepository(uofMgr.UnitOfWork);
         }
 
         public IEnumerable<InspraakItem> getInspraakItems(int jaar, string gemeente)
@@ -40,6 +45,11 @@ namespace BL
            return  repo.createProject(p, inspraakItems, afbeelding ,boekjaar, gemeente);
         }
 
+        public int changeProject(int id, ProjectScenario projectScenario, string titel, string vraag, string extraInfo, float bedrag, float minBedrag, float maxBedrag, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
+        {
+            return repo.updateProject(id, projectScenario, titel, vraag, extraInfo, bedrag, minBedrag, maxBedrag, inspraakItems, boekjaar, gemeente, isActief, afbeelding);
+        }
+
         public Project getProject(int jaar, string gemeente)
         {
             return repo.readProject(jaar, gemeente);
@@ -51,7 +61,7 @@ namespace BL
         }
 
         public void addBegrotingsVoorstel(int id, string auteurEmail, string beschrijving, string samenvatting, 
-            float totaal, List<Tuple<float, string, int>> budgetwijzigingen)
+            float totaal, List<Tuple<float, string, int>> budgetwijzigingen, List<string> afbeeldingen)
         {
            
             BegrotingsVoorstel b = new BegrotingsVoorstel()
@@ -64,7 +74,7 @@ namespace BL
             };
             
             
-            repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen);
+            repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen, afbeeldingen);
         }
 
         public void changeVoorstel(int id, int status)

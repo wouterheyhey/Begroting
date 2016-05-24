@@ -19,6 +19,14 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
+        // Constructor for Unit of Work
+        public ProjectRepository(UnitOfWork uow)
+        {
+            ctx = uow.Context;
+            ctx.Database.Initialize(false);
+            ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
+        }
+
         public int createProject(Project p, IDictionary<int, int> inspraakItems, string afbeelding, int? boekjaar, string gemeente)
         {
             //momenteel mag er maar 1 project zijn per begroting
@@ -45,8 +53,6 @@ namespace DAL.repositories
 
                 if (afbeelding != null)
                 {
-                    // Nadya aan te passen
-                  //  p.afbeelding = new HashSet<VoorstelAfbeelding>();
                   
                         byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
                         System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
@@ -59,11 +65,50 @@ namespace DAL.repositories
                     p.begroting = (JaarBegroting)fov;
                     ctx.Projecten.Add(p);
                     ctx.SaveChanges();
-                    return p.Id;     
+                    return p.Id;     // wordt 0 met unit of work aangezien de save wordt uitgesteld
                 
             }
             else return 0;
             
+        }
+
+        public int updateProject(int id, ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
+        {
+            Project pp = ctx.Projecten.Include(i => i.inspraakItems).Where( p => p.Id ==id).SingleOrDefault();
+            if (pp != null)
+            {
+                if (afbeelding != null)
+                {
+
+                    byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
+                    System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
+                    pp.afbeelding = bytes;
+
+                }
+                if (inspraakItems != null)
+                {
+                    //ID = key  &&  value = InspraakNiveau
+                    foreach (var item in inspraakItems)
+                    {
+                        InspraakItem i = updateInspraakItem(item.Key, item.Value);
+                    }
+
+                }
+
+                pp.bedrag = bedrag;
+                pp.maxBedrag = max;
+                pp.minBedrag = min;
+                pp.projectScenario = ps;
+                pp.titel = tit;
+                pp.vraag = vra;
+                pp.isActief = isActief;
+
+                ctx.Entry(pp).State = EntityState.Modified;
+                ctx.SaveChanges();  
+                return pp.Id;  // zal 0 zijn wanneer unit of work gebruikt wordt
+            }
+            else
+                return 0;
         }
 
         public int updateAantalStemmenVoorstel(int id, string email)
@@ -125,7 +170,7 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
-        public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen)
+        public void createBegrotingsVoorstel(int id, BegrotingsVoorstel b, string auteurEmail, List<Tuple<float, string, int>> budgetwijzigingen, List<string> afbeeldingen)
         {
             //budgetWijzigingen aanmaken
             if (budgetwijzigingen != null)
@@ -136,29 +181,46 @@ namespace DAL.repositories
                     b.budgetWijzigingen.Add(createBudgetWijziging(item.Item1, item.Item2, item.Item3));
                 }
             }
+
+           
+
+            if(afbeeldingen != null)
+            {
+                HashSet<VoorstelAfbeelding> vafbeeldingen = new HashSet<VoorstelAfbeelding>();
+
+                foreach (var afb in afbeeldingen)
+                {
+                    byte[] bytes = new byte[afb.Length * sizeof(char)];
+                    System.Buffer.BlockCopy(afb.ToCharArray(), 0, bytes, 0, bytes.Length);
+
+                    vafbeeldingen.Add(new VoorstelAfbeelding(bytes));
+                }
+                b.afbeeldingen = vafbeeldingen;
+            }
             ctx.Voorstellen.Add(b);
-            ctx.SaveChanges();
+
+            //begrotingsvoorstel toevoegen aan project
+            Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id == id).SingleOrDefault();
+            p.voorstellen.Add(b);
+
             //auteurEmail komt uit token dus kan niet null of fout zijn
             //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
 
-            /* Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
-             b.auteur = g; */
-
-            //begrotingsvoorstel toevoegen aan project
-
-            Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id ==id).SingleOrDefault();
-
-
-            p.voorstellen.Add(b);
-            ctx.Entry(p).State = EntityState.Modified;
+            if(auteurEmail != null)
+            {
+                Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
+                //if verwijderen kan niet dat deze niet bestaat
+                if(g != null)
+                {
+                    b.auteur = g;
+                }
+                
+            }
+             
             ctx.SaveChanges();
 
         }
 
-        private void updateProject(Project p, BegrotingsVoorstel b)
-        {
-            
-        }
 
         public InspraakItem updateInspraakItem(int id, int inspraakNiveau)
         {

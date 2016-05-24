@@ -12,10 +12,13 @@ namespace BL
     public class FinancieleLijnManager
     {
         private FinancieleLijnRepository finRepo;
-
         public FinancieleLijnManager()
         {
-            this.finRepo = new FinancieleLijnRepository();
+            finRepo = new FinancieleLijnRepository();
+        }
+        public FinancieleLijnManager(UnitOfWorkManager uofMgr)
+        {
+            finRepo = new FinancieleLijnRepository(uofMgr.UnitOfWork);
         }
 
 

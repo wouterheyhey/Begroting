@@ -11,11 +11,24 @@ using BL.Domain;
 
 namespace DAL
 {
-        internal class BegrotingDBContext : DbContext 
+     internal class BegrotingDBContext : DbContext 
         {
-            public BegrotingDBContext() : base("BegrotingDB_Azure")
-            {
-            }
+        private readonly bool delaySave;
+        public BegrotingDBContext(bool unitOfWorkPresent = false) : base("BegrotingDB_Azure")
+        {
+            delaySave = unitOfWorkPresent;
+        }
+
+        public override int SaveChanges()
+        {
+            if (delaySave) return -1;
+            return base.SaveChanges();
+        }
+        internal int CommitChanges()
+        {
+            if (delaySave) return base.SaveChanges();
+            throw new InvalidOperationException("No UnitOfWork present, use SaveChanges instead");
+        }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
@@ -47,6 +60,8 @@ namespace DAL
             modelBuilder.Entity<Actie>().Property(x => x.actieCode).HasMaxLength(15);
 
             modelBuilder.Entity<Cluster>().Property(x => x.name).IsRequired().HasMaxLength(120);
+
+            modelBuilder.Entity<Project>().HasRequired(x=>x.begroting);
 
             // 0..1 to 1 relationship
             modelBuilder.Entity<CategorieInput>().HasRequired(x => x.gemCategorie).WithOptional(x => x.categorieInput);

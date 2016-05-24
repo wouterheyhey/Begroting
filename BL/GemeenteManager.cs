@@ -36,5 +36,15 @@ namespace BL
         {
             repo.deleteBestuurlid(id);
         }
+
+        public void deleteFAQ(int id)
+        {
+            repo.deleteFAQ(id);
+        }
+
+        public int ChangeGemeenteInput(int id, HashSet<FAQ> faqs, string hoofdkleur, string logo)
+        {
+            return repo.updateGemeenteInput(id, faqs, hoofdkleur, logo);
+        }
     }
 }

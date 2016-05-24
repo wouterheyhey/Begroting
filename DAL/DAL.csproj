@@ -140,6 +140,7 @@
     <Compile Include="repositories\FinancieleLijnRepository.cs" />
     <Compile Include="repositories\GemeenteRepository.cs" />
     <Compile Include="repositories\ProjectRepository.cs" />
+    <Compile Include="UnitOfWork.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BL.Domain\BL.Domain.csproj">

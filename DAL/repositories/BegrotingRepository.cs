@@ -19,6 +19,13 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
+        public BegrotingRepository(UnitOfWork uow)
+        {
+            ctx = uow.Context;
+            ctx.Database.Initialize(false);
+            ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
+        }
+
         public IEnumerable<Actie> GetActies(int id)
         {
             return ctx.Acties.Where(a => a.parentGemCatId == id).Distinct();
@@ -30,13 +37,11 @@ namespace DAL.repositories
 
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
         {
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
+            int id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
                .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
                .Select(c => c.Id).SingleOrDefault();
 
-
-            // zo ophalen omdat dit multilevel recurieve objecten zijn
-            var gemeentecats = from g in ctx.GemeenteCategorien where g.financieelOverzicht.Id == id select g;
+            var gemeentecats = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(x => x.financieelOverzicht.Id == id);
 
             return gemeentecats;
         }

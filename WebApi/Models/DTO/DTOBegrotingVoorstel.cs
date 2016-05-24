@@ -19,6 +19,7 @@ namespace WebApi.Models.DTO
         //dit veld nodig voor Angular 2 waybinding
         public string reactie { get; set; }
         public List<DTOReactie> reacties { get; set; }
+        public List<string> afbeeldingen { get; set; }
 
     }
 }

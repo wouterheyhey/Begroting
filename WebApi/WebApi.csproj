@@ -201,6 +201,7 @@
     <Compile Include="Models\DTO\DTOBegrotingVoorstel.cs" />
     <Compile Include="Models\DTO\DTOBudgetWijziging.cs" />
     <Compile Include="Models\DTO\DTOGemeenteCategorie.cs" />
+    <Compile Include="Models\DTO\DTOHoofdGemeente.cs" />
     <Compile Include="Models\DTO\DTOProject.cs" />
     <Compile Include="Models\DTO\DTOGebruiker.cs" />
     <Compile Include="Models\DTO\DTOReactie.cs" />
