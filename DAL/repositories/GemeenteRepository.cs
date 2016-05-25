@@ -38,6 +38,11 @@ namespace DAL.repositories
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.FAQs)).Include(nameof(HoofdGemeente.bestuur)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
+        public HoofdGemeente ReadGemeenteAndCluster(string gemeenteNaam)
+        {
+            return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.FAQs)).Include(nameof(HoofdGemeente.bestuur)).Include(nameof(HoofdGemeente.cluster)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
+        }
+
         public HoofdGemeente ReadGemeente(int id)
         {
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.HoofdGemeenteID == id).SingleOrDefault();
@@ -133,9 +138,14 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
-        public Cluster GetCluster(int id)
+        public Cluster ReadCluster(int id)
         {
             return ctx.Clusters.Find(id);
+        }
+
+        public Cluster ReadCluster(HoofdGemeente gem)
+        {
+            return ctx.Clusters.Where<Cluster>(x => x.clusterId == gem.cluster.clusterId).SingleOrDefault();
         }
     }
 }

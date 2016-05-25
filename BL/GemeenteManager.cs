@@ -27,6 +27,11 @@ namespace BL
             return repo.ReadGemeente(naam);
         }
 
+        public HoofdGemeente GetGemeenteAndCluster(string naam)
+        {
+            return repo.ReadGemeenteAndCluster(naam);
+        }
+
         public void ChangeGemeente(string naam, int aantalBewoners, int opp, string maat, float man, float vrouw, float kind, HashSet<Politicus> bestuur, float aanslagvoet)
         {
             repo.UpdateGemeente(naam, aantalBewoners, opp, maat, man, vrouw, kind, bestuur, aanslagvoet);
@@ -47,9 +52,15 @@ namespace BL
             return repo.UpdateGemeenteInput(id, faqs, hoofdkleur, logo);
         }
 
-        public Cluster ReadCluster(int id)
+        public Cluster GetCluster(int id)
         {
-            return repo.GetCluster(id);
+            return repo.ReadCluster(id);
+        }
+
+        public Cluster GetCluster(string gemeenteNaam)
+        {
+            HoofdGemeente gem = GetGemeenteAndCluster(gemeenteNaam);
+            return repo.ReadCluster(gem);
         }
     }
 }

@@ -17,12 +17,12 @@ namespace WebApi.Controllers
 
         [Route("getClusterAverages")]
         [HttpGet]
-        public IHttpActionResult getClusterAverages(int clusterId, int jaar)
+        public IHttpActionResult getClusterAverages(string gemeenteNaam, int jaar)
         {
             GemeenteManager gemMgr = new GemeenteManager();
             CategorieManager catMgr = new CategorieManager();
 
-            List<Categorie> cats = catMgr.ReadClusterAverage(gemMgr.ReadCluster(clusterId), jaar).ToList();
+            List<Categorie> cats = catMgr.ReadClusterAverage(gemMgr.GetCluster(gemeenteNaam), jaar).ToList();
             // adding parents to the newly created categories
             foreach (Categorie cat in cats)
             {
