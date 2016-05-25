@@ -32,9 +32,9 @@ namespace BL
             return repo.GetActies(id);
         }
 
-        public int changeGemcatInput(int GemcatId, string input, string icoon, string film, string foto, string kleur)
+        public void changeGemcatInput(List<Tuple<int, string, string, string, string, string>> categorieInput)
         {
-           return repo.updateGemcatInput(GemcatId, input, icoon, film, foto, kleur);
+            repo.updateGemcatInput(categorieInput);
         }
     }
 }

@@ -37,35 +37,35 @@ namespace DAL.repositories
         }
 
 
-        public int updateGemcatInput(int gemcatId, string input, string icoon, string film, string foto, string kleur)
+        public void updateGemcatInput(List<Tuple<int, string, string, string, string, string>> categorieInput)
         {
-            GemeenteCategorie gc = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(y => y.ID == gemcatId).SingleOrDefault();
-
-            if (gc == null)
-                return 0;
-
-            if(gc.categorieInput == null)
+            foreach (var catinput in categorieInput)
             {
-                gc.categorieInput = createCategorieInput(input, icoon, film, foto, kleur);
-            }
-            else
-            {
-                gc.categorieInput.input = input;
-                gc.categorieInput.kleur = kleur;
+                //Tuple structuur item1 =  gemcatId,item2= string input, item3 = string icoon,item4 = string film,item5 = string foto,item6 = string kleur
+                GemeenteCategorie gc = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(y => y.ID == catinput.Item1).SingleOrDefault();
 
-                if (icoon != null)
-                    gc.categorieInput.icoon = stringConverter(icoon);
+                if (gc.categorieInput == null)
+                {
+                    gc.categorieInput = createCategorieInput(catinput.Item2, catinput.Item3, catinput.Item4, catinput.Item5, catinput.Item6);
+                }
+                else
+                {
+                    gc.categorieInput.input = catinput.Item2;
+                    gc.categorieInput.kleur = catinput.Item6;
 
-                if (film != null)
-                    gc.categorieInput.film = stringConverter(film);
+                    if (catinput.Item3 != null)
+                        gc.categorieInput.icoon = stringConverter(catinput.Item3);
 
-                if (foto != null)
-                    gc.categorieInput.foto = stringConverter(foto);
-            }
-                
+                    if (catinput.Item4 != null)
+                        gc.categorieInput.film = stringConverter(catinput.Item4);
+
+                    if (catinput.Item5 != null)
+                        gc.categorieInput.foto = stringConverter(catinput.Item5);
+                }
+
                 ctx.Entry(gc).State = EntityState.Modified;
-                ctx.SaveChanges();
-            return gc.ID;
+            }
+            ctx.SaveChanges();
         }
 
         public CategorieInput createCategorieInput(string input, string icoon, string film, string foto, string kleur)

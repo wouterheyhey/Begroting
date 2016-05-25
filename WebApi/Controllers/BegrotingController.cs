@@ -304,17 +304,22 @@ namespace WebApi.Controllers
 
         [Route("changeCatInput")]
         [HttpPut]
-        public IHttpActionResult Put(DTOGemeenteCategorie gemcat)
+        public IHttpActionResult Put(List<DTOGemeenteCategorie> gemcats)
         {
             BegrotingManager begMgr = new BegrotingManager();
-            int id = begMgr.changeGemcatInput(gemcat.ID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
-                gemcat.kleur);
-            if(id==0)
-                return StatusCode(HttpStatusCode.BadRequest);
-            return Ok(id);
+            List<Tuple<int, string, string, string, string, string>> categorieInput = new List<Tuple<int, string, string, string, string, string>>();
+
+            foreach (var gemcat in gemcats)
+            {
+                categorieInput.Add(new Tuple<int, string, string, string, string, string>(gemcat.ID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
+                gemcat.kleur));
+            }
+            begMgr.changeGemcatInput(categorieInput);
+
+            return Ok();
         }
 
-       
+
 
 
         public HttpResponseMessage Post()
