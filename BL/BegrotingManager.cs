@@ -32,5 +32,9 @@ namespace BL
             return repo.GetActies(id);
         }
 
+        public int changeGemcatInput(int GemcatId, string input, string icoon, string film, string foto, string kleur)
+        {
+           return repo.updateGemcatInput(GemcatId, input, icoon, film, foto, kleur);
+        }
     }
 }

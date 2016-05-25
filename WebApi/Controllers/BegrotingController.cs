@@ -128,6 +128,7 @@ namespace WebApi.Controllers
             }
             d.ID = gemCat.ID;
             d.totaal = gemCat.totaal;
+            d.naamCat = gemCat.categorieNaam;
 
             if(gemCat.categorieInput != null)
             {
@@ -300,6 +301,18 @@ namespace WebApi.Controllers
             }
             return StatusCode(HttpStatusCode.OK);
         }
+
+        [Route("changeCatInput")]
+        [HttpPut]
+        public IHttpActionResult Put(DTOGemeenteCategorie gemcat)
+        {
+            BegrotingManager begMgr = new BegrotingManager();
+            int id = begMgr.changeGemcatInput(gemcat.inputID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
+                gemcat.kleur);
+            return Ok(id);
+        }
+
+       
 
 
         public HttpResponseMessage Post()

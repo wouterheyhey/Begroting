@@ -36,6 +36,59 @@ namespace DAL.repositories
             return ctx.FinancieleOverzichten.Include(nameof(FinancieelOverzicht.gemeente)).Include(nameof(FinancieelOverzicht.lijnen)).Where(e => e.lijnen.Any(p => p is GemeenteCategorie)).Where(y => y.gemeente.naam == naam).OfType<JaarBegroting>();
         }
 
+
+        public int updateGemcatInput(int gemcatId, string input, string icoon, string film, string foto, string kleur)
+        {
+            GemeenteCategorie gc = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(y => y.ID == gemcatId).SingleOrDefault();
+
+            if (gc == null)
+                return 0;
+
+            if(gc.categorieInput == null)
+            {
+                gc.categorieInput = createCategorieInput(input, icoon, film, foto, kleur);
+            }
+            else
+            {
+                gc.categorieInput.input = input;
+                gc.categorieInput.kleur = kleur;
+
+                if (icoon != null)
+                    gc.categorieInput.icoon = stringConverter(icoon);
+
+                if (film != null)
+                    gc.categorieInput.film = stringConverter(film);
+
+                if (foto != null)
+                    gc.categorieInput.foto = stringConverter(foto);
+            }
+                
+                ctx.Entry(gc).State = EntityState.Modified;
+                ctx.SaveChanges();
+            return gc.ID;
+        }
+
+        public CategorieInput createCategorieInput(string input, string icoon, string film, string foto, string kleur)
+        {
+
+            CategorieInput ci = new CategorieInput()
+            {
+                input = input,
+                kleur = kleur
+            };
+            if (icoon != null)
+                ci.icoon = stringConverter(icoon);
+
+            if (film != null)
+                ci.film = stringConverter(film);
+
+            if (foto != null)
+                ci.foto = stringConverter(foto);
+
+            return ci;
+
+        }
+
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
         {
             int id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
@@ -165,6 +218,13 @@ namespace DAL.repositories
             // als het jaar huidig of verleden is, gaat het om een rekening, geen begroting
             return  jaar <= DateTime.Now.Year;
         }
+
+        private byte[] stringConverter(string beeld)
+        {
+            byte[] bytes = new byte[beeld.Length * sizeof(char)];
+            System.Buffer.BlockCopy(beeld.ToCharArray(), 0, bytes, 0, bytes.Length);
+             return bytes;
+        }                            
 
 
 
