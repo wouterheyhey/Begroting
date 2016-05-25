@@ -8,6 +8,7 @@ using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.Entity.Infrastructure.Annotations;
 using BL.Domain;
+using System.Data.Entity.Validation;
 
 namespace DAL
 {
@@ -21,12 +22,53 @@ namespace DAL
 
         public override int SaveChanges()
         {
-            if (delaySave) return -1;
-            return base.SaveChanges();
+            try
+            {
+                if (delaySave) return -1;
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // Retrieve the error messages as a list of strings.
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+
+                // Join the list to a single string.
+                var fullErrorMessage = string.Join("; ", errorMessages);
+
+                // Combine the original exception message with the new one.
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                System.Diagnostics.Debug.WriteLine(exceptionMessage);
+
+                // Throw a new DbEntityValidationException with the improved exception message.
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
         }
+
         internal int CommitChanges()
         {
-            if (delaySave) return base.SaveChanges();
+            try
+            {
+                if (delaySave) return base.SaveChanges();
+            }
+            catch (DbEntityValidationException ex)
+            {
+                // Retrieve the error messages as a list of strings.
+                var errorMessages = ex.EntityValidationErrors
+                        .SelectMany(x => x.ValidationErrors)
+                        .Select(x => x.ErrorMessage);
+
+                // Join the list to a single string.
+                var fullErrorMessage = string.Join("; ", errorMessages);
+
+                // Combine the original exception message with the new one.
+                var exceptionMessage = string.Concat(ex.Message, " The validation errors are: ", fullErrorMessage);
+                System.Diagnostics.Debug.WriteLine(exceptionMessage);
+
+                // Throw a new DbEntityValidationException with the improved exception message.
+                throw new DbEntityValidationException(exceptionMessage, ex.EntityValidationErrors);
+            }
             throw new InvalidOperationException("No UnitOfWork present, use SaveChanges instead");
         }
 
@@ -55,8 +97,8 @@ namespace DAL
                 .HasForeignKey(fk => fk.parentGemCatId)
             ;
 
-            modelBuilder.Entity<Actie>().Property(x => x.actieLang).HasMaxLength(180);
-            modelBuilder.Entity<Actie>().Property(x => x.actieKort).HasMaxLength(60);
+         //   modelBuilder.Entity<Actie>().Property(x => x.actieLang).HasMaxLength(220); // some have longer strings than 220
+            modelBuilder.Entity<Actie>().Property(x => x.actieKort).HasMaxLength(150);
             modelBuilder.Entity<Actie>().Property(x => x.actieCode).HasMaxLength(15);
 
             modelBuilder.Entity<Cluster>().Property(x => x.name).IsRequired().HasMaxLength(120);
@@ -100,7 +142,8 @@ namespace DAL
             public DbSet<Stem> Stemmen { get; set; }
             public DbSet<AntwoordEmail> AntwoordEmails { get; set; }
             public DbSet<FAQ> FAQs { get; set; }
-        // public DbSet<Cluster> Clusters { get; set; }
+            public DbSet<Cluster> Clusters { get; set; }
 
     }
+
 }

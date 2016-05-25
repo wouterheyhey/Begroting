@@ -57,7 +57,7 @@ namespace WebApi.Controllers
         public IHttpActionResult Delete(int id)
         {
             GemeenteManager mgr = new GemeenteManager();
-            mgr.deleteBestuurlid(id);
+            mgr.DeleteBestuurlid(id);
             return Ok();
         }
 
@@ -66,7 +66,7 @@ namespace WebApi.Controllers
         public IHttpActionResult DeleteFAQ(int id)
         {
             GemeenteManager mgr = new GemeenteManager();
-            mgr.deleteFAQ(id);
+            mgr.DeleteFAQ(id);
             return Ok();
         }
 

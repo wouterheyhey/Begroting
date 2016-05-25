@@ -65,7 +65,7 @@ namespace DAL.repositories
 
             // Single calls to the DB instead of repeating for each loop
             List<HoofdGemeente> gems = gemRepo.ReadGemeentes().ToList<HoofdGemeente>();
-            List<GemeenteCategorie> gemCats = catRepo.ReadGemeenteCategories().ToList<GemeenteCategorie>();
+            List<GemeenteCategorie> gemCats = catRepo.ReadGemeenteCategoriesWithFinOverzichten().ToList<GemeenteCategorie>();
             List<Categorie> cats = catRepo.ReadCategories().ToList<Categorie>();
             List<Actie> acties = begRepo.ReadActies().ToList<Actie>();
             List<FinancieelOverzicht> fos = begRepo.ReadFinancieelOverzichten().ToList<FinancieelOverzicht>();
@@ -132,7 +132,7 @@ namespace DAL.repositories
 
             }
 
-           // catRepo.SaveContext();
+            catRepo.SaveContext();
             return inspraakItems;
         }
 
