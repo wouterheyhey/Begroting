@@ -114,13 +114,15 @@ namespace DAL.repositories
 
         public int updateAantalStemmenVoorstel(int id, string email)
         {
-            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
-            if (v != null)
+            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen).Where(v1 => v1.Id == id).SingleOrDefault();
+            if (v != null && ctx.Stemmen.Include(nameof(Stem.gebruiker)).Where(x => x.gebruiker.email == email).SingleOrDefault() == null)
             {
+ 
                 Stem s = new Stem()
                 {
-                    registratieDatum = DateTime.Now
-                };
+                    registratieDatum = DateTime.Now,
+                    gebruiker = ctx.Gebruikers.Where(x => x.email == email).SingleOrDefault()
+            };
                 v.aantalStemmen += 1;
                 if (v.stemmen == null)
                 {
@@ -137,13 +139,15 @@ namespace DAL.repositories
 
         public int createReactieVoorstel(int id, string email, string reactie)
         {
-            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
+            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.reacties.Select(g => g.auteur)).Where(v1 => v1.Id == id).SingleOrDefault();
             if (v != null)
             {
+
                 BegrotingsVoorstelReactie re = new BegrotingsVoorstelReactie()
                 {
                     reactieDatum = DateTime.Now,
-                    beschrijving = reactie
+                    beschrijving = reactie,
+                    auteur = ctx.Gebruikers.Where(x => x.email == email).SingleOrDefault()
                 };
 
                 if (v.reacties == null)
@@ -204,7 +208,7 @@ namespace DAL.repositories
 
             //auteurEmail  kan niet null of fout zijn --> Authorized webapi via token
             //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
-                    b.auteur = ctx.Gebruikers.Find(auteurEmail);
+            b.auteur = ctx.Gebruikers.Where(x => x.email == auteurEmail).SingleOrDefault();
 
             ctx.SaveChanges();
 
@@ -233,6 +237,7 @@ namespace DAL.repositories
         public IEnumerable<Project> readProjects(string gemeente)
         {
              return ctx.Projecten.Include(nameof(Project.begroting)).Include(v => v.voorstellen.Select(w => w.budgetWijzigingen.Select(i => i.inspraakItem)))
+                .Include(v => v.voorstellen.Select(r => r.reacties.Select(g => g.auteur)))
                 .Where(p => p.begroting.gemeente.naam == gemeente);
             
         }

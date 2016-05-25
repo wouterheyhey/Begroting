@@ -20,6 +20,7 @@ namespace WebApi.Models.DTO
         public string reactie { get; set; }
         public List<DTOReactie> reacties { get; set; }
         public List<string> afbeeldingen { get; set; }
+        public string auteurNaam { get; set; }
 
     }
 }
