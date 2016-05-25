@@ -13,7 +13,7 @@ namespace DAL
     public class AuthDBContext : IdentityDbContext<IdentityUser>
     {
         public AuthDBContext()
-            : base("BegrotingDB_Azure")
+            : base("BegrotingDB_EF")
         {
 
         }

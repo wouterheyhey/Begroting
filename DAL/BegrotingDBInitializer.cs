@@ -13,9 +13,10 @@ using System.Reflection;
 using DAL.repositories;
 using Microsoft.AspNet.Identity;
 
+
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
     {
 
 
@@ -44,23 +45,21 @@ namespace DAL
             ctx.SaveChanges();
 
             CreateSystemUser();
-
         }
 
-        private async void CreateSystemUser()
+        private void CreateSystemUser()
         {
             AccountRepository accRepo = new AccountRepository();
             GemeenteRepository gemRepo = new GemeenteRepository();
             InTeLoggenGebruiker gebruiker = new InTeLoggenGebruiker()
             {
-                email = "system@begroting.be",
-                Password = "blended01",
-                bevestigPaswoord = "blended01",
-                Naam = "SysteemGebruiker",
-                gemeente = "Antwerpen"
+                email = CredentialHandler.Decrypt("synT9FqJUvjvKVuXpo0rlrY6sbhEnR7sdb8psU4wACjsuPrenWJhH0IriM3U8cFPs8cyTetZeQTZSMqFQoLp"),
+                Password = CredentialHandler.Decrypt("vvfK5GPP6Z8Fihbet4XyJ7lFSfE+We61O82U/iW9lY8+rtYM82xJJIWVRtxdDJc="),
+                bevestigPaswoord = CredentialHandler.Decrypt("vvfK5GPP6Z8Fihbet4XyJ7lFSfE+We61O82U/iW9lY8+rtYM82xJJIWVRtxdDJc="),
+                Naam = CredentialHandler.Decrypt("lFLEFqjYLG2xw2T5IUV1AyJXN3euBipwLvI8+zKUo0aUD+KyQRzo21liuXDa9T8vPAKHXgdaVq3pZje/Uafa"),
+                gemeente = CredentialHandler.Decrypt("gh3YSAHrOP3PxTub9zjL1hGl6n8FdKRiPMfKHY0y+UGho547KBdVSKhBq0Yr7vE=")
             };
-            IdentityResult result = await accRepo.RegisterUser(gebruiker, gemRepo.ReadGemeente(gebruiker.gemeente), RolType.superadmin);
+            var result = accRepo.RegisterUser(gebruiker, gemRepo.ReadGemeente(gebruiker.gemeente), RolType.superadmin);
         }
-
     }
 }
