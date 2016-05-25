@@ -100,6 +100,7 @@ namespace WebApi.Providers
             var identity = new ClaimsIdentity(context.Options.AuthenticationType);
             identity.AddClaim(new Claim(ClaimTypes.Name, context.UserName));
             identity.AddClaim(new Claim("sub", context.UserName));
+            identity.AddClaim(new Claim(ClaimTypes.Role, accMgr.GetRole(context.UserName).ToString()));
             //
 
             var props = new AuthenticationProperties(new Dictionary<string, string>

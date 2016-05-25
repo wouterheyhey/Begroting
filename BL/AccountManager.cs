@@ -50,6 +50,10 @@ namespace BL
         {
             return repo.AddRefreshToken(token);
         }
+        public string GetAspUserId(string userName)
+        {
+            return repo.GetAspUserId(userName);
+        }
         public Task<bool> RemoveRefreshToken(RefreshToken refreshToken)
         {
             return repo.RemoveRefreshToken(refreshToken);

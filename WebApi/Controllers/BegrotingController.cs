@@ -17,7 +17,7 @@ namespace WebApi.Controllers
 
         [Route("getClusterAverages")]
         [HttpGet]
-        public IHttpActionResult getClusterAverages( int clusterId=5, int jaar=2020)
+        public IHttpActionResult getClusterAverages(int clusterId, int jaar)
         {
             GemeenteManager gemMgr = new GemeenteManager();
             CategorieManager catMgr = new CategorieManager();
@@ -42,6 +42,7 @@ namespace WebApi.Controllers
                 catMgr.GetAllParentsCategorien(cat, parents);
                 DTOCats.Add(MapCatToDTOCatWithParents(cat, parents));
             }
+            if(DTOCats == null || DTOCats.Count() == 0) return StatusCode(HttpStatusCode.NoContent);
 
             return Ok(DTOCats);
         }
@@ -128,21 +129,37 @@ namespace WebApi.Controllers
             d.ID = gemCat.ID;
             d.totaal = gemCat.totaal;
 
-            char[] chars = new char[gemCat.categorieInput.foto.Length / sizeof(char)];
-            System.Buffer.BlockCopy(gemCat.categorieInput.foto, 0, chars, 0, gemCat.categorieInput.foto.Length);
-            d.foto = new string(chars);
+            if(gemCat.categorieInput != null)
+            {
+                if (gemCat.categorieInput.foto != null)
+                {
+                    char[] chars = new char[gemCat.categorieInput.foto.Length / sizeof(char)];
+                    System.Buffer.BlockCopy(gemCat.categorieInput.foto, 0, chars, 0, gemCat.categorieInput.foto.Length);
+                    d.foto = new string(chars);
+                }
 
-            char[] chars2 = new char[gemCat.categorieInput.film.Length / sizeof(char)];
-            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars2, 0, gemCat.categorieInput.film.Length);
-            d.film = new string(chars2);
+                if (gemCat.categorieInput.film != null)
+                {
+                    char[] chars2 = new char[gemCat.categorieInput.film.Length / sizeof(char)];
+                    System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars2, 0, gemCat.categorieInput.film.Length);
+                    d.film = new string(chars2);
+                }
 
-            char[] chars3 = new char[gemCat.categorieInput.icoon.Length / sizeof(char)];
-            System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars3, 0, gemCat.categorieInput.icoon.Length);
-            d.icoon = new string(chars3);
-            d.inputID = gemCat.categorieInput.Id;
-            d.input = gemCat.categorieInput.input;
-            d.kleur = gemCat.categorieInput.kleur;
+                if (gemCat.categorieInput.icoon != null)
+                {
+                    char[] chars3 = new char[gemCat.categorieInput.icoon.Length / sizeof(char)];
+                    System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars3, 0, gemCat.categorieInput.icoon.Length);
+                    d.icoon = new string(chars3);
+                }
 
+                d.inputID = gemCat.categorieInput.Id;
+                d.input = gemCat.categorieInput.input;
+                d.kleur = gemCat.categorieInput.kleur;
+            }
+
+           
+            
+          
 
             // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
 

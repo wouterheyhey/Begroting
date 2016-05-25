@@ -76,24 +76,6 @@ namespace WebApi.Controllers
 
            return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
-      /*  public IHttpActionResult DisableUser(string userName)
-        {
-            if (accMgr.DisableUser(userName)) return Ok();
-            else return StatusCode(HttpStatusCode.NotModified);
-        }
-
-        public IHttpActionResult EnableUser(string userName)
-        {
-            if (accMgr.EnableUser(userName)) return Ok();
-            else return StatusCode(HttpStatusCode.NotModified);
-        }
-
-        public IHttpActionResult SetRole(string userName, RolType rolType)
-        {
-            if (accMgr.SetRole(userName, rolType)) return Ok();
-            else return StatusCode(HttpStatusCode.NotModified);
-        } */
-
 
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]

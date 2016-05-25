@@ -33,7 +33,7 @@ namespace WebApi.Controllers
                 return StatusCode(HttpStatusCode.NoContent);
             return Ok(gemeente);
         }
-
+      //  [Authorize(Roles = "admin")]
         [HttpPut]
         public IHttpActionResult Put(DTOHoofdGemeente h)
         {
