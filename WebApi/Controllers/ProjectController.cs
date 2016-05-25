@@ -133,7 +133,8 @@ namespace WebApi.Controllers
                             samenvatting = voorstel.samenvatting,
                             verificatieStatus = (int)voorstel.verificatieStatus,
                             aantalStemmen = voorstel.aantalStemmen,
-                            budgetWijzigingen = new List<DTOBudgetWijziging>()
+                            budgetWijzigingen = new List<DTOBudgetWijziging>(),
+                            auteurNaam = voorstel.auteur.userName
                         };
 
                         
@@ -155,17 +156,23 @@ namespace WebApi.Controllers
                             bv.budgetWijzigingen.Add(dw); 
                         }
                         //voor elke reactie op een voorstel
-                        foreach (var reactie in voorstel.reacties)
+                        if(voorstel.reacties != null)
                         {
-                            DTOReactie re = new DTOReactie()
+                            foreach (var reactie in voorstel.reacties)
                             {
-                                email = reactie.auteur.email,
-                                beschrijving = reactie.beschrijving,
-                            };
-                            re.reactieDatum = ((DateTime)reactie.reactieDatum).ToString("d");
+                                DTOReactie re = new DTOReactie()
+                                {
+                                    email = reactie.auteur.email,
+                                    beschrijving = reactie.beschrijving,
+                                };
+                                re.reactieDatum = ((DateTime)reactie.reactieDatum).ToString("d");
 
-                            bv.reacties.Add(re);
+                                if (bv.reacties == null)
+                                    bv.reacties = new List<DTOReactie>();
+                                bv.reacties.Add(re);
+                            }
                         }
+                       
 
                         lbv.Add(bv);
                     }
