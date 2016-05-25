@@ -15,7 +15,7 @@ namespace DAL
      internal class BegrotingDBContext : DbContext 
         {
         private readonly bool delaySave;
-        public BegrotingDBContext(bool unitOfWorkPresent = false) : base("BegrotingDB_EF")
+        public BegrotingDBContext(bool unitOfWorkPresent = false) : base("BegrotingDB_Azure")
         {
             delaySave = unitOfWorkPresent;
         }

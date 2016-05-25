@@ -16,7 +16,7 @@ using Microsoft.AspNet.Identity;
 
 namespace DAL
 {
-    internal class BegrotingDBInitializer : DropCreateDatabaseAlways<BegrotingDBContext>
+    internal class BegrotingDBInitializer : DropCreateDatabaseIfModelChanges<BegrotingDBContext>
     {
 
 
