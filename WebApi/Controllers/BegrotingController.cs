@@ -307,7 +307,7 @@ namespace WebApi.Controllers
         public IHttpActionResult Put(DTOGemeenteCategorie gemcat)
         {
             BegrotingManager begMgr = new BegrotingManager();
-            int id = begMgr.changeGemcatInput(gemcat.inputID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
+            int id = begMgr.changeGemcatInput(gemcat.ID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
                 gemcat.kleur);
             return Ok(id);
         }
