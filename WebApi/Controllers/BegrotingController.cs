@@ -309,6 +309,8 @@ namespace WebApi.Controllers
             BegrotingManager begMgr = new BegrotingManager();
             int id = begMgr.changeGemcatInput(gemcat.ID, gemcat.input, gemcat.icoon, gemcat.film, gemcat.foto,
                 gemcat.kleur);
+            if(id==0)
+                return StatusCode(HttpStatusCode.BadRequest);
             return Ok(id);
         }
 
