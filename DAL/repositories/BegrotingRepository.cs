@@ -91,12 +91,7 @@ namespace DAL.repositories
 
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
         {
-            int id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
-               .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
-               .Select(c => c.Id).SingleOrDefault();
-
-            var gemeentecats = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(x => x.financieelOverzicht.Id == id);
-
+            var gemeentecats = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(x => x.financieelOverzicht.boekJaar == jaar && x.financieelOverzicht.gemeente.naam == naam);
             return gemeentecats;
         }
 
@@ -152,9 +147,6 @@ namespace DAL.repositories
             UpdateActie(actie);
             return;
         }
-
-
-
 
         public FinancieelOverzicht ReadFinancieelOverzicht(int jaar, HoofdGemeente gemeente)
         {
@@ -225,13 +217,6 @@ namespace DAL.repositories
             System.Buffer.BlockCopy(beeld.ToCharArray(), 0, bytes, 0, bytes.Length);
              return bytes;
         }                            
-
-
-
-       
-
-
-
 
     }
 }

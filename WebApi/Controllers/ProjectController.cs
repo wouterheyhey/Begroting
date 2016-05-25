@@ -72,7 +72,7 @@ namespace WebApi.Controllers
             }
 
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
-              p.minBedrag, p.maxBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
+              p.minBedrag, p.maxBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding, p.emailBeheerder);
             uowMgr.Save();
 
             return Ok(id);
@@ -159,8 +159,7 @@ namespace WebApi.Controllers
                         {
                             DTOReactie re = new DTOReactie()
                             {
-                                //@TODO veranderen naar reactie.auteur.email
-                                email = "test@test.be",
+                                email = reactie.auteur.email,
                                 beschrijving = reactie.beschrijving,
                             };
                             re.reactieDatum = ((DateTime)reactie.reactieDatum).ToString("d");

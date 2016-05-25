@@ -38,7 +38,6 @@ namespace DAL.repositories
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Include(nameof(HoofdGemeente.FAQs)).Include(nameof(HoofdGemeente.bestuur)).Where<HoofdGemeente>(x => x.naam == gemeenteNaam).SingleOrDefault();
         }
 
-        // SPRINT2: wordt niet gebruikt
         public HoofdGemeente ReadGemeente(int id)
         {
             return ctx.Gemeenten.Include(nameof(HoofdGemeente.deelGemeenten)).Where<HoofdGemeente>(x => x.HoofdGemeenteID == id).SingleOrDefault();

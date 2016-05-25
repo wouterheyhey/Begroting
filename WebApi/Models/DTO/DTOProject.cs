@@ -22,6 +22,8 @@ namespace WebApi.Models.DTO
         public bool isActief { get; set; }
         public string afbeelding { get; set; }
         public List<DTOBegrotingVoorstel> voorstellen { get; set; }
+        public string emailBeheerder { get; set; }
+
 
     }
 }

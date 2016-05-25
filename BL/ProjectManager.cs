@@ -27,7 +27,7 @@ namespace BL
             return repo.getInspraakItems(jaar, gemeente);
         }
 
-        public int addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)
+        public int addProject(ProjectScenario ps, string tit, string vra, string info, float bedrag, float min, float max, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding, string emailBeheerder)
         {
             Project p = new Project()
             {
@@ -42,7 +42,7 @@ namespace BL
 
             };
 
-           return  repo.createProject(p, inspraakItems, afbeelding ,boekjaar, gemeente);
+           return  repo.createProject(p, inspraakItems, afbeelding ,boekjaar, gemeente, emailBeheerder);
         }
 
         public int changeProject(int id, ProjectScenario projectScenario, string titel, string vraag, string extraInfo, float bedrag, float minBedrag, float maxBedrag, IDictionary<int, int> inspraakItems, int? boekjaar, string gemeente, bool isActief, string afbeelding)

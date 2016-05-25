@@ -27,11 +27,11 @@ namespace DAL.repositories
             ctx.Database.Log = msg => System.Diagnostics.Debug.WriteLine(msg);
         }
 
-        public int createProject(Project p, IDictionary<int, int> inspraakItems, string afbeelding, int? boekjaar, string gemeente)
+        public int createProject(Project p, IDictionary<int, int> inspraakItems, string afbeelding, int? boekjaar, string gemeente, string beheerder)
         {
-            //momenteel mag er maar 1 project zijn per begroting
+            //we gaan ervan uit dat er  maar 1 project mag zijn per begroting
             Project pp = readProject((int)boekjaar, gemeente);
-            //momenteel mag er maar 1 project zijn per begroting
+            Gebruiker g = ctx.Gebruikers.Where(x => x.email == beheerder).SingleOrDefault();
             if (pp == null)
             {
                 p.inspraakItems = new HashSet<InspraakItem>();
@@ -63,6 +63,7 @@ namespace DAL.repositories
                 FinancieelOverzicht fov = ctx.FinancieleOverzichten.Where(fo => fo.gemeente.naam == gemeente && fo.boekJaar == boekjaar).SingleOrDefault();
 
                     p.begroting = (JaarBegroting)fov;
+                    p.beheerder = g;
                     ctx.Projecten.Add(p);
                     ctx.SaveChanges();
                     return p.Id;     // wordt 0 met unit of work aangezien de save wordt uitgesteld
@@ -113,8 +114,7 @@ namespace DAL.repositories
 
         public int updateAantalStemmenVoorstel(int id, string email)
         {
-            //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
-            BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).Include(c => c.stemmen).SingleOrDefault();
+            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
             if (v != null)
             {
                 Stem s = new Stem()
@@ -137,8 +137,7 @@ namespace DAL.repositories
 
         public int createReactieVoorstel(int id, string email, string reactie)
         {
-            //  BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
-            BegrotingsVoorstel v = ctx.Voorstellen.Where(v1 => v1.Id == id).Include(c => c.stemmen).SingleOrDefault();
+            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker).Where(g1=> g1.email == email)).Where(v1 => v1.Id == id).SingleOrDefault();
             if (v != null)
             {
                 BegrotingsVoorstelReactie re = new BegrotingsVoorstelReactie()
@@ -203,20 +202,10 @@ namespace DAL.repositories
             Project p = ctx.Projecten.Include(nameof(Project.voorstellen)).Where(x => x.Id == id).SingleOrDefault();
             p.voorstellen.Add(b);
 
-            //auteurEmail komt uit token dus kan niet null of fout zijn
+            //auteurEmail  kan niet null of fout zijn --> Authorized webapi via token
             //aangezien je enkel een voorstel kan indienen als je ingelogd bent met een bestaand email
+                    b.auteur = ctx.Gebruikers.Find(auteurEmail);
 
-            if(auteurEmail != null)
-            {
-                Gebruiker g = ctx.Gebruikers.Find(auteurEmail);
-                //if verwijderen kan niet dat deze niet bestaat
-                if(g != null)
-                {
-                    b.auteur = g;
-                }
-                
-            }
-             
             ctx.SaveChanges();
 
         }
@@ -232,24 +221,13 @@ namespace DAL.repositories
 
         public IEnumerable<InspraakItem> getInspraakItems(int jaar, string naam)
         {
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == naam)
-               .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
-               .Select(c => c.Id).SingleOrDefault();
-
-
-            //moeten het zo ophalen omdat dit multilevel recurieve objecten zijn
-            var ip = from g in ctx.inspraakItems where g.financieelOverzicht.Id == id select g;
-
-            return ip;
+           return ctx.inspraakItems.Where(x => x.financieelOverzicht.boekJaar == jaar && x.financieelOverzicht.gemeente.naam == naam);
         }
 
         public Project readProject(int jaar, string gemeente)
         {
-            var id = ctx.FinancieleOverzichten.Include(nameof(JaarBegroting.gemeente)).Where(f1 => f1.gemeente.naam == gemeente)
-               .Where<FinancieelOverzicht>(f2 => f2.boekJaar == jaar)
-               .Select(c => c.Id).SingleOrDefault();
-
-            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Where(p => p.begroting.Id == id).SingleOrDefault();
+            return ctx.Projecten.Include(nameof(Project.inspraakItems)).Include(x => x.beheerder).Where(p => p.begroting.gemeente.naam == gemeente 
+            && p.begroting.boekJaar == jaar).SingleOrDefault();
         }
 
         public IEnumerable<Project> readProjects(string gemeente)
