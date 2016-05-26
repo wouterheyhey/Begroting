@@ -83,7 +83,10 @@ namespace DAL.repositories
 
                     byte[] bytes = new byte[afbeelding.Length * sizeof(char)];
                     System.Buffer.BlockCopy(afbeelding.ToCharArray(), 0, bytes, 0, bytes.Length);
-                    pp.afbeelding = bytes;
+                   // pp.afbeelding = bytes;
+                   string convert = afbeelding.Replace("data:image/png;base64,", "");
+                    convert = convert.Replace("data:image/jpeg;base64,", "");
+                    pp.afbeelding = Convert.FromBase64String(convert);
 
                 }
                 if (inspraakItems != null)

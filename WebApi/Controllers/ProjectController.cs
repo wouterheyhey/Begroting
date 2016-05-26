@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 using WebApi.Models.DTO;
 
@@ -282,7 +283,7 @@ namespace WebApi.Controllers
 
                 // char[] chars = new char[p.afbeelding.Length / sizeof(char)];
                 //  afb = new string(chars);
-                afb = Convert.ToBase64String(p.afbeelding);
+                afb = "data:image/jpeg;base64," + Convert.ToBase64String(p.afbeelding);
 
             }
             

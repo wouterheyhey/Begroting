@@ -135,23 +135,17 @@ namespace WebApi.Controllers
             {
                 if (gemCat.categorieInput.foto != null)
                 {
-                    char[] chars = new char[gemCat.categorieInput.foto.Length / sizeof(char)];
-                    System.Buffer.BlockCopy(gemCat.categorieInput.foto, 0, chars, 0, gemCat.categorieInput.foto.Length);
-                    d.foto = new string(chars);
+                    d.foto = Convert.ToBase64String(gemCat.categorieInput.foto);
                 }
 
                 if (gemCat.categorieInput.film != null)
                 {
-                    char[] chars2 = new char[gemCat.categorieInput.film.Length / sizeof(char)];
-                    System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars2, 0, gemCat.categorieInput.film.Length);
-                    d.film = new string(chars2);
+                    d.film = Convert.ToBase64String(gemCat.categorieInput.film);
                 }
 
                 if (gemCat.categorieInput.icoon != null)
                 {
-                    char[] chars3 = new char[gemCat.categorieInput.icoon.Length / sizeof(char)];
-                    System.Buffer.BlockCopy(gemCat.categorieInput.film, 0, chars3, 0, gemCat.categorieInput.icoon.Length);
-                    d.icoon = new string(chars3);
+                    d.icoon = Convert.ToBase64String(gemCat.categorieInput.icoon);
                 }
 
                 d.inputID = gemCat.categorieInput.Id;
@@ -233,7 +227,9 @@ namespace WebApi.Controllers
         public IHttpActionResult getBegrotingen(string naam)
         {
             BegrotingManager begMgr = new BegrotingManager();
+            ProjectManager prmgr = new ProjectManager();
             IEnumerable<JaarBegroting> jbs = begMgr.readBegrotingen(naam);
+            IEnumerable<Project> project = prmgr.getProjects(naam);
             if (jbs == null || jbs.Count() == 0)
                 return StatusCode(HttpStatusCode.NoContent);
             List<DTOBegroting> begrotingen = new List<DTOBegroting>();
@@ -245,6 +241,11 @@ namespace WebApi.Controllers
                     childCats = new List<DTOGemeenteCategorie>()
                     
                 };
+                Project p = project.Where(x => x.begroting.Id == item.Id).SingleOrDefault();
+                if (p == null)
+                    b.hasProject = false;
+                else
+                    b.hasProject = true;
                 if(item.lijnen != null)
                 {
                     foreach (var lijn in item.lijnen)

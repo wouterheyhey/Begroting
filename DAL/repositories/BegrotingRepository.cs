@@ -34,6 +34,7 @@ namespace DAL.repositories
         public IEnumerable<JaarBegroting> getBegrotingen(string naam)
         {
             return ctx.FinancieleOverzichten.Include(nameof(FinancieelOverzicht.gemeente)).Include(nameof(FinancieelOverzicht.lijnen)).Where(e => e.lijnen.Any(p => p is GemeenteCategorie)).Where(y => y.gemeente.naam == naam).OfType<JaarBegroting>();
+
         }
 
 
