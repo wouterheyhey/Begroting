@@ -112,6 +112,7 @@ namespace WebApi.Controllers
         public IHttpActionResult GetProjects( string naam)
         {
             ProjectManager mgr = new ProjectManager();
+            CategorieManager catmgr = new CategorieManager();
             List<Project> p = mgr.getProjects( naam).ToList();
 
             if (p == null || p.Count() == 0)
@@ -137,7 +138,7 @@ namespace WebApi.Controllers
                             samenvatting = voorstel.samenvatting,
                             verificatieStatus = (int)voorstel.verificatieStatus,
                             aantalStemmen = voorstel.aantalStemmen,
-                            budgetWijzigingen = new List<DTOBudgetWijziging>(),
+                            gemcats = new List<DTOGemeenteCategorie>(),
                             //AANPASSEN NAAR voorstel.auteur.userName
                             
                         };
@@ -154,19 +155,18 @@ namespace WebApi.Controllers
                         //voor elke wijziging in voorstel
                         foreach (var wijziging in voorstel.budgetWijzigingen)
                         {
-                            DTOBudgetWijziging dw = new DTOBudgetWijziging()
-                            {
-                                bedrag = wijziging.bedrag,
-                                beschrijving = wijziging.beschrijving,
-                            };
                             var gemCat = wijziging.inspraakItem as GemeenteCategorie;
                             var actie = wijziging.inspraakItem as Actie;
-                            if (gemCat != null)
-                                dw.InspraakItem = gemCat.categorieNaam;
-                            else
-                                dw.InspraakItem = actie.actieKort;
 
-                            bv.budgetWijzigingen.Add(dw); 
+                            //hirarchie voor graph
+                            List<InspraakItem> parents;
+                            if (gemCat != null)
+                            {
+
+                                parents = new List<InspraakItem>();
+                                catmgr.GetAllParents(gemCat, parents);
+                                bv.gemcats.Add(MapGemCatToDTOGemCatWithParents(gemCat, wijziging.bedrag,parents));
+                            }
                         }
                         //voor elke reactie op een voorstel
                         if(voorstel.reacties != null)
@@ -376,6 +376,42 @@ namespace WebApi.Controllers
             return d;
         }
 
+        private DTOGemeenteCategorie MapGemCatToDTOGemCatWithParents(GemeenteCategorie gemCat, float wijziging, List<InspraakItem> gemCats)
+        {
+            DTOGemeenteCategorie d = new DTOGemeenteCategorie();
+
+            foreach (InspraakItem item in gemCats.Where(x => x is GemeenteCategorie))
+            {
+                // platmaken van de hierarchische structuur met het oog op de graphs
+                // elke categorieType komt maximaal 1x voor als je de parents meegeeft 
+                d = MapTypeToPropery(((GemeenteCategorie)item), d);
+                //   d.cats[((GemeenteCategorie)item).categorieType.ToString()] = ((GemeenteCategorie)item).categorieNaam;
+            }
+            d.ID = gemCat.ID;
+            d.totaal = wijziging;
+            d.naamCat = gemCat.categorieNaam;
+
+            d = MapTypeToPropery(gemCat, d);
+
+            return d;
+        }
+
+        private DTOGemeenteCategorie MapTypeToPropery(GemeenteCategorie item, DTOGemeenteCategorie d)
+        {
+            switch (item.categorieType.ToString())
+            {
+                case ("A"):
+                    d.catA = item.categorieNaam;
+                    break;
+                case ("B"):
+                    d.catB = item.categorieNaam;
+                    break;
+                case ("C"):
+                    d.catC = item.categorieNaam;
+                    break;
+            }
+            return d;
+        }
     }
 }
 

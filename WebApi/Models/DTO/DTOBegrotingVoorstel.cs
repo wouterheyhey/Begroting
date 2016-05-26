@@ -13,6 +13,7 @@ namespace WebApi.Models.DTO
         public string samenvatting { get; set; }
         public string beschrijving { get; set; }
         public List<DTOBudgetWijziging> budgetWijzigingen { get; set; }
+        public List<DTOGemeenteCategorie> gemcats { get; set; }
         public int verificatieStatus { get; set; }
         public string verificatorEmail { get; set; } 
         public string auteurEmail { get; set; }
