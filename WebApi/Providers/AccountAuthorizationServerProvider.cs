@@ -102,7 +102,7 @@ namespace WebApi.Providers
             identity.AddClaim(new Claim("sub", context.UserName));
             identity.AddClaim(new Claim(ClaimTypes.Role, accMgr.GetRole(context.UserName).ToString()));
             //
-
+            
             var props = new AuthenticationProperties(new Dictionary<string, string>
                 {
                     {
@@ -116,6 +116,9 @@ namespace WebApi.Providers
                     },
                     {
                         "gemeente", accMgr.GetGebruiker(context.UserName).gemeente.naam
+                    },
+                    {
+                        "name", accMgr.GetGebruiker(context.UserName).naam
                     }
                 });
 

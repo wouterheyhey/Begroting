@@ -100,6 +100,21 @@ namespace DAL.repositories
                 return false;
             }
         }
+        public bool UpdateGebruiker(string userName, HoofdGemeente gemeente)
+        {
+            try
+            {
+                Gebruiker gebruikerInContext = GetGebruiker(userName);
+                gebruikerInContext.gemeente = gemeente;
+                ctx.SaveChanges();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+
+        }
 
         public IEnumerable<Gebruiker> GetGebruikers(string gemeente)
         {
@@ -134,7 +149,6 @@ namespace DAL.repositories
             }
 
         }
-
 
         public RolType GetRole(string userName)
         {

@@ -94,6 +94,10 @@ namespace BL
         {
             return repo.UpdateGebruikers(gebruikers);
         }
+        public bool ChangeGebruiker(string user, HoofdGemeente gemeente)
+        {
+            return repo.UpdateGebruiker(user, gemeente);
+        }
         public RolType GetRole(string userName)
         {
             return repo.GetRole(userName);

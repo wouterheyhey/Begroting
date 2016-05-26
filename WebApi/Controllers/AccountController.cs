@@ -25,10 +25,12 @@ namespace WebApi.Controllers
     public class AccountController : ApiController
     {
         private AccountManager accMgr = null;
+        private GemeenteManager gemMgr = null;
 
         public AccountController()
         {
             accMgr = new AccountManager();
+            gemMgr = new GemeenteManager();
         }
         public IHttpActionResult Get(string userName)
         {
@@ -57,26 +59,31 @@ namespace WebApi.Controllers
                 }
 
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(HttpStatusCode.NoContent);
             }
         }
+
         public IHttpActionResult Put(List<DTOGebruiker> dtoGebruikers)
         {
             List<Gebruiker> gebruikers = new List<Gebruiker>();
-            if(dtoGebruikers != null)
+            if (dtoGebruikers != null)
             {
                 foreach (DTOGebruiker g in dtoGebruikers)
                 {
                     gebruikers.Add(new Gebruiker() { userName = g.userId, rolType = g.rolType, isActief = g.isActief });
                 }
             }
-          
 
-           return Ok(accMgr.ChangeGebruikers(gebruikers));
+
+            return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
 
+        public IHttpActionResult Put(string userName, string gemeente)
+        {
+            return Ok(accMgr.ChangeGebruiker(userName, gemMgr.GetGemeente(gemeente)));
+        }
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]
         [Route("SetRoles")]
@@ -160,7 +167,6 @@ namespace WebApi.Controllers
         }
 
         // Externe Logins
-
         private IAuthenticationManager Authentication
         {
             get { return Request.GetOwinContext().Authentication; }
