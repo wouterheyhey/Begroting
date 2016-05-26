@@ -66,10 +66,10 @@ namespace DAL.repositories
                     p.beheerder = g;
                     ctx.Projecten.Add(p);
                     ctx.SaveChanges();
-                    return p.Id;     // wordt 0 met unit of work aangezien de save wordt uitgesteld
-                
+                // return p.Id;     // wordt 0 met unit of work aangezien de save wordt uitgesteld
+                return 0;
             }
-            else return 0;
+            else return 1; //om aan te geven dat de create niet gelukt is aangezien we niet met id kunnen werken
             
         }
 
@@ -105,11 +105,12 @@ namespace DAL.repositories
                 pp.isActief = isActief;
 
                 ctx.Entry(pp).State = EntityState.Modified;
-                ctx.SaveChanges();  
-                return pp.Id;  // zal 0 zijn wanneer unit of work gebruikt wordt
+                ctx.SaveChanges();
+                //  return pp.Id;  // zal 0 zijn wanneer unit of work gebruikt wordt
+                return 0;
             }
             else
-                return 0;
+                return 1; //om aan te geven dat de update niet gelukt is aangezien we niet met id kunnen werken
         }
 
         public int updateAantalStemmenVoorstel(int id, string email)

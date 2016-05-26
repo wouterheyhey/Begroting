@@ -74,7 +74,8 @@ namespace WebApi.Controllers
            int id =  mgr.addProject((ProjectScenario)p.projectScenario, p.titel, p.vraag, p.extraInfo, p.bedrag,
               p.minBedrag, p.maxBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding, p.emailBeheerder);
             uowMgr.Save();
-
+            if (id == 1)
+               return BadRequest("Er bestaat al een project voor deze begroting");
             return Ok(id);
         }
         [Route("updateProject/{id}")]
@@ -99,6 +100,8 @@ namespace WebApi.Controllers
                p.minBedrag, p.minBedrag, inspraakItems, p.boekjaar, p.gemeente, p.isActief, p.afbeelding);
 
             uowMgr.Save();
+            if (idP == 1)
+               return BadRequest("er is iets fout gelopen");
 
             return Ok(idP);
         }
