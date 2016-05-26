@@ -137,9 +137,18 @@ namespace WebApi.Controllers
                             verificatieStatus = (int)voorstel.verificatieStatus,
                             aantalStemmen = voorstel.aantalStemmen,
                             budgetWijzigingen = new List<DTOBudgetWijziging>(),
-                            auteurNaam = voorstel.auteur.userName
+                            //AANPASSEN NAAR voorstel.auteur.userName
+                            
                         };
-
+                        //VERWIJDEREN NIET VERGETEN
+                        if(voorstel.auteur != null)
+                        {
+                            bv.auteurNaam = voorstel.auteur.userName;
+                        }
+                        else
+                        {
+                            bv.auteurNaam = "system@begroting.be";
+                        }
                         
                         //voor elke wijziging in voorstel
                         foreach (var wijziging in voorstel.budgetWijzigingen)
