@@ -115,14 +115,16 @@ namespace DAL.repositories
 
         public int updateAantalStemmenVoorstel(int id, string email)
         {
-            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen).Where(v1 => v1.Id == id).SingleOrDefault();
-            if (v != null && ctx.Stemmen.Include(nameof(Stem.gebruiker)).Where(x => x.gebruiker.email == email).SingleOrDefault() == null)
+            BegrotingsVoorstel v = ctx.Voorstellen.Include(s => s.stemmen.Select(g => g.gebruiker)).Where(v1 => v1.Id == id).SingleOrDefault();
+
+            if (v != null && v.stemmen.Any(x => x.gebruiker.email == email) == false)
             {
  
                 Stem s = new Stem()
                 {
                     registratieDatum = DateTime.Now,
                     gebruiker = ctx.Gebruikers.Where(x => x.email == email).SingleOrDefault()
+
             };
                 v.aantalStemmen += 1;
                 if (v.stemmen == null)
