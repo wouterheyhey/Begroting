@@ -46,7 +46,7 @@ namespace DAL.repositories
 
                 if (gc.categorieInput == null)
                 {
-                    gc.categorieInput = createCategorieInput(catinput.Item2, catinput.Item3, catinput.Item4, catinput.Item5, catinput.Item6);
+                    gc.categorieInput = new CategorieInput(catinput.Item2, catinput.Item3, catinput.Item4, catinput.Item5, catinput.Item6);
                 }
                 else
                 {
@@ -68,26 +68,7 @@ namespace DAL.repositories
             ctx.SaveChanges();
         }
 
-        public CategorieInput createCategorieInput(string input, string icoon, string film, string foto, string kleur)
-        {
 
-            CategorieInput ci = new CategorieInput()
-            {
-                input = input,
-                kleur = kleur
-            };
-            if (icoon != null)
-                ci.icoon = stringConverter(icoon);
-
-            if (film != null)
-                ci.film = stringConverter(film);
-
-            if (foto != null)
-                ci.foto = stringConverter(foto);
-
-            return ci;
-
-        }
 
         public IEnumerable<GemeenteCategorie> getGemeenteCategories(int jaar, string naam)
         {

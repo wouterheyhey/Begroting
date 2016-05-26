@@ -91,6 +91,7 @@ namespace WebApi.Controllers
             d.ID = cat.ToString().GetHashCode(); 
             d.totaal = cat.totaal;
             d.catCode = cat.categorieCode;
+            d.naamCat = cat.categorieNaam;
             // d.cats[gemCat.categorieType.ToString()] = gemCat.categorieNaam;
 
             d = MapTypeToProperyCategorie(cat, d);
