@@ -14,7 +14,7 @@ namespace WebApi.Controllers
     [RoutePrefix("api/begroting")]
     public class BegrotingController : ApiController
     {
-
+        [AllowAnonymous]
         [Route("getClusterAverages")]
         [HttpGet]
         public IHttpActionResult getClusterAverages(string gemeenteNaam, int jaar)
@@ -49,7 +49,7 @@ namespace WebApi.Controllers
 
 
 
-
+        [AllowAnonymous]
         public IHttpActionResult Get(int jaar, string naam)
         {
             CategorieManager catMgr = new CategorieManager();
@@ -196,7 +196,7 @@ namespace WebApi.Controllers
             return d;
         }
 
-
+        [AllowAnonymous]
         public IHttpActionResult Get(int id)
         {
             BegrotingManager begMgr = new BegrotingManager();
@@ -221,7 +221,7 @@ namespace WebApi.Controllers
 
             return Ok(DTOacties);
         }
-
+        [AllowAnonymous]
         [Route("getBegrotingen")]
         [HttpGet]
         public IHttpActionResult getBegrotingen(string naam)
@@ -304,6 +304,7 @@ namespace WebApi.Controllers
             return StatusCode(HttpStatusCode.OK);
         }
 
+        [Authorize(Roles = "admin,superadmin")]
         [Route("changeCatInput")]
         [HttpPut]
         public IHttpActionResult Put(List<DTOGemeenteCategorie> gemcats)
@@ -323,7 +324,7 @@ namespace WebApi.Controllers
 
 
 
-
+        [Authorize(Roles = "superadmin")]
         public HttpResponseMessage Post()
         {
             HttpResponseMessage result = null;

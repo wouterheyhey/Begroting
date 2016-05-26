@@ -77,9 +77,9 @@ namespace BL
             repo.createBegrotingsVoorstel(id, b, auteurEmail, budgetwijzigingen, afbeeldingen);
         }
 
-        public void changeVoorstel(int id, int status)
+        public void changeVoorstel(int id, int status, string verificatorEmail)
         {
-            repo.UpdateVoorstel( id, status);
+            repo.UpdateVoorstel( id, status, verificatorEmail);
         }
 
         public int changeAantalStemmenVoorstel(int id, string email)

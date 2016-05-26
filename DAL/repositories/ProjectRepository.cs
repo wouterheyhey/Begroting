@@ -171,11 +171,12 @@ namespace DAL.repositories
 
 
 
-        public void UpdateVoorstel(int id, int status)
+        public void UpdateVoorstel(int id, int status, string verificatorEmail)
         {
             BegrotingsVoorstel bv = ctx.Voorstellen.Find(id);
             bv.verificatieStatus = (VerificatieStatus) status;
             bv.verificatieDatum = DateTime.Now;
+            bv.verificator = ctx.Gebruikers.Where(x => x.email == verificatorEmail).SingleOrDefault();
             ctx.SaveChanges();
         }
 

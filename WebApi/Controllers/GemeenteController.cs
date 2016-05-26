@@ -12,7 +12,7 @@ namespace WebApi.Controllers
     [RoutePrefix("api/Gemeente")]
     public class GemeenteController : ApiController
     {
-
+        [AllowAnonymous]
         // GET: api/Gemeente
         public IHttpActionResult Get()
         {
@@ -24,7 +24,7 @@ namespace WebApi.Controllers
 
             return Ok(gemeenten);
         }
-        // GET: api/Gemeente/id
+        [AllowAnonymous]
         public IHttpActionResult Get(string naam)
         {
             GemeenteManager mgr = new GemeenteManager();
@@ -33,7 +33,9 @@ namespace WebApi.Controllers
                 return StatusCode(HttpStatusCode.NoContent);
             return Ok(gemeente);
         }
-      //  [Authorize(Roles = "admin")]
+
+
+        [Authorize(Roles = "admin,superadmin")]
         [HttpPut]
         public IHttpActionResult Put(DTOHoofdGemeente h)
         {
@@ -44,6 +46,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "admin,superadmin")]
         [HttpPut]
         public IHttpActionResult Put(int id,DTOHoofdGemeente h)
         {
@@ -53,6 +56,7 @@ namespace WebApi.Controllers
             return Ok(i);
         }
 
+        [Authorize(Roles = "admin,superadmin")]
         [HttpDelete]
         public IHttpActionResult Delete(int id)
         {
@@ -61,6 +65,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "admin,superadmin")]
         [Route("deleteFAQ/{id}")]
         [HttpDelete]
         public IHttpActionResult DeleteFAQ(int id)

@@ -39,7 +39,7 @@ namespace WebApi.Controllers
             return Ok(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType, g.isActief));
         }
 
-        [AllowAnonymous]
+        [Authorize(Roles= "admin,moderator,superadmin")]
         [Route("GetGebruikers")]
         public IHttpActionResult GetGebruikers(string gemeente)
         {
@@ -64,7 +64,7 @@ namespace WebApi.Controllers
                 return StatusCode(HttpStatusCode.NoContent);
             }
         }
-
+        [Authorize(Roles = "admin,moderator,superadmin")]
         public IHttpActionResult Put(List<DTOGebruiker> dtoGebruikers)
         {
             List<Gebruiker> gebruikers = new List<Gebruiker>();
@@ -79,11 +79,12 @@ namespace WebApi.Controllers
 
             return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
-
+        [Authorize(Roles = "admin,moderator,superadmin")]
         public IHttpActionResult Put(string userName, string gemeente)
         {
             return Ok(accMgr.ChangeGebruiker(userName, gemMgr.GetGemeente(gemeente)));
         }
+
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
         [AllowAnonymous]
         [Route("SetRoles")]

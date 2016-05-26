@@ -14,7 +14,7 @@ namespace WebApi.Controllers
     [RoutePrefix("api/Project")]
     public class ProjectController : ApiController
     {
-
+        [AllowAnonymous]
         [Route("itemsGET")]
         [HttpGet]
         public IHttpActionResult Get(int jaar, string naam)
@@ -55,7 +55,8 @@ namespace WebApi.Controllers
             }
         }
 
-         
+
+        [Authorize(Roles = "admin,superadmin")]
         [Route("postProject")]
         [HttpPost]
         public IHttpActionResult Post(DTOProject p)
@@ -79,6 +80,8 @@ namespace WebApi.Controllers
                return BadRequest("Er bestaat al een project voor deze begroting");
             return Ok(id);
         }
+
+        [Authorize(Roles = "admin,superadmin")]
         [Route("updateProject/{id}")]
         [HttpPut]
         public IHttpActionResult put(int id, DTOProject p)
@@ -108,6 +111,7 @@ namespace WebApi.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet]
         public IHttpActionResult GetProjects( string naam)
         {
@@ -158,7 +162,7 @@ namespace WebApi.Controllers
                             var gemCat = wijziging.inspraakItem as GemeenteCategorie;
                             var actie = wijziging.inspraakItem as Actie;
 
-                            //hirarchie voor graph
+                            //hierarchie voor graph
                             List<InspraakItem> parents;
                             if (gemCat != null)
                             {
@@ -211,7 +215,8 @@ namespace WebApi.Controllers
             return Ok(dp);
         }
 
-        // id: projectID
+
+        [Authorize(Roles = "standaard,admin,moderator,superadmin")]
         [Route("postVoorstel/{id}")]
         [HttpPost]
         public IHttpActionResult Post(int id, DTOBegrotingVoorstel p)
@@ -240,6 +245,7 @@ namespace WebApi.Controllers
             return Ok();
         }
 
+        [Authorize(Roles = "standaard,admin,moderator,superadmin")]
         [Route("putStem/{id}")]
         [HttpPut]
         public IHttpActionResult put(int id, [FromBody]string email)
@@ -249,6 +255,7 @@ namespace WebApi.Controllers
             return Ok(idStem);
         }
 
+        [Authorize(Roles = "standaard,admin,moderator,superadmin")]
         [Route("postReactie/{id}")]
         [HttpPost]
         public IHttpActionResult postReactie(int id, DTOReactie r)
@@ -257,17 +264,17 @@ namespace WebApi.Controllers
             int idStem = mgr.addReactieVoorstel(id, r.email, r.beschrijving);
             return Ok(idStem);
         }
-
+        [Authorize(Roles = "admin,moderator,superadmin")]
         [Route("putVoorstel/{id}")]
         [HttpPut]
-        public IHttpActionResult put(int id, [FromBody]int status)
+        public IHttpActionResult put(int id, DTOBegrotingVoorstel b)
         {
             ProjectManager mgr = new ProjectManager();
-            mgr.changeVoorstel(id, status);
+            mgr.changeVoorstel(id,b.verificatieStatus, b.verificatorEmail);
             return Ok();
         }
 
-
+        [AllowAnonymous]
         [Route("projectGET")]
         [HttpGet]
         public IHttpActionResult GetProject(int jaar, string naam)
