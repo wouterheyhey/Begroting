@@ -143,18 +143,11 @@ namespace WebApi.Controllers
                             verificatieStatus = (int)voorstel.verificatieStatus,
                             aantalStemmen = voorstel.aantalStemmen,
                             gemcats = new List<DTOGemeenteCategorie>(),
-                            //AANPASSEN NAAR voorstel.auteur.userName
-                            
-                        };
+                            auteurNaam = voorstel.auteur.userName
+
+                    };
                         //VERWIJDEREN NIET VERGETEN
-                        if(voorstel.auteur != null)
-                        {
-                            bv.auteurNaam = voorstel.auteur.userName;
-                        }
-                        else
-                        {
-                            bv.auteurNaam = "system@begroting.be";
-                        }
+                            
                         
                         //voor elke wijziging in voorstel
                         foreach (var wijziging in voorstel.budgetWijzigingen)
