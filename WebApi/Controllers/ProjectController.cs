@@ -280,9 +280,10 @@ namespace WebApi.Controllers
             if (p.afbeelding != null)
             {
 
-                 char[] chars = new char[p.afbeelding.Length / sizeof(char)];
-                  afb = new string(chars);
-               
+                // char[] chars = new char[p.afbeelding.Length / sizeof(char)];
+                //  afb = new string(chars);
+                afb = Convert.ToBase64String(p.afbeelding);
+
             }
             
 
