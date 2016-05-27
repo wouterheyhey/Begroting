@@ -80,6 +80,7 @@ namespace WebApi.Controllers
             return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
         [Authorize(Roles = "admin,moderator,superadmin")]
+        [Route("PutGebruiker")]
         public IHttpActionResult Put(DTOGebruiker gebruiker)
         {
             return Ok(accMgr.ChangeGebruiker(gebruiker.userId, gemMgr.GetGemeente(gebruiker.gemeente)));
