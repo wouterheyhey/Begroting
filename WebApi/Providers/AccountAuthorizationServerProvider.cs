@@ -118,7 +118,7 @@ namespace WebApi.Providers
                         "gemeente", accMgr.GetGebruiker(context.UserName).gemeente.naam
                     },
                     {
-                        "name", accMgr.GetGebruiker(context.UserName).naam
+                        "naam", accMgr.GetGebruiker(context.UserName).naam
                     }
                 });
 
