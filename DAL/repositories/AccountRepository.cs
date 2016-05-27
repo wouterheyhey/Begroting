@@ -106,6 +106,7 @@ namespace DAL.repositories
             {
                 Gebruiker gebruikerInContext = GetGebruiker(userName);
                 gebruikerInContext.gemeente = gemeente;
+                ctx.Entry(gebruikerInContext.gemeente).State = System.Data.Entity.EntityState.Unchanged;
                 ctx.SaveChanges();
                 return true;
             }
