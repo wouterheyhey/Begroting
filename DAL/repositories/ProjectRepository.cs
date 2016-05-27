@@ -244,7 +244,7 @@ namespace DAL.repositories
         public IEnumerable<Project> readProjects(string gemeente)
         {
              return ctx.Projecten.Include(nameof(Project.begroting)).Include(v => v.voorstellen.Select(w => w.budgetWijzigingen.Select(i => i.inspraakItem)))
-                .Include(v => v.voorstellen.Select(r => r.reacties.Select(g => g.auteur)))
+                .Include(v => v.voorstellen.Select(r => r.reacties.Select(g => g.auteur))).Include(v => v.voorstellen.Select(g => g.auteur))
                 .Where(p => p.begroting.gemeente.naam == gemeente);
             
         }
