@@ -19,7 +19,7 @@ namespace BL.Domain
 
         public Actie()
         {
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
         }  // EF needs this
 
         public Actie(string actieCode, string actieKort, string actieLang)
@@ -27,14 +27,14 @@ namespace BL.Domain
             this.actieCode = actieCode;
             this.actieKort = actieKort;
             this.actieLang = actieLang;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
         }
 
         public Actie(string actieKort, string actieLang, BestuurType bt, float inkomsten, float uitgaven, FinancieelOverzicht fo, GemeenteCategorie gemCat)
         {
             this.actieKort = actieKort;
             this.actieLang = actieLang;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
             this.bestuurType = bt;
             this.inkomsten = inkomsten;
             this.uitgaven = uitgaven;
@@ -47,7 +47,7 @@ namespace BL.Domain
         {
             this.actieKort = actieKort;
             this.actieLang = actieLang;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
             this.bestuurType = bt;
             this.financieelOverzicht = fo;
             this.parentGemCat = gemCat;

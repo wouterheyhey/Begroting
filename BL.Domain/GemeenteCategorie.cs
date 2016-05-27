@@ -22,7 +22,7 @@ namespace BL.Domain
         public GemeenteCategorie(Categorie cat)
         {
          //   this.cat = cat;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
             this.categorieId = cat.categorieId;
             this.categorieCode = cat.categorieCode;
             this.categorieNaam = cat.categorieNaam;
@@ -32,7 +32,7 @@ namespace BL.Domain
         {
           //  this.cat = cat;
             this.financieelOverzicht = fo;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
             this.categorieId = cat.categorieId;
             this.categorieCode = cat.categorieCode;
             this.categorieNaam = cat.categorieNaam;
@@ -45,7 +45,7 @@ namespace BL.Domain
         {
             //  this.cat = cat;
             this.financieelOverzicht = fo;
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
             this.categorieId = cat.categorieId;
             this.categorieCode = cat.categorieCode;
             this.categorieNaam = cat.categorieNaam;
@@ -56,7 +56,7 @@ namespace BL.Domain
 
         public GemeenteCategorie()  // Required by EF
         {
-            this.inspraakNiveau = InspraakNiveau.Auto;
+            this.inspraakNiveau = InspraakNiveau.Open;
         }
 
         public float calculateTotal(float inkomsten, float uitgaven)
