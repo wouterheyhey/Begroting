@@ -80,9 +80,9 @@ namespace WebApi.Controllers
             return Ok(accMgr.ChangeGebruikers(gebruikers));
         }
         [Authorize(Roles = "admin,moderator,superadmin")]
-        public IHttpActionResult Put(string userName, string gemeente)
+        public IHttpActionResult Put(DTOGebruiker gebruiker)
         {
-            return Ok(accMgr.ChangeGebruiker(userName, gemMgr.GetGemeente(gemeente)));
+            return Ok(accMgr.ChangeGebruiker(gebruiker.userId, gemMgr.GetGemeente(gebruiker.gemeente)));
         }
 
         //AdminCall om de rollen in de enum te kopiëren naar rollen in de asp.net systeemtabellen
