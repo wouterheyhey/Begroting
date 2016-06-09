@@ -337,7 +337,7 @@ namespace WebApi.Controllers
                 foreach (string file in httpRequest.Files)
                 {
                     var postedFile = httpRequest.Files[file];
-                    var filePath = HttpContext.Current.Server.MapPath("~/App_Data/" + postedFile.FileName);
+                    var filePath = HttpContext.Current.Server.MapPath(System.IO.Path.Combine("~/App_Data/", System.IO.Path.GetFileName(postedFile.FileName)));
                     fileName = postedFile.FileName;
                     postedFile.SaveAs(filePath);
 

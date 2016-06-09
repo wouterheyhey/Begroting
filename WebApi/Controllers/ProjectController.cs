@@ -283,7 +283,7 @@ namespace WebApi.Controllers
 
                 // char[] chars = new char[p.afbeelding.Length / sizeof(char)];
                 //  afb = new string(chars);
-                afb = "data:image/jpeg;base64," + Convert.ToBase64String(p.afbeelding);
+                afb = "data:image/jpg;base64," + Convert.ToBase64String(p.afbeelding);
 
             }
             
