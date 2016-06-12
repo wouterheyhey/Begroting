@@ -140,12 +140,12 @@ namespace WebApi.Controllers
 
                 if (gemCat.categorieInput.film != null)
                 {
-                    d.film = Convert.ToBase64String(gemCat.categorieInput.film);
+                    d.film = gemCat.categorieInput.film;
                 }
 
                 if (gemCat.categorieInput.icoon != null)
                 {
-                    d.icoon = Convert.ToBase64String(gemCat.categorieInput.icoon);
+                    d.icoon = gemCat.categorieInput.icoon;
                 }
 
                 d.inputID = gemCat.categorieInput.Id;

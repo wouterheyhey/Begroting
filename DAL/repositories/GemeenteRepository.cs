@@ -106,9 +106,10 @@ namespace DAL.repositories
 
                 if(logo != null)
                 {
-                    byte[] bytes = new byte[logo.Length * sizeof(char)];
-                    System.Buffer.BlockCopy(logo.ToCharArray(), 0, bytes, 0, bytes.Length);
-                    g.logo = bytes;
+                    string convert = logo.Replace("data:image/png;base64,", "");
+                    convert = convert.Replace("data:image/jpeg;base64,", "");
+                    g.logo = Convert.FromBase64String(convert);
+                    
                 }
                 
 

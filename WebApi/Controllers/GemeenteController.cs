@@ -29,9 +29,35 @@ namespace WebApi.Controllers
         {
             GemeenteManager mgr = new GemeenteManager();
             var gemeente = mgr.GetGemeente(naam);
+
             if (gemeente == null)
-                return StatusCode(HttpStatusCode.NoContent);
-            return Ok(gemeente);
+                return StatusCode(HttpStatusCode.NoContent); 
+
+            DTOHoofdGemeente g = new DTOHoofdGemeente()
+            {
+                HoofdGemeenteID = gemeente.HoofdGemeenteID,
+                naam = gemeente.naam,
+                postCode = gemeente.postCode,
+                provincie = gemeente.provincie,
+                aantalBewoners = gemeente.aantalBewoners,
+                oppervlakte = gemeente.oppervlakte,
+                oppervlakteMaat = gemeente.oppervlakteMaat,
+                isKind = gemeente.isKind,
+                isMan = gemeente.isMan,
+                isVrouw = gemeente.isVrouw,
+                bestuur = gemeente.bestuur,
+                aanslagVoet = gemeente.aanslagVoet,
+                deelGemeenten = gemeente.deelGemeenten,
+                cluster = gemeente.cluster,
+                FAQs = gemeente.FAQs,
+                hoofdkleur = gemeente.hoofdKleur,
+
+            };
+            
+            if (gemeente.logo != null)
+                g.logo = "data:image/jpg;base64," + Convert.ToBase64String(gemeente.logo);
+       
+            return Ok(g);
         }
 
 

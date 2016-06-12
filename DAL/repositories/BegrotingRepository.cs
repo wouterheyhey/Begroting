@@ -44,10 +44,9 @@ namespace DAL.repositories
             {
                 //Tuple structuur item1 =  gemcatId,item2= string input, item3 = string icoon,item4 = string film,item5 = string foto,item6 = string kleur
                 GemeenteCategorie gc = ctx.GemeenteCategorien.Include(x => x.categorieInput).Where(y => y.ID == catinput.Item1).SingleOrDefault();
-
                 if (gc.categorieInput == null)
                 {
-                    gc.categorieInput = new CategorieInput(catinput.Item2, catinput.Item3, catinput.Item4, catinput.Item5, catinput.Item6);
+                    gc.categorieInput = new CategorieInput(catinput.Item2, catinput.Item3, catinput.Item4, catinput.Item5, catinput.Item6,gc.categorieNaam);
                 }
                 else
                 {
@@ -55,10 +54,10 @@ namespace DAL.repositories
                     gc.categorieInput.kleur = catinput.Item6;
 
                     if (catinput.Item3 != null)
-                        gc.categorieInput.icoon = stringConverter(catinput.Item3);
+                        gc.categorieInput.icoon = catinput.Item3;
 
                     if (catinput.Item4 != null)
-                        gc.categorieInput.film = stringConverter(catinput.Item4);
+                        gc.categorieInput.film = catinput.Item4;
 
                     if (catinput.Item5 != null)
                         gc.categorieInput.foto = stringConverter(catinput.Item5);

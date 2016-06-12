@@ -39,7 +39,7 @@ namespace WebApi.Controllers
             return Ok(new DTOGebruiker(g.email, g.naam, g.gemeente.naam, g.rolType, g.isActief));
         }
 
-        [Authorize(Roles= "admin,moderator,superadmin")]
+       // [Authorize(Roles= "admin,moderator,superadmin")]
         [Route("GetGebruikers")]
         public IHttpActionResult GetGebruikers(string gemeente)
         {
